@@ -142,28 +142,30 @@ class FormObject {
 	*
 	*/
 	function saveIncluded() {
-		$this->incDataObject->setFrom($this->data); //Copy the form data into the object.
-		if ($this->data['included_id']) { //Only update the DB if an id was supplied
-			$this->incDataObject->id = $this->data['included_id'];
-			$result = $this->incDataObject->update();
-		    if(PEAR::isError($result)){ 
-				$this->template->assign('form_error',$result->getMessage());
-				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
-			} else {
+		if ($this->data['parent_id']) {//If parent_id is null, either the form is hosed, or they forgot to save the main record before adding children.
+			$this->incDataObject->setFrom($this->data); //Copy the form data into the object.
+			if ($this->data['included_id']) { //Only update the DB if an id was supplied
+				$this->incDataObject->id = $this->data['included_id'];
+				$result = $this->incDataObject->update();
 				$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
-			}
-		} else {
-			$result = $this->incDataObject->id = $this->incDataObject->insert();
-			if(PEAR::isError($result)){ 
-				$this->template->assign('form_error',$result->getMessage());
-				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
-			} else {
+			} else { //If no id supplied we are inserting
+				if ($this->data['included_search']) {
+					$result = $this->incDataObject->includedInsert($this->data['included_search']);
+				} else {
+					$result = $this->incDataObject->id = $this->incDataObject->insert();
+				}
 				$this->template->assign('action_message', '<font color="#66CC00">Added</font>');
 			}
+		} else {
+			$result = new PEAR_error ('You needed to save your main record before trying to add an included record.');
+		}
+		if(PEAR::isError($result)){ 
+			$this->template->assign('form_error',$result->getMessage());
+			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
 		}
 		$this->dataObject->get($this->data['parent_id']);
 		$incClassName = get_class($this->incDataObject);
-		$this->incDataObject = new $incClassName;
+		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
 		if ($this->data['included_order_by']) {
 			$this->incDataObject->orderBy($this->data['included_order_by']);
 		}
@@ -177,7 +179,6 @@ class FormObject {
 	*/
 	function delete() {
 		if ($this->data['id'] == '') { //No id for this record
-			//$this->dataObject->validation_results['form'] .= '<br> Tried to delete a non-existent record.';
 			$this->template->assign('action_message', '<font color="#FF0000">Delete Failed!</font>');
 			$this->edit();
 			return false;
@@ -189,8 +190,9 @@ class FormObject {
 			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
 			$this->edit();
 		} else {
-			$this->template = new TemplatePower('./templates/' . 'deleted.html'); //make a new TemplatePower objec
+			$this->template = new TemplatePower('./templates/deleted.html'); //make a new TemplatePower objec
 			$this->template->prepare();//let TemplatePower do its thing, parsing etc.
+			$this->template->assign('action_message', '<font color="#FF0000">Deleted.</font>');
 		}
 		
 		return true;
@@ -238,7 +240,7 @@ class FormObject {
 		$this->template->prepare();//let TemplatePower do its thing, parsing etc.;
 		
 		if ($this->data['search']) { //Only bother to search if they submit critera, show the blank form regardless
-		    valueFill($this->data['search'],$this->template); //Put the search values back in the form fields
+		    valueFill($this->data,$this->template); //Put the search values back in the form fields
 			foreach ($this->data['search'] as $field => $value) {
 				$whereLine = $this->buildWhereLine($field, $this->data['search_operators'][$field], $value);
 				if ($whereLine) {
@@ -269,28 +271,43 @@ class FormObject {
 	*
 	*/
 	function report() {
+		$this->template = new TemplatePower( './templates/report_two_col.html' );//make a new TemplatePower object
+		$this->template->prepare();//let TemplatePower do its thing, parsing etc.
+	
 		//Using the arrays passed in via $this->data, set up the query
 		if ($this->data['selcols']) {
 			$this->dataObject->selectAdd(); //Clear the default '*'
 			foreach ($this->data['selcols'] as $colName) {
-				$this->dataObject->selectAdd($colName);
+				$this->dataObject->selectAdd(stripslashes(urldecode($colName)));
 			}
 		} else {
 			return false;
 		}
+		
+		if ($this->data['titles']) {
+			foreach ($this->data['titles'] as $colNum => $colName) {
+				$this->template->assign('col' . $colNum . 'Header',$colName);
+			}
+		} else {
+			foreach ($this->data['selcols'] as $colNum => $colName) {
+				$this->data['titles'][$colNum] = ucwords(str_replace('_',' ',$colName));
+				$this->template->assign('col' . $colNum . 'Header',$this->data['titles'][$colNum]);
+			}
+		}
+		
 		if ($this->data['groupcols']) {
 			foreach ($this->data['groupcols'] as $colName) {
-				$this->dataObject->groupBy($colName);
+				$this->dataObject->groupBy(stripslashes(urldecode($colName)));
 			}
 		}
 		if ($this->data['ordercols']) {
 			foreach ($this->data['ordercols'] as $colName) {
-				$this->dataObject->orderBy($colName);
+				$this->dataObject->orderBy(stripslashes(urldecode($colName)));
 			}
 		}
 		if ($this->data['where']) {
 			foreach ($this->data['where'] as $whereRow) {
-				$this->dataObject->whereAdd($whereRow);
+				$this->dataObject->whereAdd(stripslashes(urldecode($whereRow)));
 			}
 		}
 		if ($this->data['limit']) {
@@ -305,13 +322,6 @@ class FormObject {
 			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
 		} else {
 			$this->template->assign('action_message', $this->dataObject->N . ' Found');
-		}
-
-		$this->template = new TemplatePower( './templates/report_two_col.html' );//make a new TemplatePower object
-		$this->template->prepare();//let TemplatePower do its thing, parsing etc.
-		
-		foreach ($this->data['selcols'] as $colNum => $colName) {
-			$this->template->assign('col' . $colNum . 'Header',ucwords(str_replace('_',' ',$colName)));
 		}
 		
 		$lastCol1 = -1;

@@ -66,7 +66,13 @@ function valueFill ($inHash, &$inTemplate) {
 	//echo '<PRE>'; print_r ($inHash); echo '<PRE>';
 	//Put the values back into the form
 	foreach ($inHash as $key => $value) {
-		$inTemplate->assign($key, stripslashes($value));
+		if (is_array($value)) {
+			foreach ($value as $subKey => $subValue) {
+				$inTemplate->assign($key . '[' . $subKey . ']', stripslashes($subValue));
+			}
+		} else {
+			$inTemplate->assign($key, stripslashes($value));
+		}
 	}
 
 	return true;
