@@ -33,6 +33,8 @@ class DataObjects_Event extends DB_DataObject {
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
+	/* ZE2 compatibility trick */
+    function __clone() { return $this;}
 
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Event',$k,$v); }

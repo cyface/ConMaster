@@ -21,7 +21,9 @@ class DataObjects_Convention extends DB_DataObject {
 	var $logo_file;                       // string(200)  not_null
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
-
+	/* ZE2 compatibility trick */
+    function __clone() { return $this;}
+    
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Convention',$k,$v); }
 

@@ -20,6 +20,8 @@ class DataObjects_Slot extends DB_DataObject {
     var $web_site_url;                    // string(200)  
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
+	/* ZE2 compatibility trick */
+    function __clone() { return $this;}
 
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Slot',$k,$v); }

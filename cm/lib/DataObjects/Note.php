@@ -21,6 +21,8 @@ class DataObjects_Note extends DB_DataObject {
     var $sender;                               // string(80)  not_null
     var $last_modified;                       // timestamp(14)  not_null unsigned zerofill timestamp
 
+	/* ZE2 compatibility trick */
+    function __clone() { return $this;}
 
     /* Static get */
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Note',$k,$v); }
