@@ -17,10 +17,10 @@ class DataObjects_Score_packet extends DB_DataObject {
     var $person_id;                        // int(11)  not_null
 	var $event_id;                        // int(11)  not_null
 	var $section_id;                      // int(11)  not_null
-    var $scenario_score;                  // int(4)  
-    var $group_score;                     // int(4) 
-    var $number_of_players;               // int(4)  
-    var $rpga_event_type;                 // string(2)  
+    var $scenario_score;                  // int(4)
+    var $group_score;                     // int(4)
+    var $number_of_players;               // int(4)
+    var $rpga_event_type;                 // string(15)
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
