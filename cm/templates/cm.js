@@ -1,13 +1,25 @@
-function popwin(url,windowName) {
+function popWin(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
 	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
 }
 
-function popwinsmall(url,windowName) {
+function popWinSmall(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
 	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=320,height=240');
+}
+
+function deleteCheck(table,id) {
+	 if (confirm('Are You Sure You Want to Permanently Delete This Record?')) {
+	 	MM_goToURL('parent','form.php?table=' + table + '&action=delete&id=' + id);
+	 } else {
+		document.MM_returnValue = false;
+	 }
+}
+
+function GP_popupConfirmMsg(msg) { //v1.0
+  document.MM_returnValue = confirm(msg);
 }
 
 function MM_popupMsg(msg) { //v1.0

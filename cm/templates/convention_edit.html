@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{name} Convention Record'" class="BodyClass">
+<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title='{name} Convention Record'" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
     <td class="FormTitle">{name}</td>
@@ -54,7 +54,7 @@
     <tr>
       <td>
         <div align="center">
-          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=person&action=delete&id={id}');return document.MM_returnValue">
+          <input type="button" name="delete" value="Delete" onClick="deleteCheck('convention','{id}');return document.MM_returnValue">
         </div>
       </td>
       <td>
@@ -75,8 +75,21 @@
       </td>
     </tr>
   </table>
-  <hr>
-</form>
+ </form>
+<hr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <form name="actions_form">
+    <tr>
+      <td align="center">&nbsp;</td>
+      <td align="center">&nbsp; </td>
+      <td align="center">
+        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=convention&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=convention&form_constants[form_label]={name}','note_edit');return false">
+      </td>
+    </tr>
+  </form>
+</table>
+<hr>
+
 <!-- START BLOCK : included_header -->
 <span class="FormTitle">Slots  {action_message}</span> 
 <span class="FieldError">{form_error} </span>
@@ -124,10 +137,10 @@
         <input type="hidden" name="parent_id" value="{convention_id}">
         <input type="hidden" name="included_table" value="slot">
         <input type="hidden" name="included_order_by" value="slot_number">
-        <input type="submit" name="delete" value="Delete" onClick="popwin()">
+        <input type="submit" name="delete" value="Delete">
       </td>
     </form>
-    <form name="person_section_save" method="post" action="form.php" target="popup">
+    <form name="slot_save" method="post" action="form.php" target="popup">
       <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="convention">
         <input type="hidden" name="included_id" value="{id}">
@@ -136,7 +149,7 @@
         <input type="hidden" name="included_table" value="slot">
         <input type="hidden" name="included_order_by" value="slot_number">
         <span class="FieldName"> </span> 
-        <input type="submit" name="update" value="Update" onClick="popwin()">
+        <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
         <input type="text" name="slot_number" size="6" maxlength="10" class="FieldData" value="{slot_number}">

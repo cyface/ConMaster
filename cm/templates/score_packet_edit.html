@@ -85,7 +85,7 @@
     <tr>
       <td>
         <div align="center">
-          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=score_packet&action=delete&id={id}');return document.MM_returnValue">
+          <input type="button" name="delete" value="Delete" onClick="deleteCheck('score_packet','{id}');return document.MM_returnValue">
         </div>
       </td>
       <td>
@@ -175,10 +175,10 @@
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
         <input type="hidden" name="score_packet_id" value="{score_packet_id}">
-        <input type="submit" name="update" value="Update" onClick="popwin()">
+        <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_person_id[rpga_number]}</td>
-      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_person_id[first_name]} 
+      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_person_id[first_name]} 
         {_person_id[last_name]}</a></td>
       <td class="TableData"><span class="FieldName">
         <input type="text" name="score" size="6" maxlength="10" class="FieldData" value="{score}">

@@ -66,7 +66,7 @@
     <input type="hidden" name="action" value="save">
     <input type="submit" name="save" value="Save" onClick="MM_validateForm('name','','R','description','','R');return document.MM_returnValue">
     <input type="button" name="cancel" value="Cancel" onClick="window.close()">
-    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=item&amp;action=delete&amp;id={id}');return document.MM_returnValue">
+    <input type="button" name="delete" value="Delete" onClick="deleteCheck('item','{id}');return document.MM_returnValue">
   </p>
 </form>
 <p>&nbsp; </p>

@@ -19,22 +19,22 @@
     <tr>
       <td width="10%" class="FieldName">Last Name</td>
       <td width="38%">
-        <input type="text" name="search[last_name]" value="{last_name}" class="FieldData">
+        <input type="text" name="search[last_name]" value="{search[last_name]}" class="FieldData">
       </td>
       <td width="10%"><span class="FieldName">First Name</span></td>
       <td width="38%">
-        <input type="text" name="search[first_name]" value="{first_name}" class="FieldData">
+        <input type="text" name="search[first_name]" value="{search[first_name]}" class="FieldData">
       </td>
     </tr>
     <tr>
       <td width="10%" class="FieldName">RPGA Number</td>
       <td width="38%">
-        <input type="text" name="search[rpga_number]" value="{rpga_number}" class="FieldData">
+        <input type="text" name="search[rpga_number]" value="{search[rpga_number]}" class="FieldData">
         <input type="hidden" name="search_operators[rpga_number]" value="equals">
       </td>
       <td width="10%" class="FieldName">Badge Number</td>
       <td width="38%">
-        <input type="text" name="search[badge_number]" value="{badge_number}" class="FieldData">
+        <input type="text" name="search[badge_number]" value="{search[badge_number]}" class="FieldData">
         <input type="hidden" name="search_operators[badge_number]" value="equals">
       </td>
     </tr>
@@ -58,7 +58,7 @@
   <!-- START BLOCK : result_row -->
   <tr>
     <td class="TableDataBold">{badge_number}</td>
-    <td class="TableData"><a href="" class="TableData" onclick="popwin('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}','person_edit');return false">{last_name},
+    <td class="TableData"><a href="" class="TableData" onclick="popWin('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}','person_edit');return false">{last_name},
       {first_name}</a></td>
     <td class="TableData">{street}</td>
     <td class="TableData">{city}
@@ -67,7 +67,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="" onclick="popwin('form.php?table=person&action=edit','person_edit');return false">Create a New Person</a></span>
+<span class="FieldName"><a href="" onclick="popWin('form.php?table=person&action=edit','person_edit');return false">Create a New Person</a></span>
 <hr noshade>
 </body>
 </html>
