@@ -3,20 +3,20 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Bakken <ssb@fast.no>                                    |
+// | Author: Stig Bakken <ssb@php.net>                                    |
 // +----------------------------------------------------------------------+
 //
-// $Id: Auth.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Auth.php,v 1.5 2003/09/16 17:18:01 cyface Exp $
 
 require_once "PEAR/Command/Common.php";
 require_once "PEAR/Remote.php";
@@ -28,6 +28,8 @@ require_once "PEAR/Config.php";
  */
 class PEAR_Command_Auth extends PEAR_Command_Common
 {
+    // {{{ properties
+
     var $commands = array(
         'login' => array(
             'summary' => 'Connects and authenticates to remote server',
@@ -55,6 +57,10 @@ password from your user configuration.',
 
         );
 
+    // }}}
+
+    // {{{ constructor
+
     /**
      * PEAR_Command_Auth constructor.
      *
@@ -64,6 +70,10 @@ password from your user configuration.',
     {
         parent::PEAR_Command_Common($ui, $config);
     }
+
+    // }}}
+
+    // {{{ doLogin()
 
     /**
      * Execute the 'login' command.
@@ -113,6 +123,9 @@ password from your user configuration.',
 
     }
 
+    // }}}
+    // {{{ doLogout()
+
     /**
      * Execute the 'logout' command.
      *
@@ -136,6 +149,7 @@ password from your user configuration.',
         $this->config->store();
     }
 
+    // }}}
 }
 
 ?>

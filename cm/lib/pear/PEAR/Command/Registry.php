@@ -3,21 +3,21 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Bakken <ssb@fast.no>                                    |
+// | Author: Stig Bakken <ssb@php.net>                                    |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Registry.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Registry.php,v 1.5 2003/09/16 17:18:01 cyface Exp $
 
 require_once 'PEAR/Command/Common.php';
 require_once 'PEAR/Registry.php';
@@ -25,7 +25,7 @@ require_once 'PEAR/Config.php';
 
 class PEAR_Command_Registry extends PEAR_Command_Common
 {
-    // {{{ command definitions
+    // {{{ properties
 
     var $commands = array(
         'list' => array(
@@ -51,11 +51,14 @@ Tests if a package is installed in the system. Will exit(1) if it is not.
    <version>    The version to compare with
 '),
         'info' => array(
-            'summary'  => 'Information of an installed package',
+            'summary'  => 'Display information about a package',
             'function' => 'doInfo',
-            'shortcut' => 'i',
+            'shortcut' => 'in',
             'options'  => array(),
-            'doc'      => '[package] Displays the information of an installed package'
+            'doc'      => '<package>
+Displays information about a package. The package argument may be a
+local package file, an URL to a package file, or the name of an
+installed package.'
             )
         );
 
@@ -73,6 +76,7 @@ Tests if a package is installed in the system. Will exit(1) if it is not.
     }
 
     // }}}
+
     // {{{ doList()
 
     function _sortinfo($a, $b)
@@ -186,13 +190,13 @@ Tests if a package is installed in the system. Will exit(1) if it is not.
             // "pear shell-test Foo 1.0"
         } elseif (sizeof($params) == 2) {
             $v = $reg->packageInfo($params[0], 'version');
-            if (!$v || !version_compare($v, $params[1], "ge")) {
+            if (!$v || !version_compare("$v", "{$params[1]}", "ge")) {
                 exit(1);
             }
             // "pear shell-test Foo ge 1.0"
         } elseif (sizeof($params) == 3) {
             $v = $reg->packageInfo($params[0], 'version');
-            if (!$v || !version_compare($v, $params[2], $params[1])) {
+            if (!$v || !version_compare("$v", "{$params[2]}", $params[1])) {
                 exit(1);
             }
         } else {
@@ -212,15 +216,133 @@ Tests if a package is installed in the system. Will exit(1) if it is not.
             return $this->raiseError("This command only accepts one param: ".
                                      "the package you want information");
         }
-        $package = $params[0];
-        $reg = &new PEAR_Registry($this->config->get('php_dir'));
-        if (!$reg->packageExists($package)) {
-            return $this->raiseError("The package $package is not installed");
+        if (@is_file($params[0])) {
+            $obj  = &new PEAR_Common();
+            $info = $obj->infoFromAny($params[0]);
+        } else {
+            $reg = &new PEAR_Registry($this->config->get('php_dir'));
+            $info = $reg->packageInfo($params[0]);
         }
-        $info = $reg->packageInfo($package);
-        include_once 'PEAR/Command/Package.php';
-        $data = &PEAR_Command_Package::_infoForDisplaying($info);
-        $this->ui->outputData($data, $command);
+        if (PEAR::isError($info)) {
+            return $info;
+        }
+        if (empty($info)) {
+            $this->raiseError("Nothing found for `$params[0]'");
+            return;
+        }
+        unset($info['filelist']);
+        unset($info['changelog']);
+        $keys = array_keys($info);
+        $longtext = array('description', 'summary');
+        foreach ($keys as $key) {
+            if (is_array($info[$key])) {
+                switch ($key) {
+                    case 'maintainers': {
+                        $i = 0;
+                        $mstr = '';
+                        foreach ($info[$key] as $m) {
+                            if ($i++ > 0) {
+                                $mstr .= "\n";
+                            }
+                            $mstr .= $m['name'] . " <";
+                            if (isset($m['email'])) {
+                                $mstr .= $m['email'];
+                            } else {
+                                $mstr .= $m['handle'] . '@php.net';
+                            }
+                            $mstr .= "> ($m[role])";
+                        }
+                        $info[$key] = $mstr;
+                        break;
+                    }
+                    case 'release_deps': {
+                        $i = 0;
+                        $dstr = '';
+                        foreach ($info[$key] as $d) {
+                            if (isset($this->_deps_rel_trans[$d['rel']])) {
+                                $rel = $this->_deps_rel_trans[$d['rel']];
+                            } else {
+                                $rel = $d['rel'];
+                            }
+                            if (isset($this->_deps_type_trans[$d['type']])) {
+                                $type = ucfirst($this->_deps_type_trans[$d['type']]);
+                            } else {
+                                $type = $d['type'];
+                            }
+                            if (isset($d['name'])) {
+                                $name = $d['name'] . ' ';
+                            } else {
+                                $name = '';
+                            }
+                            if (isset($d['version'])) {
+                                $version = $d['version'] . ' ';
+                            } else {
+                                $version = '';
+                            }
+                            $dstr .= "$type $name$rel $version\n";
+                        }
+                        $info[$key] = $dstr;
+                        break;
+                    }
+                    case 'provides' : {
+                        $debug = $this->config->get('verbose');
+                        if ($debug < 2) {
+                            $pstr = 'Classes: ';
+                        } else {
+                            $pstr = '';
+                        }
+                        $i = 0;
+                        foreach ($info[$key] as $p) {
+                            if ($debug < 2 && $p['type'] != "class") {
+                                continue;
+                            }
+                            // Only print classes when verbosity mode is < 2
+                            if ($debug < 2) {
+                                if ($i++ > 0) {
+                                    $pstr .= ", ";
+                                }
+                                $pstr .= $p['name'];
+                            } else {
+                                if ($i++ > 0) {
+                                    $pstr .= "\n";
+                                }
+                                $pstr .= ucfirst($p['type']) . " " . $p['name'];
+                                if (isset($p['explicit']) && $p['explicit'] == 1) {
+                                    $pstr .= " (explicit)";
+                                }
+                            }
+                        }
+                        $info[$key] = $pstr;
+                        break;
+                    }
+                    default: {
+                        $info[$key] = implode(", ", $info[$key]);
+                        break;
+                    }
+                }
+            }
+            if ($key == '_lastmodified') {
+                $hdate = date('Y-m-d', $info[$key]);
+                unset($info[$key]);
+                $info['Last Modified'] = $hdate;
+            } else {
+                $info[$key] = trim($info[$key]);
+                if (in_array($key, $longtext)) {
+                    $info[$key] = preg_replace('/  +/', ' ', $info[$key]);
+                }
+            }
+        }
+        $caption = 'About ' . $info['package'] . '-' . $info['version'];
+        $data = array(
+            'caption' => $caption,
+            'border' => true);
+        foreach ($info as $key => $value) {
+            $key = ucwords(trim(str_replace('_', ' ', $key)));
+            $data['data'][] = array($key, $value);
+        }
+        $data['raw'] = $info;
+
+        $this->ui->outputData($data, 'package-info');
     }
 
     // }}}

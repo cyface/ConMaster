@@ -3,21 +3,21 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Bakken <ssb@fast.no>                                    |
+// | Author: Stig Bakken <ssb@php.net>                                    |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Remote.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Remote.php,v 1.5 2003/09/16 17:18:01 cyface Exp $
 
 require_once 'PEAR/Command/Common.php';
 require_once 'PEAR/Common.php';
@@ -56,12 +56,12 @@ Lists the packages available on the configured server along with the
 latest stable release of each package.',
             ),
         'search' => array(
-            'summary' => 'Search Packagesdatabase',
+            'summary' => 'Search remote package database',
             'function' => 'doSearch',
             'shortcut' => 'sp',
             'options' => array(),
             'doc' => '
-Lists all packages which match the search paramteres (first param 
+Lists all packages which match the search parameters (first param
 is package name, second package info)',
             ),
         'list-all' => array(
@@ -88,6 +88,16 @@ Download a package tarball.  The file will be named as suggested by the
 server, for example if you download the DB package and the latest stable
 version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
             ),
+        'clear-cache' => array(
+            'summary' => 'Clear XML-RPC Cache',
+            'function' => 'doClearCache',
+            'shortcut' => 'cc',
+            'options' => array(),
+            'doc' => '
+Clear the XML-RPC cache.  See also the cache_ttl configuration
+parameter.
+',
+            ),
         );
 
     // }}}
@@ -105,46 +115,38 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
 
     // }}}
 
-    // {{{ remote-info
+    // {{{ doRemoteInfo()
 
     function doRemoteInfo($command, $options, $params)
     {
-/*
-        return false; // coming soon
-
-        var_dump($params[0]);
+        if (sizeof($params) != 1) {
+            return $this->raiseError("$command expects one param: the remote package name");
+        }
         $r = new PEAR_Remote($this->config);
         $info = $r->call('package.info', $params[0]);
         if (PEAR::isError($info)) {
             return $this->raiseError($info);
         }
-        
-        var_dump($info);
-*/
-        $r = new PEAR_Remote($this->config);
-        $available = $r->call('package.listAll', true);
-        if (PEAR::isError($available)) {
-            return $this->raiseError($available);
-        }
-        $info = $available[$params[0]];
-        $info["name"] = $params[0];
 
         $reg = new PEAR_Registry($this->config->get('php_dir'));
         $installed = $reg->packageInfo($info['name']);
-        $info['installed'] = $installed['version'];
-    
+        $info['installed'] = $installed['version'] ? $installed['version'] : '- no -';
+
         $this->ui->outputData($info, $command);
-        
-        return true; // coming soon
+
+        return true;
     }
 
     // }}}
-    // {{{ list-remote
+    // {{{ doRemoteList()
 
     function doRemoteList($command, $options, $params)
     {
         $r = new PEAR_Remote($this->config);
-        $available = $r->call('package.listAll', true);
+        $list_options = false;
+        if ($this->config->get('preferred_state') == 'stable')
+            $list_options = true;
+        $available = $r->call('package.listAll', $list_options);
         if (PEAR::isError($available)) {
             return $this->raiseError($available);
         }
@@ -155,7 +157,7 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
             'headline' => array('Package', 'Version'),
             );
         foreach ($available as $name => $info) {
-            $data['data'][] = array($name, $info['stable']);
+            $data['data'][] = array($name, isset($info['stable']) ? $info['stable'] : '-n/a-');
         }
         if (count($available)==0) {
             $data = '(no packages installed yet)';
@@ -165,33 +167,53 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
     }
 
     // }}}
-    // {{{ list-all
+    // {{{ doListAll()
 
     function doListAll($command, $options, $params)
     {
         $r = new PEAR_Remote($this->config);
         $reg = new PEAR_Registry($this->config->get('php_dir'));
-        $available = $r->call('package.listAll', true);
+        $list_options = false;
+        if ($this->config->get('preferred_state') == 'stable')
+            $list_options = true;
+        $available = $r->call('package.listAll', $list_options);
         if (PEAR::isError($available)) {
             return $this->raiseError($available);
+        }
+        if (!is_array($available)) {
+            return $this->raiseError('The package list could not be fetched from the remote server. Please try again. (Debug info: "'.$available.'")');
         }
         $data = array(
             'caption' => 'All packages:',
             'border' => true,
             'headline' => array('Package', 'Latest', 'Local'),
             );
-                  
+
         foreach ($available as $name => $info) {
             $installed = $reg->packageInfo($name);
             $desc = $info['summary'];
             if (isset($params[$name]))
                 $desc .= "\n\n".$info['description'];
-            
+
+            if (isset($options['mode']))
+            {
+                if ($options['mode'] == 'installed' && !isset($installed['version']))
+                    continue;
+                if ($options['mode'] == 'notinstalled' && isset($installed['version']))
+                    continue;
+                if ($options['mode'] == 'upgrades'
+                    && (!isset($installed['version']) || $installed['version'] == $info['stable']))
+                {
+                    continue;
+                };
+            };
+
             $data['data'][$info['category']][] = array(
-                $name, 
-                $info['stable'], 
-                $installed['version'],
-                $desc,
+                $name,
+                @$info['stable'],
+                @$installed['version'],
+                @$desc,
+                @$info['deps'],
                 );
         }
         $this->ui->outputData($data, $command);
@@ -199,16 +221,16 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
     }
 
     // }}}
-    // {{{ search
+    // {{{ doSearch()
 
     function doSearch($command, $options, $params)
     {
         if ((!isset($params[0]) || empty($params[0]))
             && (!isset($params[1]) || empty($params[1])))
         {
-            return $this->raiseError('no valid search string suppliedy<');
+            return $this->raiseError('no valid search string supplied');
         };
-            
+
         $r = new PEAR_Remote($this->config);
         $reg = new PEAR_Registry($this->config->get('php_dir'));
         $available = $r->call('package.listAll', true);
@@ -220,24 +242,24 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
             'border' => true,
             'headline' => array('Package', 'Latest', 'Local'),
             );
-            
+
         foreach ($available as $name => $info) {
             $found = (!empty($params[0]) && stristr($name, $params[0]) !== false);
             if (!$found && !(isset($params[1]) && !empty($params[1])
                 && (stristr($info['summary'], $params[1]) !== false
                     || stristr($info['description'], $params[1]) !== false)))
-            {   
+            {
                 continue;
             };
-                
+
             $installed = $reg->packageInfo($name);
             $desc = $info['summary'];
             if (isset($params[$name]))
                 $desc .= "\n\n".$info['description'];
-            
+
             $data['data'][$info['category']][] = array(
-                $name, 
-                $info['stable'], 
+                $name,
+                $info['stable'],
                 $installed['version'],
                 $desc,
                 );
@@ -250,7 +272,7 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
     }
 
     // }}}
-    // {{{ download
+    // {{{ doDownload()
 
     function doDownload($command, $options, $params)
     {
@@ -260,7 +282,8 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
         }
         $server = $this->config->get('master_server');
         if (!ereg('^http://', $params[0])) {
-            $pkgfile = "http://$server/get/$params[0]";
+            $getoption = isset($options['nocompress'])&&$options['nocompress']==1?'?uncompress=on':'';
+            $pkgfile = "http://$server/get/$params[0]".$getoption;
         } else {
             $pkgfile = $params[0];
         }
@@ -283,7 +306,7 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
     }
 
     // }}}
-    // {{{ list-upgrades
+    // {{{ doListUpgrades()
 
     function doListUpgrades($command, $options, $params)
     {
@@ -310,16 +333,17 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
         $data = array(
             'caption' => $caption,
             'border' => 1,
-            'headline' => array('Package', 'Version', 'Size'),
+            'headline' => array('Package', 'Local', 'Remote', 'Size'),
             );
-        foreach ($latest as $package => $info) {
+        foreach ($latest as $pkg => $info) {
+            $package = strtolower($pkg);
             if (!isset($inst[$package])) {
                 // skip packages we don't have installed
                 continue;
             }
             extract($info);
             $inst_version = $reg->packageInfo($package, 'version');
-            if (version_compare($version, $inst_version, "le")) {
+            if (version_compare("$version", "$inst_version", "le")) {
                 // installed version is up-to-date
                 continue;
             }
@@ -332,10 +356,51 @@ version of DB is 1.2, the downloaded file will be DB-1.2.tgz.',
             } else {
                 $fs = "  -"; // XXX center instead
             }
-            $data['data'][] = array($package, $version, $fs);
+            $data['data'][] = array($pkg, $inst_version, $version, $fs);
         }
-        $this->ui->outputData($data, $command);
+        if (empty($data['data'])) {
+            $this->ui->outputData('No upgrades available');
+        } else {
+            $this->ui->outputData($data, $command);
+        }
         return true;
+    }
+
+    // }}}
+    // {{{ doClearCache()
+
+    function doClearCache($command, $options, $params)
+    {
+        $cache_dir = $this->config->get('cache_dir');
+        $verbose = $this->config->get('verbose');
+        $output = '';
+        if (!($dp = @opendir($cache_dir))) {
+            return $this->raiseError("opendir($cache_dir) failed: $php_errormsg");
+        }
+        if ($verbose >= 1) {
+            $output .= "reading directory $cache_dir\n";
+        }
+        $num = 0;
+        while ($ent = readdir($dp)) {
+            if (preg_match('/^xmlrpc_cache_[a-z0-9]{32}$/', $ent)) {
+                $path = $cache_dir . DIRECTORY_SEPARATOR . $ent;
+                $ok = @unlink($path);
+                if ($ok) {
+                    if ($verbose >= 2) {
+                        $output .= "deleted $path\n";
+                    }
+                    $num++;
+                } elseif ($verbose >= 1) {
+                    $output .= "failed to delete $path\n";
+                }
+            }
+        }
+        closedir($dp);
+        if ($verbose >= 1) {
+            $output .= "$num cache entries cleared\n";
+        }
+        $this->ui->outputData(rtrim($output), $command);
+        return $num;
     }
 
     // }}}

@@ -3,22 +3,22 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Bakken <ssb@fast.no>                                    |
+// | Author: Stig Bakken <ssb@php.net>                                    |
 // |         Tomas V.V.Cox <cox@idecnet.com>                              |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Config.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Config.php,v 1.5 2003/09/16 17:18:01 cyface Exp $
 
 require_once "PEAR/Command/Common.php";
 require_once "PEAR/Config.php";
@@ -29,6 +29,8 @@ require_once "PEAR/Config.php";
  */
 class PEAR_Command_Config extends PEAR_Command_Common
 {
+    // {{{ properties
+
     var $commands = array(
         'config-show' => array(
             'summary' => 'Show All Settings',
@@ -46,7 +48,8 @@ configuration layers are "user", "system" and "default".
             'function' => 'doConfigGet',
             'shortcut' => 'cg',
             'options' => array(),
-            'doc' => 'Displays the value of one configuration parameter.  The
+            'doc' => '<parameter> [layer]
+Displays the value of one configuration parameter.  The
 first argument is the name of the parameter, an optional second argument
 may be used to tell which configuration layer to look in.  Valid configuration
 layers are "user", "system" and "default".  If no layer is specified, a value
@@ -59,15 +62,29 @@ just specified.
             'function' => 'doConfigSet',
             'shortcut' => 'cs',
             'options' => array(),
-            'doc' => 'Sets the value of one configuration parameter.  The first
-argument is the name of the parameter, the second argument is the new value.
-Some parameters are be subject to validation, and the command will fail with
-an error message if the new value does not make sense.  An optional third
-argument may be used to specify which layer to set the configuration parameter
-in.  The default layer is "user".
+            'doc' => '<parameter> <value> [layer]
+Sets the value of one configuration parameter.  The first argument is
+the name of the parameter, the second argument is the new value.  Some
+parameters are subject to validation, and the command will fail with
+an error message if the new value does not make sense.  An optional
+third argument may be used to specify in which layer to set the
+configuration parameter.  The default layer is "user".
 ',
             ),
+        'config-help' => array(
+            'summary' => 'Show Information About Setting',
+            'function' => 'doConfigHelp',
+            'shortcut' => 'ch',
+            'options' => array(),
+            'doc' => '[parameter]
+Displays help for a configuration parameter.  Without arguments it
+displays help for all configuration parameters.
+',
+           ),
         );
+
+    // }}}
+    // {{{ constructor
 
     /**
      * PEAR_Command_Config constructor.
@@ -78,6 +95,10 @@ in.  The default layer is "user".
     {
         parent::PEAR_Command_Common($ui, $config);
     }
+
+    // }}}
+
+    // {{{ doConfigShow()
 
     function doConfigShow($command, $options, $params)
     {
@@ -105,6 +126,9 @@ in.  The default layer is "user".
         return true;
     }
 
+    // }}}
+    // {{{ doConfigGet()
+
     function doConfigGet($command, $options, $params)
     {
         // $params[0] -> the parameter
@@ -122,6 +146,9 @@ in.  The default layer is "user".
         }
         return true;
     }
+
+    // }}}
+    // {{{ doConfigSet()
 
     function doConfigSet($command, $options, $params)
     {
@@ -149,6 +176,32 @@ in.  The default layer is "user".
         return true;
     }
 
+    // }}}
+    // {{{ doConfigHelp()
+
+    function doConfigHelp($command, $options, $params)
+    {
+        if (empty($params)) {
+            $params = $this->config->getKeys();
+        }
+        $data['caption']  = "Config help" . ((count($params) == 1) ? " for $params[0]" : '');
+        $data['headline'] = array('Name', 'Type', 'Description');
+        $data['border']   = true;
+        foreach ($params as $name) {
+            $type = $this->config->getType($name);
+            $docs = $this->config->getDocs($name);
+            if ($type == 'set') {
+                $docs = rtrim($docs) . "\nValid set: " .
+                    implode(' ', $this->config->getSetValues($name));
+            }
+            $data['data'][] = array($name, $type, $docs);
+        }
+        $this->ui->outputData($data, $command);
+    }
+
+    // }}}
+    // {{{ _checkLayer()
+
     /**
      * Checks if a layer is defined or not
      *
@@ -157,7 +210,7 @@ in.  The default layer is "user".
      */
     function _checkLayer($layer = null)
     {
-        if (!empty($layer)) {
+        if (!empty($layer) && $layer != 'default') {
             $layers = $this->config->getLayers();
             if (!in_array($layer, $layers)) {
                 return " only the layers: \"" . implode('" or "', $layers) . "\" are supported";
@@ -166,6 +219,7 @@ in.  The default layer is "user".
         return false;
     }
 
+    // }}}
 }
 
 ?>
