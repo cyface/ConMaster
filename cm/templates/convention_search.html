@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>Convention Search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<span class="FormTitle">Convention Search Form</span> 
+<hr noshade>
+<form name="person_search_form" method="post" action="form.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
+    <tr>
+      <td width="10%" class="FieldName"> Name</td>
+      <td width="38%">
+        <input type="text" name="search[name]" value="{search[name]}" class="FieldData">
+      </td>
+      <td width="10%"><span class="FieldName">Sponsor</span></td>
+      <td width="38%">
+        <input type="text" name="search[sponsor_organization]" value="{search[sponsor_organization]}" class="FieldData">
+      </td>
+    </tr>
+    <tr>
+      <td width="10%" class="FieldName">RPGA Con Code</td>
+      <td width="38%">
+        <input type="text" name="search[rpga_convention_code]" value="{search[rpga_convention_code]}" class="FieldData">
+        <input type="hidden" name="search_operators[rpga_number]" value="equals">
+      </td>
+      <td width="10%" class="FieldName">Web Site URL</td>
+      <td width="38%">
+        <input type="text" name="search[web_site_url]" value="{search[web_site_url]}" class="FieldData">
+      </td>
+    </tr>
+  </table>
+  <p align="center">
+    <input type="hidden" name="table" value="convention">
+    <input type="hidden" name="action" value="search">
+    <input type="submit" name="Search" value="Search">
+  </p>
+  </form>
+<hr noshade>
+<span class="FormTitle">Conventions - {action_message}</span> 
+<table width="100%" border="1">
+  <tr> 
+    <td class="TableTitle">Name</td>
+    <td class="TableTitle"> Sponsor Organization</td>
+    <td class="TableTitle"> Web Site URL</td>
+    <td class="TableTitle">RPGA Con Code</td>
+  </tr>
+  <!-- START BLOCK : result_row -->
+  <tr> 
+    <td class="TableDataBold"><a href="form.php?table=convention&action=edit&included_table=slot&included_order_by=slot_number&id={id}" target="popup" class="TableData" onclick="popwin()">{name}</a></td>
+    <td class="TableData">{sponsor_organization}</td>
+    <td class="TableData">{street}</td>
+    <td class="TableData">{rpga_convention_code} 
+  </tr>
+  <!-- END BLOCK : result_row -->
+</table>
+<hr noshade>
+<span class="FieldName"><a href="form.php?table=convention&action=edit" target="popup" onclick="popwin()">Create a New Convention</a></span>
+<hr noshade>
+</body>
+</html>
