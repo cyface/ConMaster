@@ -6,7 +6,7 @@
  *
  * @see FormObject for usage information
  *
- * CVS Info: $Id: ScorePacketFormObject.php,v 1.4 2002/08/15 04:15:50 cyface Exp $
+ * CVS Info: $Id: ScorePacketFormObject.php,v 1.5 2002/08/15 19:58:23 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -49,8 +49,8 @@ class ScorePacketFormObject extends FormObject {
      **/
 	function newPacket ()
 	{
-		require_once('./lib/DataObjects/Event.php');
-		$this->eventObject = new DataObjects_Event;
+		$eventClass = DB_DataObject::staticAutoloadTable('event');
+		$this->eventObject = new $eventClass;
 		$this->eventObject->whereAdd("type = 'Role-Playing'");
 		$this->eventObject->orderBy("event_name");
 		$this->eventObject->find();
@@ -62,8 +62,8 @@ class ScorePacketFormObject extends FormObject {
 
 		$this->template->gotoBlock("_ROOT");
 
-		require_once('./lib/DataObjects/Section.php');
-		$this->sectionObject = new DataObjects_Section;
+		$sectionClass = DB_DataObject::staticAutoloadTable('section');
+		$this->sectionObject = new $sectionClass;
 		$this->sectionObject->query("SELECT section.* FROM section,event WHERE section.event_id = event.id AND event.type = 'Role-Playing'");
 
 		while ($this->sectionObject->fetch()) { // Pull the results through the object and put them on the form
@@ -82,16 +82,16 @@ class ScorePacketFormObject extends FormObject {
 	 *
      **/
 	function edit ()
-	{		
+	{
 		$this->dataObject->getLinks();
-		
+
 		objectValueFill($this->dataObject, $this->template);
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
-		
+
 		if ($this->template->getVarValue('form_error') != '') {  //If there is an error, skip the rest
 			return true;
 		}
-		
+
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
 			objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
@@ -206,8 +206,9 @@ class ScorePacketFormObject extends FormObject {
 		$this->dataObject->get($this->data['parent_id']);
 
 		//Locate the person who's RPGA number was entered
+		$personClass = DB_DataObject::staticAutoloadTable('person');
 		if (intval(rtrim($this->data['included_search'])) == 0) { //Only search if something reasonable was entered.
-			$personObject = DB_DataObject::staticGet('DataObjects_Person','rpga_number',rtrim($this->data['included_search']));
+			$personObject = DB_DataObject::staticGet($personClass,'rpga_number',rtrim($this->data['included_search']));
 		}
 		if (!$personObject) { //If the rpga number was not found
 			if (file_exists('resources/RPGAList.txt')) {
@@ -219,15 +220,14 @@ class ScorePacketFormObject extends FormObject {
 					}
 				}
 				if (isset($foundData)) {
-					require_once('./lib/DataObjects/Person.php');
-					$personObject = new DataObjects_Person;
+					$personObject = new $personClass;
 					$personObject->first_name = $data[1];
 					$personObject->last_name = $data[2];
 					$personObject->city = $data[3];
 					$personObject->state = $data[4];
 
 					$personObject->find();
-					
+
 					if ($personObject->N !=0) { //We found them!
 						$personObject->fetch();
 						if ($personObject->rpga_number == 0) {
@@ -240,10 +240,10 @@ class ScorePacketFormObject extends FormObject {
 						$id = $personObject->insert();
 						$personObject->id = $id;
 					}
-					echo '<pre>'; print_r($personObject); echo '</pre>';
+					//echo '<pre>'; print_r($personObject); echo '</pre>';
 				}
 			}
-			
+
 			if (!$personObject) { //Still can't find them
 				$this->errorString .= ' That RPGA Number Does Not Exist.';
 				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
@@ -256,10 +256,10 @@ class ScorePacketFormObject extends FormObject {
 				return true;
 			}
 		}
-		
+
 		//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
-		require_once('./lib/DataObjects/Person_section.php');
-		$personSectionObject = new DataObjects_Person_section;
+		$personSectionClass = DB_DataObject::staticAutoloadTable('person_section');
+		$personSectionObject = new $personSectionClass;
 		$personSectionObject->person_id = $personObject->id;
 		$personSectionObject->event_id = $this->data['event_id'];
 		$personSectionObject->section_id = $this->data['section_id'];
@@ -280,7 +280,7 @@ class ScorePacketFormObject extends FormObject {
 				$this->dataObject->update();
 			}
 		} else { //We need to create a new Person Section Record for this combo
-			$personSectionObject = new DataObjects_Person_section; //Have to start over with a new object due to a DB_DataObject "feature"
+			$personSectionObject = new $personSectionClass; //Have to start over with a new object due to a DB_DataObject "feature"
 
 			$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
 			$personSectionObject->person_id = $personObject->id;

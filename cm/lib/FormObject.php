@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.19 2002/08/15 04:15:35 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.20 2002/08/15 19:58:23 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -73,10 +73,6 @@ class FormObject {
         $options = &PEAR::getStaticProperty('DB_DataObject', 'options');
         $config = parse_ini_file('config/conmaster.ini', true);
         $options = $config['DB_DataObject'];
-        $db_name = $config['ConMaster']['db_name'];
-        $links = &PEAR::getStaticProperty('DB_DataObject', "{$db_name}.links");
-        $linkConfig = parse_ini_file("config/{$db_name}.links.ini", true);
-        $links = $linkConfig;
 
 		//Load the appropriate DataObject for this form
         $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
@@ -87,8 +83,8 @@ class FormObject {
             	return false;
             }
         } else { //We are loading mutiple records, or more like, processing the included table
-            require_once('./lib/DataObjects/' . ucwords($this->table) . '.php');
-            $this->dataObject = new $objectName;
+        	 $class = DB_DataObject::staticAutoloadTable($this->table);
+             $this->dataObject = new $class;
         }
 
 		//Load the appropriate template and initialize it
@@ -100,7 +96,7 @@ class FormObject {
         $this->template = new TemplatePower($templateName); //make a new TemplatePower object with default 'Edit' template
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
 
-		//If constants were specified, load them
+		//If constants weren't disabled, build the form_constants array
 		if ($this->data['load_constants'] != 'no') {
 			$this->loadConstants();
 		}
@@ -108,9 +104,8 @@ class FormObject {
 		//Set up the included object, if specified
         if ($this->data['included_table']) {
             $this->included_table = $this->data['included_table'];
-            require_once('./lib/DataObjects/' . ucwords($this->included_table) . '.php');
-            $incObjectName = 'DataObjects_' . ucwords($this->included_table); //Name of DataObject subclass to use for data access
-            $this->incDataObject = new $incObjectName; //Start with an empty included object.  It gets loaded in edit()
+            $incClass = DB_DataObject::staticAutoloadTable($this->included_table);
+            $this->incDataObject = new $incClass; //Start with an empty included object.  It gets loaded in edit()
             if ($this->data['included_order_by']) {
                 $this->incDataObject->orderBy($this->data['included_order_by']);
             }
@@ -175,7 +170,7 @@ class FormObject {
         //echo '<pre>'; print_r ($this->dataObject); echo '</pre>';
 		objectValueFill($this->dataObject, $this->template);
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
-	
+
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
             objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
@@ -266,7 +261,7 @@ class FormObject {
         if ($this->data['included_order_by']) {
             $this->incDataObject->orderBy($this->data['included_order_by']);
         }
-        
+
         return $this->edit();
     }  //End function updateIncluded
 
@@ -329,7 +324,7 @@ class FormObject {
         if ($this->data['included_order_by']) {
             $this->incDataObject->orderBy($this->data['included_order_by']);
         }
-        
+
         return $this->edit();
     }  //End function deleteIncluded
 	/**
