@@ -3,39 +3,56 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Authors: Tomas V.V.Cox <cox@idecnet.com>                             |
-// |          Stig Bakken <ssb@fast.no>                                   |
+// |          Stig Bakken <ssb@php.net>                                   |
 // +----------------------------------------------------------------------+
 //
-// $Id: Dependency.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
-
-/**
-* Methods for dependencies check. Based on Stig's dependencies RFC
-* at http://cvs.php.net/cvs.php/pearweb/rfc
-* (requires php >= 4.1)
-*/
+// $Id: Dependency.php,v 1.5 2003/09/16 19:22:47 cyface Exp $
 
 require_once "PEAR.php";
 
+define('PEAR_DEPENDENCY_MISSING',        -1);
+define('PEAR_DEPENDENCY_CONFLICT',       -2);
+define('PEAR_DEPENDENCY_UPGRADE_MINOR',  -3);
+define('PEAR_DEPENDENCY_UPGRADE_MAJOR',  -4);
+define('PEAR_DEPENDENCY_BAD_DEPENDENCY', -5);
+
+/**
+ * Dependency check for PEAR packages
+ *
+ * The class is based on the dependency RFC that can be found at
+ * http://cvs.php.net/cvs.php/pearweb/rfc. It requires PHP >= 4.1
+ *
+ * @author Tomas V.V.Vox <cox@idecnet.com>
+ * @author Stig Bakken <ssb@php.net>
+ */
 class PEAR_Dependency
 {
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param  object Registry object
+     * @return void
+     */
     function PEAR_Dependency(&$registry)
     {
         $this->registry = &$registry;
     }
+
     /**
-    * This method maps the xml dependency definition to the
-    * PEAR_dependecy one
+    * This method maps the XML dependency definition to the
+    * corresponding one from PEAR_Dependency
     *
     * $opts => Array
     *    (
@@ -44,35 +61,38 @@ class PEAR_Dependency
     *        [version] => 3.4
     *        [name] => HTML_Common
     *    )
+    *
+    * @param  string Error message
+    * @param  array  Options
+    * @return boolean
     */
-    function callCheckMethod($opts)
+    function callCheckMethod(&$errmsg, $opts)
     {
         $rel = isset($opts['rel']) ? $opts['rel'] : 'has';
-        if (isset($opts['version'])) {
-            $req = $opts['version'];
-            $rel = 'v.' . $rel;
-        } else {
-            $req = null;
-        }
+        $req = isset($opts['version']) ? $opts['version'] : null;
         $name = isset($opts['name']) ? $opts['name'] : null;
+        $errmsg = '';
         switch ($opts['type']) {
             case 'pkg':
-                return $this->checkPackage($name, $req, $rel);
+                return $this->checkPackage($errmsg, $name, $req, $rel);
                 break;
             case 'ext':
-                return $this->checkExtension($name, $req, $rel);
+                return $this->checkExtension($errmsg, $name, $req, $rel);
                 break;
             case 'php':
-                return $this->checkPHP($req, $rel);
+                return $this->checkPHP($errmsg, $req, $rel);
                 break;
             case 'prog':
-                return $this->checkProgram($name);
+                return $this->checkProgram($errmsg, $name);
                 break;
             case 'os':
-                return $this->checkOS($name);
+                return $this->checkOS($errmsg, $name);
                 break;
             case 'sapi':
-                return $this->checkSAPI($name);
+                return $this->checkSAPI($errmsg, $name);
+                break;
+            case 'zend':
+                return $this->checkZend($errmsg, $name);
                 break;
             default:
                 return "'{$opts['type']}' dependency type not supported";
@@ -88,20 +108,22 @@ class PEAR_Dependency
      *
      * @return mixed bool false if no error or the error string
      */
-    function checkPackage($name, $req = null, $relation = 'has')
+    function checkPackage(&$errmsg, $name, $req = null, $relation = 'has')
     {
-        if (substr($relation, 0, 2) == "v.") {
+        if (substr($relation, 0, 2) == 'v.') {
             $relation = substr($relation, 2);
         }
         switch ($relation) {
             case 'has':
                 if (!$this->registry->packageExists($name)) {
-                    return "requires package `$name'";
+                    $errmsg = "requires package `$name'";
+                    return PEAR_DEPENDENCY_MISSING;
                 }
                 return false;
             case 'not':
                 if (!$this->registry->packageExists($name)) {
-                    return "conflicts with package `$name'";
+                    $errmsg = "conflicts with package `$name'";
+                    return PEAR_DEPENDENCY_CONFLICT;
                 }
                 return false;
             case 'lt':
@@ -112,14 +134,46 @@ class PEAR_Dependency
             case 'gt':
                 $version = $this->registry->packageInfo($name, 'version');
                 if (!$this->registry->packageExists($name)
-                    || !version_compare($version, $req, $relation))
+                    || !version_compare("$version", "$req", $relation))
                 {
-                    return "requires package `$name' " .
-                           $this->signOperator($relation) . " $req";
+                    $errmsg = "requires package `$name' " .
+                        $this->signOperator($relation) . " $req";
+                    $code = $this->codeFromRelation($relation, $version, $req);
+                    return PEAR_DEPENDENCY_MISSING;
                 }
                 return false;
         }
-        return "Relation '$relation' with requirement '$req' is not supported (name=$name)";
+        $errmsg = "relation '$relation' with requirement '$req' is not supported (name=$name)";
+        return PEAR_DEPENDENCY_BAD_DEPENDENCY;
+    }
+
+    /**
+     * Check package dependencies on uninstall
+     *
+     * @param string $error     The resultant error string
+     * @param string $name      Name of the package to test
+     *
+     * @return bool true if there were errors
+     */
+    function checkPackageUninstall(&$error, $package)
+    {
+        $error = null;
+        $packages = $this->registry->listPackages();
+        foreach ($packages as $pkg) {
+            if ($pkg == $package) {
+                continue;
+            }
+            $deps = $this->registry->packageInfo($pkg, 'release_deps');
+            if (empty($deps)) {
+                continue;
+            }
+            foreach ($deps as $dep) {
+                if ($dep['type'] == 'pkg' && strcasecmp($dep['name'], $package) == 0) {
+                    $error .= "Package '$pkg' depends on '$package'\n";
+                }
+            }
+        }
+        return ($error) ? true : false;
     }
 
     /**
@@ -131,27 +185,29 @@ class PEAR_Dependency
      *
      * @return mixed bool false if no error or the error string
      */
-    function checkExtension($name, $req = null, $relation = 'has')
+    function checkExtension(&$errmsg, $name, $req = null, $relation = 'has')
     {
         // XXX (ssb): could we avoid loading the extension here?
-        if (!extension_loaded($name)) {
-            $dlext = OS_WINDOWS ? '.dll' : '.so';
-            if (!@dl($name . $dlext)) {
-                return "'$name' PHP extension is not installed";
-            }
+        if (!PEAR::loadExtension($name)) {
+            $errmsg = "'$name' PHP extension is not installed";
+            return PEAR_DEPENDENCY_MISSING;
         }
         if ($relation == 'has') {
             return false;
         }
+        $code = false;
         if (substr($relation, 0, 2) == 'v.') {
             $ext_ver = phpversion($name);
             $operator = substr($relation, 2);
-            if (!version_compare($ext_ver, $req, $operator)) {
-                return "'$name' PHP extension version " .
-                        $this->signOperator($operator) . " $req is required";
+            // Force params to be strings, otherwise the comparation will fail (ex. 0.9==0.90)
+            settype($req, "string");
+            if (!version_compare("$ext_ver", "$req", $operator)) {
+                $retval = "'$name' PHP extension version " .
+                    $this->signOperator($operator) . " $req is required";
+                $code = $this->codeFromRelation($relation, $ext_ver, $req);
             }
         }
-        return false;
+        return $code;
     }
 
     /**
@@ -161,16 +217,21 @@ class PEAR_Dependency
      *
      * @return mixed bool false if no error or the error string
      */
-    function checkOS($os)
+    function checkOS(&$errmsg, $os)
     {
         // XXX Fixme: Implement a more flexible way, like
         // comma separated values or something similar to PEAR_OS
-
-        // only 'has' relation is supported
-        if ($os == PHP_OS) {
+        static $myos;
+        if (empty($myos)) {
+            include_once "OS/Guess.php";
+            $myos = new OS_Guess();
+        }
+        // only 'has' relation is currently supported
+        if ($myos->matchSignature($os)) {
             return false;
         }
-        return "'$os' operating system not supported";
+        $errmsg = "'$os' operating system not supported";
+        return PEAR_DEPENDENCY_CONFLICT;
     }
 
     /**
@@ -181,15 +242,17 @@ class PEAR_Dependency
      *
      * @return mixed bool false if no error or the error string
      */
-    function checkPHP($req, $relation = 'v.ge')
+    function checkPHP(&$errmsg, $req, $relation = 'ge')
     {
-        if (substr($relation, 0, 2) == 'v.') {
-            $php_ver = phpversion();
-            $operator = substr($relation, 2);
-            if (!version_compare($php_ver, $req, $operator)) {
-                return "PHP version " . $this->signOperator($operator) .
-                       " $req is required";
-            }
+        if (substr($req, 0, 2) == 'v.') {
+            $req = substr($req,2, strlen($req) - 2);
+        }
+        $php_ver = phpversion();
+        $operator = substr($relation,0,2);
+        if (!version_compare("$php_ver", "$req", $operator)) {
+            $errmsg = "PHP version " . $this->signOperator($operator) .
+                " $req is required";
+            return PEAR_DEPENDENCY_CONFLICT;
         }
         return false;
     }
@@ -202,7 +265,7 @@ class PEAR_Dependency
      *
      * @return mixed bool false if no error or the error string
      */
-    function checkProgram($program)
+    function checkProgram(&$errmsg, $program)
     {
         // XXX FIXME honor safe mode
         $path_delim = OS_WINDOWS ? ';' : ':';
@@ -214,7 +277,8 @@ class PEAR_Dependency
                 return false;
             }
         }
-        return "'$program' program is not present in the PATH";
+        $errmsg = "'$program' program is not present in the PATH";
+        return PEAR_DEPENDENCY_MISSING;
     }
 
     /**
@@ -227,7 +291,7 @@ class PEAR_Dependency
      *                          hardcoded to 'has')
      * @return mixed bool false if no error or the error string
      */
-    function checkSAPI($name, $req = null, $relation = 'has')
+    function checkSAPI(&$errmsg, $name, $req = null, $relation = 'has')
     {
         // XXX Fixme: There is no way to know if the user has or
         // not other SAPI backends installed than the installer one
@@ -238,13 +302,43 @@ class PEAR_Dependency
         if ($sapi_backend == $name) {
             return false;
         }
-        return "'$sapi_backend' SAPI backend not supported";
+        $errmsg = "'$sapi_backend' SAPI backend not supported";
+        return PEAR_DEPENDENCY_CONFLICT;
+    }
+
+
+    /**
+     * Zend version check method
+     *
+     * @param string $req   which version to compare
+     * @param string $relation  how to compare the version
+     *
+     * @return mixed bool false if no error or the error string
+     */
+    function checkZend(&$errmsg, $req, $relation = 'ge')
+    {
+        if (substr($req, 0, 2) == 'v.') {
+            $req = substr($req,2, strlen($req) - 2);
+        }
+        $zend_ver = zend_version();
+        $operator = substr($relation,0,2);
+        if (!version_compare("$zend_ver", "$req", $operator)) {
+            $errmsg = "Zend version " . $this->signOperator($operator) .
+                " $req is required";
+            return PEAR_DEPENDENCY_CONFLICT;
+        }
+        return false;
     }
 
     /**
-    * Converts text comparing operators to them sign equivalents
-    * ex: 'ge' to '>='
-    */
+     * Converts text comparing operators to them sign equivalents
+     *
+     * Example: 'ge' to '>='
+     *
+     * @access public
+     * @param  string Operator
+     * @return string Sign equivalent
+     */
     function signOperator($operator)
     {
         switch($operator) {
@@ -258,6 +352,35 @@ class PEAR_Dependency
                 return $operator;
         }
     }
-}
 
+    /**
+     * Convert relation into corresponding code
+     *
+     * @access public
+     * @param  string Relation
+     * @param  string Version
+     * @param  string Requirement
+     * @return integer
+     */
+    function codeFromRelation($relation, $version, $req)
+    {
+        $code = PEAR_DEPENDENCY_BAD_DEPENDENCY;
+        switch ($relation) {
+            case 'gt': case 'ge': case 'eq':
+                // upgrade
+                $have_major = preg_replace('/\D.*/', '', $version);
+                $need_major = preg_replace('/\D.*/', '', $req);
+                if ($need_major > $have_major) {
+                    $code = PEAR_DEPENDENCY_UPGRADE_MAJOR;
+                } else {
+                    $code = PEAR_DEPENDENCY_UPGRADE_MINOR;
+                }
+                break;
+            case 'lt': case 'le': case 'ne':
+                $code = PEAR_DEPENDENCY_CONFLICT;
+                break;
+        }
+        return $code;
+    }
+}
 ?>

@@ -3,21 +3,21 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
+// | This source file is subject to version 3.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author: Stig Bakken <ssb@fast.no>                                    |
+// | Author: Stig Bakken <ssb@php.net>                                    |
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Autoloader.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Autoloader.php,v 1.5 2003/09/16 19:22:46 cyface Exp $
 
 if (!extension_loaded("overload")) {
     // die hard without ext/overload
@@ -38,7 +38,7 @@ require_once "PEAR.php";
  * methods, an instance of each class providing separated methods is
  * stored and called every time the aggregated method is called.
  *
- * @author Stig Sæther Bakken <ssb@fast.no>
+ * @author Stig Sæther Bakken <ssb@php.net>
  */
 class PEAR_Autoloader extends PEAR
 {
