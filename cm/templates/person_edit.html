@@ -231,11 +231,14 @@ function setRegTypeList() {
       <tr>
         <td class="FieldName" align="right">Print: </td>
         <td align="left">
-            <input type="button" value="Badge" onClick="popWinSmall('form.php?table=person&action=edit&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
-            <input type="button" value="Badge & All Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
+            
+        <input type="button" value="Badge" onClick="popWinSmall('form.php?table=person&action=edit&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')" name="badge">
+            
+        <input type="button" value="Badge & All Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')" name="badge_tix">
             <input type="hidden" name="ticketList" value="">
             <input type="button" name="selected_tix" value="Selected Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=tickets.html&logo_name={_convention_id[logo_file]}&included_where=id%20IN(' + form.ticketList.value + ')')">
-        </td>
+        <input type="button" value="Conf. Sheet" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=confirmation_sheet.html&logo_name={_convention_id[logo_file]}')" name="confirm_sheet">
+      </td>
         <td>
           <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=person&action=edit&included_table=note&included_order_by=last_modified%20desc&included_id_col=id&id={id}&template=note_edit.html&form_constants[table]=person&form_constants[form_label]={first_name}%20{last_name}','note_edit');return false">
         </td>
