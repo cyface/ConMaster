@@ -7,7 +7,7 @@ function popWin(url,windowName) {
 function popWinSmall(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
-	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=320,height=240');
+	window.open(url,windowName,'toolbar=no,status=no,resizable=no,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=320,height=240');
 }
 
 function deleteCheck(table,id) {
@@ -215,3 +215,230 @@ function isURLok(compareChar) // part of URL Encode
                 return false;
         }
 }
+//WDF 2/26/03 Add getDayofWeek and getUserTime functions
+
+// getDayofWeek - a numeric date into a day of the week
+//	input - date_str - a date string in the format yyyy-mm-dd 
+//	returns - a String that is the day of the week, e.g. 'Friday' 
+//  Notes - This function is NOT internationalized and only returns the english day of the week
+function getDayofWeek(date_str) {
+	var dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	var date_fields = date_str.split('-');
+	//Note Date uses 0-11 for months, not 1-12, so
+	date_fields[1]--;
+	var d = new Date(date_fields[0], date_fields[1], date_fields[2]);
+	return dayOfWeek[d.getDay()];
+}		 
+// getUserTime - translate 24 hour clock time to AM/PM
+//	input - time_str - a time string in the format hh:mm:ss (the :ss are optional)
+//	returns - a String in the format hh:mm AM|PM. 
+//		Note, the preceding 0 on the time is dropped, so 03:00:00, is returned as
+//		3:00 AM
+function getUserTime(time_str) {
+	var time_fields = time_str.split(':')
+	var am_pm = 'AM';
+	time_fields[0] -= 0;  //Convert hours to numbers
+	
+	//Check for the PM case.
+	if (time_fields[0] > 11) {
+		am_pm = 'PM';
+		if (time_fields[0] > 12) {
+			time_fields[0] -= 12;
+			//Special case to handle 24:00:00
+			if (time_fields[0] == 12) {
+				am_pm = 'AM';
+			}
+		}
+	}
+	//Remember the special case for 00:mm:ss, its 12:mm AM
+	if (time_fields[0] == 0) {
+			time_fields[0] = 12;
+	}
+	return time_fields[0] + ':' + time_fields[1] + ' ' + am_pm;
+}
+//WDF 2/26/03 Add createTicket and createBadge functions
+
+// createTicket - This function generates the HTML code needed to print an event ticket.
+//	input - logoFile - The name of the con logo file
+//			eventNumber - the complete event number (e.g. 10.2)
+//			price - The cost of the event, in dollars
+//			conName - The name of the con
+//			eventName - The complete name of the event
+//			eventDate - the date of the event, in yyyy-mm-dd format
+//			eventStart - the start time of the event, in hh:mm:ss format
+//			eventEnd - the end time of the event, in hh:mm:ss format 
+//	returns - Nothing 
+//  Notes - The HTML presented here is tuned for Internet Explorer 5.x for Macintosh (only tested under OS X)
+//			and for Internet Explorer 6.0 for Windows. It assumes that we are printing to a Dymo label printer
+//			formatted for label badge stock (30365, 2.43" x 3.5" in landscape mode. All other uses are
+//			at the risk of the user.
+function createTicket(logoFile, eventNumber, price, conName, eventName, eventDate, eventStart, eventEnd) {
+
+//	Define properties for PC printing
+	var tWidth = "280";
+	var tHeight = "183";
+	var logoWidth = "80";
+	var logoHeight = "80";
+	var evNumHeight = "53";
+	var evNumSize = "7";
+	var priceHeight = "27";
+	var priceSize = "4";
+	var evNumWidth = "200";
+	var conNameHeight = "26";
+	var conNameSize = "4";
+	var evNameHeight = "40";
+	var evNameSize = "3";
+	var timeHeight = "27";
+	var timeSize = "3";
+	var isMac = navigator.platform.indexOf("Mac") != -1;
+//	redefine properties for Mac printing
+	if (isMac) {
+		tWidth = "210";
+		tHeight = "140";
+		logoWidth = "60";
+		logoHeight = "60";
+		evNumHeight = "40";
+		evNumSize = "6";
+		priceHeight = "20";
+		priceSize = "3";
+		evNumWidth = "150";
+		conNameHeight = "20";
+		conNameSize = "3";
+		evNameHeight = "30";
+		evNameSize = "2";
+		timeHeight = "30";
+		timeSize = "2";
+		}
+
+	document.write('<table width=',tWidth,' border="0" height=',tHeight,' cellpadding="0" cellspacing="0" name="badge">');
+	document.write('<tr>'); 
+	document.write('<td rowspan="2" width=',logoWidth,' align="center" valign="center">'); 
+	document.write('<img src="images/logos/',logoFile,'" width=',logoWidth,' height=',logoHeight,'>');
+	document.write('</td>');
+	document.write('<td height = ',evNumHeight,' width=',evNumWidth,' align = "right">'); 
+	document.write('<b><font size=',evNumSize,' face="Arial, Helvetica, sans-serif">',eventNumber, '</font></b>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr>'); 
+	document.write('<td height = '+priceHeight+' width='+evNumWidth+' align = "right">');
+	document.write('<font size='+priceSize+' face="Arial, Helvetica, sans-serif">$',price,'</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr>');
+	document.write('<td colspan="2" height='+conNameHeight+' align="center" valign="center" bgcolor="black"> ');
+	document.write('<font color="white" size='+conNameSize+' face="Arial, Helvetica, sans-serif"><b>',conName,'</b></font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr> ');
+	document.write('<td colspan="2" height='+evNameHeight+' align="center" > ');
+	document.write('<font size='+evNameSize+'>',eventName,'</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr> ');
+	document.write('<td colspan="2" height='+timeHeight+' align="center" valign="center" > ');
+	document.write('<font size='+timeSize+' face="Arial, Helvetica, sans-serif">');
+	document.write(getDayofWeek(eventDate), '  ');
+	document.write(getUserTime(eventStart), '-');
+	document.write(getUserTime(eventEnd));
+	document.write('</font></td></tr></table>');
+	}
+
+// createBadge - This function generates the HTML code needed to print person's badge.
+//	input - logoFile - The name of the con logo file
+//			badgeNum - the number of the badge
+//			regType - The registration type
+//			rpgaNum - The person's RPGA number
+//			conName - The name of the con
+//			firstName - The person's first name
+//			laststName - The person's last name
+//	returns - Nothing 
+//  Notes - The HTML presented here is tuned for Internet Explorer 5.x for Macintosh (only tested under OS X)
+//			and for Internet Explorer 6.0 for Windows. It assumes that we are printing to a Dymo label printer
+//			formatted for label badge stock (30365, 2.43" x 3.5" in landscape mode. All other uses are
+//			at the risk of the user.
+function createBadge(logoFile, badgeNum, regType, rpgaNum, conName, firstName, lastName) {
+
+//	Define properties for PC printing
+	var tWidth = "280";
+	var tHeight = "183";
+	var logoWidth = "80";
+	var logoHeight = "80";
+	var badgeNumHeight = "40";
+	var badgeNumSize = "7";
+	var regHeight = "26";
+	var regSize = "4";
+	var rpgaHeight = "14";
+	var rpgaSize = "2";
+	var evNumWidth = "200";
+	var conNameHeight = "25";
+	var conNameSize = "4";
+	var firstNameHeight = "40";
+	var firstNameSize = "6";
+	var lastNameHeight = "33";
+	var lastNameSize = "5";
+	var isMac = navigator.platform.indexOf("Mac") != -1;
+//	redefine properties for Mac printing
+	if (isMac) {
+		tWidth = "210";
+		tHeight = "140";
+		logoWidth = "60";
+		logoHeight = "60";
+		badgeNumHeight = "30";
+		badgeNumSize = "6";
+		regHeight = "20";
+		regSize = "3";
+		rpgaHeight = "10";
+		rpgaSize = "1";
+		evNumWidth = "150";
+		conNameHeight = "20";
+		conNameSize = "3";
+		firstNameHeight = "35";
+		firstNameSize = "5";
+		lastNameHeight = "25";
+		lastNameSize = "4";
+		}
+
+	document.write('<table width=',tWidth,' border="0" height=',tHeight,' cellpadding="0" cellspacing="0" name="badge">');
+	document.write('<tr>'); 
+	document.write('<td rowspan="3" width=',logoWidth,' align="center" valign="center">'); 
+	document.write('<img src="images/logos/',logoFile,'" width=',logoWidth,' height=',logoHeight,'>');
+	document.write('</td>');
+	document.write('<td height = ',badgeNumHeight,' width=',evNumWidth,' align = "right">'); 
+	document.write('<b><font size=',badgeNumSize,' face="Arial, Helvetica, sans-serif">',badgeNum, '</font></b>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr>'); 
+	document.write('<td height = ',regHeight,' width=',evNumWidth,' align = "right">');
+	document.write('<font size=',regSize,' face="Arial, Helvetica, sans-serif">',regType,'</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr>'); 
+	document.write('<td height = ',rpgaHeight,' width=',evNumWidth,' align = "right">');
+	document.write('<font size=',rpgaSize,' face="Arial, Helvetica, sans-serif">');
+	if (rpgaNum != 0) {
+		document.write('RPGA: ',rpgaNum);
+	}
+	else {
+		document.write(' ');
+	}
+	document.write('</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr>');
+	document.write('<td colspan="2" height=',conNameHeight,' align="center" valign="center" bgcolor="black"> ');
+	document.write('<font color="white" size=',conNameSize,' face="Arial, Helvetica, sans-serif"><b>',conName,'</b></font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr> ');
+	document.write('<td colspan="2" height=',firstNameHeight,' align="center" > ');
+	document.write('<font size=',firstNameSize,'>',firstName,'</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('<tr> ');
+	document.write('<td colspan="2" height=',lastNameHeight,' align="center" > ');
+	document.write('<font size=',lastNameSize,'>',lastName,'</font>');
+	document.write('</td>');
+	document.write('</tr>');
+	document.write('</table>');
+	}
+

@@ -13,49 +13,10 @@
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" border=0 topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" onLoad="printMe();window.close()">
-<table width="200" border="0" height="120" cellpadding="0" cellspacing="0" name="badge">
-  <tr> 
-    <td rowspan="2" width="60"> 
-      <div align="center"><img src="images/logos/{_convention_id[logo_file]}" width="64" height="64"></div>
-    </td>
-    <td width="144"> 
-      <p align="right"><b><font size="5">{badge_number}</font><br>
-        </b><font size="2">RPGA: {rpga_number}</font></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="144"> 
-      <div align="center"><font size="5">{first_name}</font></div>
-    </td>
-  </tr>
-  <tr> 
-    <td width="60"> 
-      <div align="center"><b>{_convention_id[name]}</b></div>
-    </td>
-    <td width="144"> 
-      <div align="center"><font size="6">{last_name}</font></div>
-    </td>
-  </tr>
-</table>
+<script language="JavaScript">createBadge("{_convention_id[logo_file]}", "{badge_number}", "{reg_type}", "{rpga_number}", "{_convention_id[name]}", "{first_name}", "{last_name}");</script>
+
 <!-- START BLOCK : person_section_row -->
-<table width="200" border="0" height="120" cellpadding="0" cellspacing="0" name="badge">
-  <tr> 
-    <td width="60"> 
-      <div align="center"><img src="images/logos/{_convention_id[logo_file]}" width="64" height="64"></div>
-    </td>
-    <td rowspan="2" align="center"> <span align="center"><b><font size="2" face="Verdana, Arial, Helvetica, sans-serif">EVENT 
-      TICKET<br>
-      </font></b></span><font size="1" face="Times New Roman, Times, serif">{_section_id[complete_event_number]}: 
-      {_event_id[event_name]}<br>
-      </font><font size="2">{_section_id[date]} {_section_id[start_time]}-{_section_id[end_time]}<br>
-      Price: ${price}</font></td>
-  </tr>
-  <tr> 
-    <td width="60"> 
-      <div align="center"><b>{_convention_id[name]}</b></div>
-    </td>
-  </tr>
-</table>
+<script language="JavaScript">createTicket("{_convention_id[logo_file]}", "{_section_id[complete_event_number]}", "{price}", "{_convention_id[name]}", "{_event_id[event_name]}", "{_section_id[date]}", "{_section_id[start_time]}", "{_section_id[end_time]}");</script>
 <!-- END BLOCK : person_section_row -->
 </body>
 </html>

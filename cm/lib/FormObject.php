@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.24 2002/10/17 21:35:21 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.25 2003/09/15 20:58:39 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -288,6 +288,14 @@ class FormObject {
 			$this->template->assign('action_message', 'Saved');
 		}
 
+		//Refresh main object's data, in case saving the included object changed it.
+		$class = DB_DataObject::staticAutoloadTable($this->table); //Name of DataObject subclass to use for data access
+		$reloadObject = new $class;
+		$reloadObject->id = $this->data['id'];
+		$reloadObject->find();
+		$reloadObject->fetch();
+		$this->dataObject = $reloadObject;
+
 		$this->edit();
 	}  //End function saveIncluded
 
@@ -319,6 +327,14 @@ class FormObject {
 		errorCheck($this->incDataObject->delete()); //Try to delete the record in the DB using the object
 
 		$this->template->assign('action_message', 'Row Deleted');
+
+		//Refresh main object's data, in case saving the included object changed it.
+		$class = DB_DataObject::staticAutoloadTable($this->table); //Name of DataObject subclass to use for data access
+		$reloadObject = new $class;
+		$reloadObject->id = $this->data['id'];
+		$reloadObject->find();
+		$reloadObject->fetch();
+		$this->dataObject = $reloadObject;
 
 		$this->edit();
 	}  //End function deleteIncluded

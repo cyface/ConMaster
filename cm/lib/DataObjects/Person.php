@@ -47,9 +47,9 @@ class DataObjects_Person extends DB_DataObject {
 		require_once('DB.php');
 		$connections = &PEAR::getStaticProperty('DB_DataObject','connections');
 		$__DB = &$connections[$this->_database_dsn_md5];
-
-		$this->badge_number = $__DB->nextId('badge_number'); //Fetch the next id in the sequence.  To set the sequence to a specifc value, use phpMyAdmin to tweak the value in the badge_number_seq table
-
+		if ($this->reg_type != null) {
+			$this->badge_number = $__DB->nextId('badge_number'); //Fetch the next id in the sequence.  To set the sequence to a specifc value, use phpMyAdmin to tweak the value in the badge_number_seq table
+		}
 		return DB_DataObject::insert();
 	}
 
@@ -72,5 +72,22 @@ class DataObjects_Person extends DB_DataObject {
 
 		return DB_DataObject::delete(); //Call the parent method
 	}
+
+	function update() {
+		require_once('DB.php');
+		$connections = &PEAR::getStaticProperty('DB_DataObject','connections');
+		$__DB = &$connections[$this->_database_dsn_md5];
+		if ($this->reg_type != null && $this->reg_type != " ") {
+			if ($this->badge_number == null || $this->badge_number <= 0) {
+				$this->badge_number = $__DB->nextId('badge_number'); //Fetch the next id in the sequence.  To set the sequence to a specifc value, use phpMyAdmin to tweak the value in the badge_number_seq table
+			}
+		}
+		else {
+			$this->badge_number = 0;
+		}
+	
+		return DB_DataObject::update(); //Call the parent method
+	}
+
 }
 ?>

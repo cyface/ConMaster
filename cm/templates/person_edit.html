@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 <script language="JavaScript">
-<!--
+
 function fmtShortTime (inTimeStr) {
 	var formattedTime;
 	var dateObj;
@@ -22,7 +22,10 @@ function updateTicketList(id,checked) {
 			document.actions_form.ticketList.value += ',' + id;
 		}
 	} else {
-		document.actions_form.actions_form.value = document.actions_form.ticketList.value.replace(',' + id,'');
+		document.actions_form.ticketList.value = document.actions_form.ticketList.value.replace(id,'');
+		document.actions_form.ticketList.value = document.actions_form.ticketList.value.replace(',,',',');
+		document.actions_form.ticketList.value = document.actions_form.ticketList.value.replace(/^,/,'');
+		document.actions_form.ticketList.value = document.actions_form.ticketList.value.replace(/,$/,'');
 	}
 }
 
@@ -32,11 +35,22 @@ function initRegTypes() {
 	<!-- END BLOCK : form_constants[reg_type]_row -->
 }
 var regTypes = new initRegTypes();
-
 function regTypeLookup(inType) {
-	var old_cost = parseInt(regTypes[document.person_edit.old_reg_type.value])
-	var old_value = parseInt(document.person_edit.total_fee.value)
-	var new_cost = parseInt(regTypes[inType])
+
+	//Modified assignment of old_cost and old_value to handle null value fields
+	//WDF 2/24/03
+	var old_cost = 0
+	if (document.person_edit.old_reg_type.value != '') {
+		old_cost = parseInt(regTypes[document.person_edit.old_reg_type.value]);
+	}
+	var old_value = 0
+	if (document.person_edit.total_fee.value != '') {
+		old_value = parseInt(document.person_edit.total_fee.value);
+	}
+	var new_cost = 0
+	if (inType != '' && inType != null) {
+		new_cost = parseInt(regTypes[inType])
+	}
 	var additional_fees = 0
 	if (document.person_edit.additional_fees.value != '') {
 	   additional_fees = parseInt(document.person_edit.additional_fees.value);
@@ -211,6 +225,7 @@ function setRegTypeList() {
     </tr>
   </table>
 </form>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
 <!-- START BLOCK : included_header -->
 <form name="actions_form" method="post" action="form.php">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -270,7 +285,7 @@ function setRegTypeList() {
   <tr> 
     <form name="person_section_delete_{id}" method="post" action="form.php">
       <td class="TableData"> 
-        <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},form.ticket_print.checked)">
+        <input type="checkbox" name="ticket_print" value="ticketprint" onclick="updateTicketList({id},form.ticket_print.checked)">
       </td>
       <td> 
         <input type="hidden" name="table" value="person">
@@ -295,7 +310,7 @@ function setRegTypeList() {
         <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
-      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_event_id[event_name]}</a></td>
+      <td class="TableData"><a href="form.php?table=event&action=edit&included_table=section&included_order_by=section_number&id={event_id}" target="popup" onClick="popWin()" class="TableData">{_event_id[event_name]}</a></td>
       <td class="TableData"> 
         <script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>
         - 
@@ -310,6 +325,7 @@ function setRegTypeList() {
   </tr>
   <!-- END BLOCK : person_section_row -->
 </table>
-<span class="FieldName><small><b>Note:</b> A place of 0 indicates that this person judged that event, and got registered for it via a Score Packet.</small></span>
+<span class="FieldName"><small><b>Note:</b> A place of 0 indicates that this person judged that event, and got registered for it via a Score Packet.</small></span>
 </body>
 </html>
+

@@ -1,6 +1,5 @@
 SELECT
 	per.id AS person_id,
-	per.prereg_batch_num,
 	per.first_name,
 	per.last_name,
 	per.street,
@@ -32,7 +31,6 @@ AND ps.event_id = ev.id
 AND per.badge_number IS NOT NULL
 AND per.reg_type != 'Score Packet'
 ORDER BY
-	per.prereg_batch_num desc,
 	ps.person_id,
 	sec.complete_event_number
 ;
