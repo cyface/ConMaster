@@ -65,7 +65,14 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="" onclick="popWin('score_packet.php?table=score_packet&action=edit&load_constants[rpga_event_type]=constant','score_packet_edit');return false">Create a New Score Packet</a></span>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="FieldName"><a href="" onClick="popWin('score_packet.php?table=score_packet&action=edit&load_constants[rpga_event_type]=constant','score_packet_edit');return false">Create 
+      a New Score Packet</a></td>
+    <td class="FieldName"><a href="export.php?queryFile=rpga_export_query.sql&filename=scores.txt&format=tab&quotes=off">Download 
+      RPGA Score File</a></td>
+  </tr>
+</table>
 <hr noshade>
 </body>
 </html>
