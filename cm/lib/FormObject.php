@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.21 2002/08/16 23:45:53 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.22 2002/08/16 23:47:43 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -155,7 +155,7 @@ class FormObject {
 	var $included_table = false; //Name of the DB table this object's included table maps to	@access private
 	var $included_class = false; //Name of the included table's DataObject subclass 			@access private
 	var $data = array('id' => false); //A hash of the data elements of this form				@access private
-	var $form_constants = array('table' => false); //A hash of constatnts to pass to the form	@access private
+	var $form_constants = array('table' => false); //A hash of constants to pass to the form	@access private
 	var $dataObject = false; //The dataObject associcated with this form						@access private
 	var $incDataObject = false; //The included dataObject associcated with this form (subform)	@access private
 	var $template = false; //The template Object associcated with this form					 	@access private
