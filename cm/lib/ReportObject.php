@@ -52,7 +52,7 @@ class ReportObject {
 
 		// get DataObject's config - so we can use the config directly.
 		$options = &PEAR::getStaticProperty('DB_DataObject', 'options');
-		$config = parse_ini_file('./lib/DataObjects/cyface.ini', true);
+		$config = parse_ini_file('config/conmaster.ini', true);
 		$options = $config['DB_DataObject'];
 
 		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'handle_pear_error');
