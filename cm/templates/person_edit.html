@@ -135,21 +135,33 @@ function fmtShortTime (inTimeStr) {
         </div>
       </td>
       <td>
-        <div align="center"><span class="FieldName">
+        <div align="center">
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="badge_number" value="{badge_number}">
           <input type="hidden" name="table" value="person">
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
-          </span>
           <input type="submit" name="save" value="Save">
         </div>
       </td>
     </tr>
   </table>
+  </form>
   <hr>
-</form>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form><tr>
+      <td>
+        <div align="center">
+          <input type="button" value="Print Badge" onClick="popwinsmall('form_merge.php?first_name={first_name}&last_name={last_name}&badge_number={badge_number}&rpga_number={rpga_number}&convention_name={_convention_id[name]}&logo_name=ben_con_2000.gif&template=badge.html')">
+        </div>
+      </td>
+      <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+    </tr></form>
+  </table>
+  <hr>
+<!-- START BLOCK : included_header -->
 <span class="FormTitle">Events</span> <span class="FormTitle">{action_message}</span> 
 <span class="FieldError">{form_error} </span>
 <table width="100%" border="1">
@@ -185,11 +197,12 @@ function fmtShortTime (inTimeStr) {
       <td class="TableData">&nbsp; </td>
     </form>
   </tr>
+  <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
   <tr> 
     <form name="person_section_delete" method="post" action="form.php">
       <td class="TableData" width="5%"> 
-        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="table2" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
         <input type="hidden" name="parent_id" value="{person_id}">

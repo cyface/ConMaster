@@ -1,5 +1,13 @@
-function popwin() {
-	window.open('please_wait.html','popup','toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,width=640,height=480');
+function popwin(url,windowName) {
+	if(!url) url="please_wait.html";
+	if(!windowName) windowName="popup";
+	window.open(url,windowName,'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
+}
+
+function popwinsmall(url,windowName) {
+	if(!url) url="please_wait.html";
+	if(!windowName) windowName="popup";
+	window.open(url,windowName,'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,width=320,height=240');
 }
 	
 function MM_goToURL() { //v3.0
@@ -39,13 +47,6 @@ function MM_preloadImages() { //v3.0
   var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
     var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
     if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
-}
-
-function MM_findObj(n, d) { //v3.0
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
 }
 
 function MM_swapImage() { //v3.0
@@ -109,4 +110,82 @@ function YY_checkform() { //v4.66
   }
   if (myErr!=''){alert('The required information is incomplete or contains errors:\t\t\t\t\t\n\n'+myErr)}
   document.MM_returnValue = (myErr=='');
+}
+
+var hexVals = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+var unsafeString = "\"<>%\\^[]`";
+
+function highlight(element1){element1.focus();element1.select();}
+
+function URLDecode()
+{
+	var returnstr=unescape(form1.string1.value);
+	document.all.div1.innerHTML='RESULT:<br><textarea name="textarea2">'+returnstr+'</textarea>';
+	highlight(form3.textarea2);
+        // while coding i found that IE had problem writing '<form>' to innerhtml. </form> was ok. 'unknown runtime error' IE5.5.
+}
+
+function URLEncode(val)
+{
+        var state   = 'urlenc';
+        var len     = val.length;
+        var backlen = len;
+        var i       = 0;
+
+        var newStr  = "";
+        var frag    = "";
+        var encval  = "";
+
+        for (i=0;i<len;i++) 
+        {
+// uncomment the next 7 commented lines to encode only the usual URL unsafe characters
+//                if (isURLok(val.substring(i,i+1)))
+//                {
+//                        newStr = newStr + val.substring(i,i+1);
+//                }
+//                else
+//                {
+                        tval1=val.substring(i,i+1);
+                        newStr = newStr + "%" + decToHex(tval1.charCodeAt(0),16);
+//                }
+        }
+	document.all.div1.innerHTML='RESULT:<br><textarea name="textarea2">'+newStr+'</textarea>';
+	highlight(form3.textarea2);
+}
+
+function decToHex(num, radix) // part of URL Encode
+{
+        var hexString = "";
+        while (num >= radix)
+        {
+               temp = num % radix;
+               num = Math.floor(num / radix);
+               hexString += hexVals[temp];
+        }
+        hexString += hexVals[num];
+        return reversal(hexString);
+}
+
+function reversal(s) // part of URL Encode
+{
+        var len = s.length;
+        var trans = "";
+        for (i=0; i<len; i++)
+        {
+                trans = trans + s.substring(len-i-1, len-i);
+        }
+        s = trans;
+        return s;
+}
+
+function isURLok(compareChar) // part of URL Encode
+{
+        if (unsafeString.indexOf(compareChar) == -1 && compareChar.charCodeAt(0) > 32 && compareChar.charCodeAt(0) < 123) 
+        {
+                return true;
+        }
+        else
+        {
+                return false;
+        }
 }

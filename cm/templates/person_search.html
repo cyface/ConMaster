@@ -58,7 +58,7 @@
   <!-- START BLOCK : result_row -->
   <tr>
     <td class="TableDataBold">{badge_number}</td>
-    <td class="TableData"><a href="form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name},
+    <td class="TableData"><a href="" class="TableData" onclick="popwin('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}','person_edit');return false">{last_name},
       {first_name}</a></td>
     <td class="TableData">{street}</td>
     <td class="TableData">{city}
@@ -67,7 +67,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form.php?table=person&action=edit" target="popup" onclick="popwin()">Create a New Person</a></span>
+<span class="FieldName"><a href="" onclick="popwin('form.php?table=person&action=edit','person_edit');return false">Create a New Person</a></span>
 <hr noshade>
 </body>
 </html>

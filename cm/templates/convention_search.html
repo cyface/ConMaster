@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass" onLoad="person_search_form.submit()">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
@@ -55,7 +55,7 @@
   </tr>
   <!-- START BLOCK : result_row -->
   <tr> 
-    <td class="TableDataBold"><a href="form.php?table=convention&action=edit&included_table=slot&included_order_by=slot_number&id={id}" target="popup" class="TableData" onclick="popwin()">{name}</a></td>
+    <td class="TableDataBold"><a href="" class="TableData" onclick="popwin('form.php?table=convention&action=edit&included_table=slot&included_order_by=slot_number&id={id}','convention_edit');return false">{name}</a></td>
     <td class="TableData">{sponsor_organization}</td>
     <td class="TableData">{street}</td>
     <td class="TableData">{rpga_convention_code} 
@@ -63,7 +63,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form.php?table=convention&action=edit" target="popup" onclick="popwin()">Create a New Convention</a></span>
+<span class="FieldName"><a href="" onclick="popwin('form.php?table=convention&action=edit','convention_edit');return false">Create a New Convention</a></span>
 <hr noshade>
 </body>
 </html>
