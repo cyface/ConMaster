@@ -17,7 +17,7 @@
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Remote.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: Remote.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 
 require_once 'PEAR/Command/Common.php';
 require_once 'PEAR/Common.php';

@@ -17,7 +17,7 @@
 // |          Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: LDAP.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: LDAP.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 //
 
 require_once "Auth/Container.php";
@@ -54,7 +54,7 @@ require_once "PEAR.php";
  *
  * @author   Jan Wagner <wagner@netsols.de>
  * @package  Auth
- * @version  $Revision: 1.3 $
+ * @version  $Revision: 1.4 $
  */
 class Auth_Container_LDAP extends Auth_Container
 {

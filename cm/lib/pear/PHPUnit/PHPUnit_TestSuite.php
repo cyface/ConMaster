@@ -16,7 +16,7 @@
 // | Author: Sebastian Bergmann <sb@sebastian-bergmann.de>                |
 // +----------------------------------------------------------------------+
 //
-// $Id: PHPUnit_TestSuite.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: PHPUnit_TestSuite.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 //
 
 require_once 'PHPUnit/PHPUnit_TestCase.php';

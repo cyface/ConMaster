@@ -15,7 +15,7 @@
 // | Authors: Alan Knowles <alan@akbkhome.com>                 |
 // +----------------------------------------------------------------------+
 //
-// $Id: phpIniFile.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: phpIniFile.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 
 require_once( "Config/Container.php" ) ;
 
@@ -30,7 +30,7 @@ require_once( "Config/Container.php" ) ;
 *
 * @author      Alan Knowles <alan@akbkhome.com>
 * @access      public
-* @version     $Id: phpIniFile.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+* @version     $Id: phpIniFile.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 * @package     Config
 */
 

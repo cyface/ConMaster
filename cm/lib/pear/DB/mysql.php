@@ -17,7 +17,7 @@
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: mysql.php,v 1.4 2002/07/10 22:57:08 cyface Exp $
+// $Id: mysql.php,v 1.5 2002/07/18 21:39:39 cyface Exp $
 //
 // Database independent query interface definition for PHP's MySQL
 // extension.

@@ -16,7 +16,7 @@
   | Author: Stig Sæther Bakken <ssb@fast.no>                             |
   +----------------------------------------------------------------------+
 
-  $Id: CLI.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+  $Id: CLI.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 */
 
 require_once "PEAR.php";

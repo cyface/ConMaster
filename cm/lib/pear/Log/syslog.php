@@ -1,5 +1,5 @@
 <?php
-// $Id: syslog.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: syslog.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 // $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
 
 /**
@@ -8,7 +8,7 @@
  * (PHP emulates this with the Event Log on Windows machines).
  * 
  * @author  Chuck Hagenbuch <chuck@horde.org>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @since   Horde 1.3
  * @package Log 
  */

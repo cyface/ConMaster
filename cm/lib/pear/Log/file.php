@@ -1,5 +1,5 @@
 <?php
-// $Id: file.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: file.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 // $Horde: horde/lib/Log/file.php,v 1.4 2000/06/28 21:36:13 jon Exp $
 
 /**
@@ -7,7 +7,7 @@
  * abstract class which writes message to a text file.
  * 
  * @author  Jon Parise <jon@horde.org>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @since   Horde 1.3
  * @package Log
  */

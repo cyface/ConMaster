@@ -1,5 +1,5 @@
 <?php
-// $Id: Log.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
+// $Id: Log.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
 // $Horde: horde/lib/Log.php,v 1.15 2000/06/29 23:39:45 jon Exp $
 
 /**
@@ -8,7 +8,7 @@
  *
  * @author  Chuck Hagenbuch <chuck@horde.org>
  * @author  Jon Parise <jon@horde.org>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @since   Horde 1.3
  * @package Log
  */
