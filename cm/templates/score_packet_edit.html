@@ -111,6 +111,9 @@ function popSetup() {
 		searchSections(document.packet_edit.event_id.value);
 		searchEvents(document.packet_edit.event_id.value);
 	} else {
+		searchSections(document.packet_edit.events.options[0].value);
+		searchEvents(document.packet_edit.events.options[0].value);
+		setRPGAType(document.packet_edit.events.options[0].value);
 		document.packet_edit.events.size=10;
 		document.packet_edit.sections.size=4;
 	}
