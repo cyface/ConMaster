@@ -1,0 +1,1188 @@
+<HTML>
+<body bgcolor="#FFFFFF">
+<h1>ConMaster5 Detailed Data Model</h1>
+<hr>
+Version 1.0 23-OCT-2000 
+<h2>Authors</h2>
+<ul>
+  <li>Tim White</li>
+  <li>Daniel Llewellyn<br>
+  </li>
+</ul>
+<h2>Overview of the Data Model</h2>
+
+The ConMaster5 Data Model is based on previous incarnations of ConMaster that 
+have proven themselves in production use. The model does not strive toward 3rd 
+Normal Form, but instead strives for maximum ease of development and reporting, 
+with performance an occasional consideration. Don't forget to picture the students 
+and classes model when thinking about the relationships between teh main tables. 
+<h3>Simple ERD of the Main Tables</h3>
+
+<PRE>
+**********    ******************    ***********    *********
+* Person *---<* Person Section *>---* Section *>---* Event *
+**********    ******************    ***********    *********
+     |                     \/            |
+    /\                      |            /\
+*********************       |     ****************
+* Person_Convention *       |_____* Score Packet *
+*********************             ****************
+    \/
+     |
+**************
+* Convention *
+**************
+</PRE>
+
+  
+<h3>Quick Summary of all Tables</h3>
+<table width="100%" border="1">
+  <tr> 
+    <td><b><a href="#Contact">Contact</a></b></td>
+    <td>A record of contact with a person.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Convention">Convention</a></b></td>
+    <td>A particular instance of a convention (Genghis Con XII).</td>
+  </tr>
+  <tr> 
+    <td><b> <a href="#Event">Event</a></b></td>
+    <td>Something that can be participated in (game, seminar, etc.).</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Group">Group</a></b></td>
+    <td>A group that people can belong to, such as the RPGA, or club.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Item">Item</a></b></td>
+    <td>Something that can be bought, perhaps at an auction, or awarded.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Location">Location</a></b></td>
+    <td>A room or table at a venue.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Note">Note</a></b></td>
+    <td>Messages attached to any other object.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Person">Person</a></b></td>
+    <td>An individual associated with the convention, whether they be staff, authors, 
+      attendees, judges, or vendors.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Person_Convention">Person_Convention</a> </b></td>
+    <td>A registration for or assoication with a person with a con.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Person_Item">Person_Item</a></b></td>
+    <td>A person purchasing an Item.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Person_Group">Person_Group</a></b></td>
+    <td> A membership of a person in a group (and includes id number).</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Person_Section">Person_Section</a></b></td>
+    <td>An intersection (many to many) entity between Person and Section. It allows 
+      each section to be associated with many people, and each Person to be associated 
+      with many Sections.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Preference">Preference</a></b></td>
+    <td>Holds a person's preferences (games, times, etc.)</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Score_Packet">Score_Packet</a></b></td>
+    <td>A labeled subset of people participating in a particular event at a particular 
+      time. It is used to track the performance of that group of participants. 
+      Additionally, it is used to mimic the RPGA score packets that are used to 
+      sumbit performance data to the RPGA(tm) Network.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Section">Section</a></b></td>
+    <td>An occurance of an event at a specific time.</td>
+  </tr>
+  <tr> 
+    <td height="17"><b><a href="#Sequence">Sequence</a></b></td>
+    <td height="17">Numeric sequences for _id fields.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Time_Slot">Time_Slot</a></b></td>
+    <td>A block of time in which Sections for a particular con occur.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Transaction">Transaction</a></b></td>
+    <td>A Person paying (or being refunded) money.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Type">Type</a></b></td>
+    <td>A table to hold possible values for other fields.</td>
+  </tr>
+  <tr> 
+    <td><b><a href="#Venue">Venue</a></b></td>
+    <td>A hotel, game store, or other place where the con is held.</td>
+  </tr>
+</table>
+<hr>
+<h3>Detailed Descriptions of Each Table</h3>
+<hr>
+<h4>Contact<a name="Contact"></a> </h4>
+<p>This is a record of a contact with a person. Useful for both personal contacts, 
+  and recording system activity perhaps.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Contact_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Contacted_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Contactor_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Subject</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Body</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Method_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Callback_Method_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Callback_Number</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Priority_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Status_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Created</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Returned_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Reminder_Date</b></td>
+    <td>DATE</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Convention<a name="Convention"></a></h4>
+<p>Remember that each occurance of a convention has its own convention record. 
+  Facilities need to exist to duplicate information between conventions.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Sponsor_Group_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Year</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Logo</b></td>
+    <td>BLOB</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Primary_Contact_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Event<a name="Event"></a></h4>
+<p>Events are unique to a convention. Although the same event (for RPGA events 
+  especially) might actually run at multiple conventions, the description, price, 
+  RPGA Event Type, and other factors might be considerably different. This each 
+  convention has its own copy. For the future, we might add an RPGA Event table 
+  that parents Event. The purpose of this would be to copy information between 
+  conventions, and to more easily track scores across the event.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Event_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Event_Code</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Game_System</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Scenario_Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Author_Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Description</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Price</b></td>
+    <td>REAL</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Multiple_Registration_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Round_Count</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Participant_Level</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Maximum_Table_Size</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Contact_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Sponsor_Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Event_Received_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>RPGA_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>RPGA_Event_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>RPGA_Event_Code</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Group<a name="Group"></a></h4>
+<p>Group is an organization of some kind that people are associated with. This 
+  includes the RPGA, gaming clubs, and convention sponsoring organizations.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Group_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Primary_Contact_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Item<a name="Item"></a></h4>
+<p>This table tracks items that people can purchase, either convention goodies, 
+  auction items, or the like.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td width="30%"><b>Item_Id</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">pk</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Name</b></td>
+    <td width="15%">STRING</td>
+    <td width="55%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Type</b></td>
+    <td width="15%">STRING</td>
+    <td width="55%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Description</b></td>
+    <td width="15%">STRING</td>
+    <td width="55%">(may need to be a very long string, may have to go with a 
+      BLOB here)</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Price</b></td>
+    <td width="15%">REAL</td>
+    <td width="55%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Source_Person_Id</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">fk</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Source_Group_Id</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">sk</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Quantity_Available</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Proceeds_Go_To_Person_Id</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">fk</td>
+  </tr>
+  <tr> 
+    <td width="30%"><b>Proceeds_Go_To_Group_Id</b></td>
+    <td width="15%">NUMBER</td>
+    <td width="55%">fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Location<a name="Location"></a></h4>
+<p>A Location belongs to a Venue, and is a place where individual Secitons/Events 
+  can be held. </p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Location_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Venue_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Capacity</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Note<a name="Note"></a></h4>
+<p>Notes are messages that can be attached to any other object.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Note_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Object_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Subject</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Body</b></td>
+    <td>STRING</td>
+    <td>Needs to be long, might have to go BLOB here, depending on DB.</td>
+  </tr>
+  <tr> 
+    <td><b>Entered_By_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Public_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Priority_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Status_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Person<a name="Person"></a></h4>
+<p>Remember that People persist across all conventions. There is only one entry 
+  in this table for a person regardless of the number of conventions they attend. 
+  Care will need to be taken when enabling information sharing across conventions.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>First_Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Last_Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Street</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>City</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>State</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Postal_Code</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Country</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Phone_Number</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Phone_Number_2</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Email_Address</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Email_Address_2</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Original_Parent_Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Added</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Modified</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Person_Convention<a name="Person_Convention"></a></h4>
+<p>Person_Convention is where people and conventions come together. It is a many-to-many 
+  intersection table. All types of information relating to the relationship of 
+  a person to a convention goes here. This includes registration, scoring, and 
+  judge scheduling information.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Badge_Number</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Judge_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Staff_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Volunteer_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Coordinator_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Badge_Printed_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Tickets_Printed_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Confimation_Printed_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Entered</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Modified</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Person_Group<a name="Person_Group"></a></h4>
+<p>This is where people and groups come together. Note that RPGA Number is stored 
+  here, in the ID Number field.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td width="27%"><b>Person_Id</b></td>
+    <td width="16%">NUMBER</td>
+    <td width="57%">|pk</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Group_Id</b></td>
+    <td width="16%">NUMBER</td>
+    <td width="57%">|pk</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Id_Number</b></td>
+    <td width="16%">STRING</td>
+    <td width="57%">(used for RPGA number)</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Membership_Start_Date</b></td>
+    <td width="16%">DATE</td>
+    <td width="57%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Membership_Expiry_Date</b></td>
+    <td width="16%">DATE</td>
+    <td width="57%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Title</b></td>
+    <td width="16%">STRING</td>
+    <td width="57%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Numeric_Attribute_1</b></td>
+    <td width="16%">NUMBER</td>
+    <td width="57%">(generic, for RPGA, used for classic level)</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Numeric_Attribute_2</b></td>
+    <td width="16%">NUMBER</td>
+    <td width="57%">(generic, for RPGA, used for campaign level)</td>
+  </tr>
+  <tr> 
+    <td width="27%"><b>Numeric_Attribute_3</b></td>
+    <td width="16%">NUMBER</td>
+    <td width="57%">(generic, for RPGA used for judge level)</td>
+  </tr>
+</table>
+<hr>
+<h4>Person_Item<a name="Person_Item"></a></h4>
+<p>This is where people and the Items they purchase come together.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Parent_Item_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Purchased_By_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Purchase_Price</b></td>
+    <td>REAL</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Quantity_Purchased</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Purchased</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Sales_Agent_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Person_Section<a name="Person_Section"></a></h4>
+<p>A Person Section is where people and events come together. Since its important 
+  which Section they are associated with, the relationship between Person and 
+  Event has to go through Section. This is a many-to-many intersection table. 
+  All types of information relating to the relationship of a person to a section 
+  goes here. This includes registration, scoring, and judge scheduling information. 
+  This table is not typically accessed directly, but rather via the Person or 
+  Score_Packet sessions.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Section_Id</b></td>
+    <td>NUMBER</td>
+    <td>|pk</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Price</b></td>
+    <td>REAL</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Score</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Prorated_Score</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Place</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Judge_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Participated_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Assigned_Location_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Score_Packet_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Score_Packet_Position</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Score_Given_To_Judge</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Score_Given_To_Scenario</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Preference </h4>
+<p>These are preferences associated with a person. They may be ConMaster5 preferences, 
+  or player/judge/volunteer/participant preferences. The idea is that the name 
+  of the preference will be everything - &quot;Call of Cthulhu&quot;, Type = &quot;Judge&quot;. 
+  Or &quot;Morning&quot;, Type = &quot;Judge&quot;. Or &quot;Frames&quot;, Type 
+  = &quot;ConMaster5&quot;, Value = 1.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Preference_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Value</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Score_Packet<a name="Score_Packet"></a></h4>
+<p>Score_Packets represent a specific group of people participating in an event. 
+  Typically, there is one judge and multiple players, although the table can support 
+  other groupings (although there must always be one 'primary' judge, although 
+  this can be the organizer, or lead participant). The main purpose of this table 
+  is to enable processing of RPGA score packets, but it can be used as a generic 
+  grouping of participants. Often what we are calling a score packet is referred 
+  to as a &quot;Table&quot; at a con, for example, &quot;I was at Bob's table.&quot; 
+  Since table has so many meanings, and is meaningless for many events, the notion 
+  of Score Packet was chosen, especially since many of the details tracked about 
+  the group of participants related to scoring.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Score_Packet_Id </b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Section_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Judge_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Number_Of_Players</b></td>
+    <td>NUMBER</td>
+    <td>(Count of non-judge participants used for error checking and pro-rating).</td>
+  </tr>
+  <tr> 
+    <td><b>Total_Scenario_Score</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Total_Group_Score</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Total_Team_Score</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>RPGA_Event_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Entered</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Modified</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Scored_By_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Checked_By_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Entered_By_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Section<a name="Section"></a></h4>
+<p>Sections belong to individual Events, and are thus unique to a single convention. 
+  Sections are, in Colorado parlance, the &quot;.3&quot; in &quot;501.3&quot;. 
+  Sections tend to be most useful for RPGA role-playing events that run multiple 
+  times in at the same convention. If you have that same event running at 8AM, 
+  1PM, and 7PM, each of those is a separate section. Note that a group of players 
+  in that event during that section is a Score_Packet, and that the time it runs 
+  at is a Time_Slot.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Section_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Event_Id</b></td>
+    <td>NUMBER</td>
+    <td> fk</td>
+  </tr>
+  <tr> 
+    <td><b>Occurs_Time_Slot_Id</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Participant_Capacity</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Round_Number</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Advance_To_Section_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Override</b></td>
+    <td>DATE</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Start_Time_Override</b></td>
+    <td>TIME</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>End_Time_Override</b></td>
+    <td>TIME</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Section_Ran_Flag</b></td>
+    <td>BOOLEAN</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Sequence</h4>
+<p>This provides a DB-independent implementation of sequence generation for all 
+  our primary key Id fields.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Sequence_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Next_Value</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Time_Slot<a name="Time_Slot"></a></h4>
+<p>A Date and Time into which Sections are scheduled. Time Slots belong to a single 
+  convention. Even if two cons have overlapping time slots, there is no reason 
+  to share them.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Time_Slot_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>(Can also be a number of course, like .1)</td>
+  </tr>
+  <tr> 
+    <td><b>Date</b></td>
+    <td>DATE</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Start_Time</b></td>
+    <td>TIME</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>End_Time</b></td>
+    <td>TIME</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<h4>Transaction<a name="Transaction"></a></h4>
+<p>This is an instance of a Person paying money (or being refunded money) for 
+  something. </p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Transaction_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Parent_Convention_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+  <tr> 
+    <td><b>Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Payment_Type</b></td>
+    <td>STRING</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Amount</b></td>
+    <td>REAL</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Credit_Card_Number</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Credit_Card_Exp_Date</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Check_Number</b></td>
+    <td>NUMBER</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Date_Transacted</b></td>
+    <td>TIMESTAMP</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td><b>Agent_Person_Id</b></td>
+    <td>NUMBER</td>
+    <td>fk</td>
+  </tr>
+</table>
+<hr>
+<h4>Type<a name="Type"></a></h4>
+<p>Types are lists of values for the various places where such lists are useful, 
+  such as GUI choice lists. Right now the Name is stored in the destination table 
+  rather than the Id for ease of use, and since types rarely have much to them 
+  except their name, thus making links not useful.</p>
+<h5>Columns </h5>
+<table width="100%" border="1">
+  <tr> 
+    <td><b>Type_Id</b></td>
+    <td>NUMBER</td>
+    <td>pk</td>
+  </tr>
+  <tr> 
+    <td><b>Group_Name</b></td>
+    <td>STRING</td>
+    <td>Name of the Type Group that this type belongs to. Note that there is no 
+      table of Type Groups - they are defined in this table, since they have no 
+      attribute other than name.</td>
+  </tr>
+  <tr> 
+    <td><b>Name</b></td>
+    <td>STRING</td>
+    <td>The type itself - or a short version if applicable.</td>
+  </tr>
+  <tr> 
+    <td><b>Long_Name</b></td>
+    <td>STRING</td>
+    <td>A longer version of the type code if applicable.</td>
+  </tr>
+  <tr> 
+    <td><b>Value</b></td>
+    <td>NUMBER</td>
+    <td>If the type has an associated numeric value, it goes here.</td>
+  </tr>
+  <tr> 
+    <td><b>Value_2</b></td>
+    <td>NUMBER</td>
+    <td>A second possible associated numeric value.</td>
+  </tr>
+</table>
+<hr>
+<h4>Venue<a name="Venue"></a></h4>
+<p>Venue is a place where a convention is held, such as a hotel, or game store. 
+  Places where individual Events/Sections are held are Locations.</p>
+</HTML>
