@@ -21,6 +21,7 @@ class DataObjects_Score_packet extends DB_DataObject {
     var $group_score;                     // int(4)
     var $number_of_players;               // int(4)
     var $rpga_event_type;                 // string(15)
+    var $status;                          // string(15)
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
@@ -31,5 +32,28 @@ class DataObjects_Score_packet extends DB_DataObject {
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+    function delete() {
+    	//Go through each related person_section row and either delete or detach it.
+    	require_once('./lib/DataObjects/Person_section.php');
+    	$personSectionObject = new DataObjects_Person_section;
+    	$personSectionObject->score_packet_id = $this->id;
+    	$personSectionObject->find();
+
+    	if ($personSectionObject) {
+			while ($personSectionObject->fetch()) {
+				$psCopy = $personSectionObject; //Need to make a copy in order to allow the master to continue to iterate
+
+				if ($psCopy->reg_type == 'Score Packet') {
+					$psCopy->delete();
+				} else {
+					$psCopy->score_packet_id = '';
+					$psCopy->update();
+				}
+			}
+		}
+
+		return DB_DataObject::delete(); //Call the parent method
+	}
 }
 ?>
