@@ -1,5 +1,0 @@
-Developer Notes.txt
-
-The way that DataObject works, if you add a column to a table, or change a column to/from a number, you need to update cm/lib/DataObjects/cyface.ini to reflect the change.
-
-The cyface.ini format requires that a field '=1' if it is a number (needs no quotes in SQL), and '=2' if it is not a number (needs quotes).
