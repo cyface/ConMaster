@@ -240,7 +240,6 @@ function setRegTypeList() {
     <td class="TableTitle">Reg</td>
     <td class="TableTitle" width="75"> Price</td>
     <td class="TableTitle">Place</td>
-    <td class="TableTitle">Judge</td>
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="form.php">
@@ -264,7 +263,6 @@ function setRegTypeList() {
       <td class="TableData">&nbsp;</td>
       <td class="TableData" width="75">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
-      <td class="TableData">&nbsp; </td>
     </form>
   </tr>
   <!-- END BLOCK : included_header -->
@@ -307,13 +305,11 @@ function setRegTypeList() {
       <td class="TableData" width="75">$ 
         <input type="text" name="price" size="5" maxlength="10" class="FieldData" value="{price}">
       </td>
-      <td class="TableData"> {place}</td>
-      <td class="TableData"> 
-        <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">
-      </td>
+      <td class="TableData">{place}</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_row -->
 </table>
+<span class="FieldName><small><b>Note:</b> A place of 0 indicates that this person judged that event, and got registered for it via a Score Packet.</small></span>
 </body>
 </html>
