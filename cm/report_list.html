@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>ConMaster Reports</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="/cm/images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<span class="FormTitle">ConMaster Reports </span> 
+<hr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td class="FormTitle">2 Column Summary Reports</td>
+    <td class="TableDataBold">&nbsp;</td>
+    <td class="TableData">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=state&selcols[2]=city&selcols[3]=count(*)&groupcols[1]=state&groupcols[2]=city&where[1]=length(reg_type)!=0">Person 
+      City/State</a></td>
+    <td class="TableData">Summarizes the person table by state and city.</td>
+  </tr>
+  <tr>
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=reg_type&selcols[2]=total_fee&selcols[3]=sum(total_fee)&groupcols[1]=reg_type&groupcols[2]=total_fee&where[0]=length(reg_type)!=0">Person 
+      Reg Type/Total Fee</a> Sum</td>
+    <td class="TableData">Sums the person table by Reg Type and total fee.</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=reg_type&selcols[2]=total_fee&selcols[3]=count(*)&groupcols[1]=reg_type&groupcols[2]=total_fee&where[0]=length(reg_type)!=0">Person 
+      Reg Type/Total Fee</a></td>
+    <td class="TableData">Summarizes the person table by Reg Type and total fee.</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="form.php?table=person_section&action=report&selcols[1]=reg_type&selcols[2]=price&selcols[3]=count(*)&groupcols[1]=reg_type&groupcols[2]=price">Person 
+      Section Reg Type/Price</a></td>
+    <td class="TableData">Summarizes the person section (registration) table by 
+      Reg Type and event fee.</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="form.php?table=event&action=report&selcols[1]=type&selcols[2]=price&selcols[3]=count(*)&groupcols[1]=type&groupcols[2]=price">Event 
+      Type/Price</a></td>
+    <td class="TableData">Summarizes the event table by type and price</td>
+  </tr>
+</table>
+</body>
+</html>
