@@ -27,5 +27,5 @@ AND ev.rpga_event_code IS NOT NULL
 AND ev.rpga_event_code != ''
 ORDER BY
 	pkt.id,
-	IF(ps.place IS NULL,0,ps.place)
+	ps.place
 ;
