@@ -32,7 +32,7 @@ var events = new initEvents();
 function setEventList() {
 	var i=0
 	for (var id in events) { //populate the events select list
-		document.event_edit.events.options[i]=new Option(events[id].name,id);
+		document.packet_edit.events.options[i]=new Option(events[id].name,id);
 		i++;
 	}
 }
@@ -56,57 +56,76 @@ function searchSections(inEventId) {
 			i++;
 		}
 	}
-	for (i=0;i<document.event_edit.sections.options.length;i++) { //clear the sections select list
-		document.event_edit.sections.options[i]=null;
+	for (i=0;i<document.packet_edit.sections.options.length;i++) { //clear the sections select list
+		document.packet_edit.sections.options[i]=null;
 	}
 	
 	for (i=0;i<resultArray.length;i++) { //Set the options for the section list to the array we just built
-		document.event_edit.sections.options[i]=new Option(resultArray[i].dateblock,resultArray[i].id);
+		document.packet_edit.sections.options[i]=new Option(resultArray[i].dateblock,resultArray[i].id);
 	}
-	document.event_edit.sections.options[0].selected=true;
-	document.event_edit.section_id.value=resultArray[0].id;
+	document.packet_edit.sections.options[0].selected=true;
+	document.packet_edit.section_id.value=resultArray[0].id;
 }
 
 
 
 function searchEvents(inEventId) {
-	for (i=0;i<document.event_edit.events.options.length;i++) {
-		if (document.event_edit.events.options[i].value == inEventId) {
-			document.event_edit.events.options[i].selected=true;
+	for (i=0;i<document.packet_edit.events.options.length;i++) {
+		if (document.packet_edit.events.options[i].value == inEventId) {
+			document.packet_edit.events.options[i].selected=true;
 		}
 	}
 }
 
 function setRPGAType(inEventId) {
 	var searchType = events[inEventId].rpga_event_type
-	for (i=0;i<document.event_edit.rpga_event_type.options.length;i++) {
-		if (document.event_edit.rpga_event_type.options[i].text == searchType) {
-			document.event_edit.rpga_event_type.options[i].selected=true;
+	for (i=0;i<document.packet_edit.rpga_event_type.options.length;i++) {
+		if (document.packet_edit.rpga_event_type.options[i].text == searchType) {
+			document.packet_edit.rpga_event_type.options[i].selected=true;
 		}
 	}
 }
 
 function eventChange(inEventId) {
 	searchSections(inEventId);
-	document.event_edit.event_id.value=inEventId;
+	document.packet_edit.event_id.value=inEventId;
 	setRPGAType(inEventId);
+}
+
+function noVote (inNoVote) {
+	if (inNoVote == 'CHECKED') {
+		document.packet_edit.group_score.value = 18;
+		document.packet_edit.scenario_score.value = 0;
+		if (document.person_section_add) {
+			document.person_section_add.score = 10;
+		}
+	} else {
+		document.packet_edit.group_score.value = '';
+		document.packet_edit.scenario_score.value = '';
+	}
 }
 
 function popSetup() {
 	setEventList();
-	if (document.event_edit.section_id.value != '') {
-		searchSections(document.event_edit.event_id.value);
-		searchEvents(document.event_edit.event_id.value);
+	if (document.packet_edit.section_id.value != '') {
+		searchSections(document.packet_edit.event_id.value);
+		searchEvents(document.packet_edit.event_id.value);
 	} else {
-		document.event_edit.events.size=10;
-		document.event_edit.sections.size=4;
+		document.packet_edit.events.size=10;
+		document.packet_edit.sections.size=4;
+	}
+}
+
+function jumpNext() {
+	if (document.person_section_add.included_search) {
+		document.person_section_add.included_search.focus();
 	}
 }
 
 </script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" onLoad="document.title = '{id} {last_name} Score Packet Record';popSetup()" class="BodyClass">
+<body bgcolor="#FFFFFF" text="#000000" onLoad="document.title = '{id} {last_name} Score Packet Record';popSetup();jumpNext()" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
     <td class="FormTitle">Packet {id}</td>
@@ -116,7 +135,7 @@ function popSetup() {
   </tr>
 </table>
 <span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
-<form name="event_edit" method="post" action="score_packet.php">
+<form name="packet_edit" method="post" action="score_packet.php">
   <table border="0" cellspacing="2" cellpadding="2">
     <tr> 
       <td class="FieldName">Event</td>
@@ -150,10 +169,6 @@ function popSetup() {
       <td> 
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
       </td>
-      <td class="FieldName">No Vote Packet</td>
-      <td> 
-        <input type="checkbox" name="no_vote" value="CHECKED" {no_vote}>
-      </td>
     </tr>
     <tr> 
       <td class="FieldName">Scenario Score</td>
@@ -165,6 +180,10 @@ function popSetup() {
       <td class="FieldName">Group Score</td>
       <td> 
         <input type="text" name="group_score" value="{group_score}" maxlength="10" size="3" class="FieldData">
+      </td>
+      <td class="FieldName">No Vote Packet</td>
+	   <td> 
+	      <input type="checkbox" name="no_vote" value="CHECKED" {no_vote} onClick="noVote(document.packet_edit.no_vote.value)">
       </td>
     </tr>
   </table>
@@ -194,26 +213,25 @@ function popSetup() {
     </tr>
   </table>
 </form>
-<p> 
   <!-- START BLOCK : included_header -->
   <span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 
   <span class="FieldError"><br>
-  {form_error}</span></p>
+  {form_error}</span>
 <table width="100%" border="1">
   <tr> 
-    <td class="TableTitle" width="5%" colspan=2>Action</td>
-    <td class="TableTitle" width="5%">RPGA Number</td>
-    <td class="TableTitle"> Person Name</td>
-    <td class="TableTitle">Score</td>
-    <td class="TableTitle">Place</td>
-    <td class="TableTitle">Position</td>
-    <td class="TableTitle">Prorated Score</td>
+    <td class="TableTitle" colspan=2>Action</td>
+    <td class="TableTitle" width="20%">RPGA Number</td>
+    <td class="TableTitle" width="20%"> Person Name</td>
+    <td class="TableTitle" width="8%">Score</td>
+    <td class="TableTitle" width="8%">Place</td>
+    <td class="TableTitle" width="12%">Position</td>
+    <td class="TableTitle" width="19%">Prorated Score</td>
   </tr>
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
   <tr> 
     <form name="person_section_delete" method="post" action="score_packet.php">
-      <td class="TableData" width="5%"> 
+      <td class="TableData" width="6%"> 
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
@@ -223,7 +241,7 @@ function popSetup() {
       </td>
     </form>
     <form name="person_section_save" method="post" action="score_packet.php">
-      <td class="TableData" width="5%"> 
+      <td class="TableData" width="7%"> 
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="packet_position" value="{packet_position}">
@@ -236,17 +254,15 @@ function popSetup() {
         <input type="hidden" name="person_id" value="{person_id}">
         <input type="submit" name="update" value="Update">
       </td>
-      <td class="TableDataBold">{_person_id[rpga_number]}</td>
-      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_person_id[first_name]} 
+      <td class="TableDataBold" width="20%">{_person_id[rpga_number]}</td>
+      <td class="TableData" width="20%"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_person_id[first_name]} 
         {_person_id[last_name]}</a></td>
-      <td class="TableData"><span class="FieldName"> 
+      <td class="TableData" width="8%"><span class="FieldName"> 
         <input type="text" name="score" size="6" maxlength="10" class="FieldData" value="{score}">
         </span></td>
-      <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
-        </span></td>
-      <td class="TableDataBold"> {position_disp}</td>
-      <td class="TableDataBold">{prorated_score}</td>
+      <td class="TableData" width="8%"><span class="TableDataBold">{place}</span></td>
+      <td class="TableDataBold" width="12%"> {position_disp}</td>
+      <td class="TableDataBold" width="19%">{prorated_score}</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_row -->
@@ -256,7 +272,7 @@ function popSetup() {
       <td colspan=2> 
         <input type="submit" name="add" value="Add">
       </td>
-      <td class="TableDataBold"><span class="FieldName"> 
+      <td class="TableDataBold" width="20%"><span class="FieldName"> 
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="action" value="addParticipant">
         <input type="hidden" name="id" value="{id}">
@@ -267,17 +283,16 @@ function popSetup() {
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
         <input type="hidden" name="packet_position" value="{packet_position}">
+        <input type="hidden" name="no_vote" value="{no_vote}">
         <input type="text" name="included_search" size="8" maxlength="10" class="FieldData">
         </span> </td>
-      <td class="TableData">&nbsp;</td>
-      <td class="TableData"><span class="FieldName"> 
+      <td class="TableData" width="20%">&nbsp;</td>
+      <td class="TableData" width="8%"><span class="FieldName"> 
         <input type="text" name="score" size="6" maxlength="10" class="FieldData">
         </span></td>
-      <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
-        </span></td>
-      <td class="TableDataBold"> {position_disp}</td>
-      <td class="TableDataBold">&nbsp;</td>
+      <td class="TableData" width="8%"><span class="TableDataBold">{place} </span></td>
+      <td class="TableDataBold" width="12%"> {position_disp}</td>
+      <td class="TableDataBold" width="19%">&nbsp;</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_footer -->

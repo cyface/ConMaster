@@ -15,7 +15,7 @@
 // | Author:  Alan Knowles <alan@akbkhome.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: DataObject.php,v 1.6 2002/08/15 19:53:12 cyface Exp $
+// $Id: DataObject.php,v 1.7 2002/10/16 18:25:52 cyface Exp $
 //
 // Object Based Database Query Builder and data store
 //
@@ -516,17 +516,28 @@ Class DB_DataObject {
         if (($key = @$keys[0]) && ($dbtype != 'mysql')) {
             $this->$key = $__DB->nextId();
         }
-
+         
         foreach($items as $k=>$v) {
-            if (isset($this->$k)) {
-                if ($leftq) {
-                    $leftq .= ", $k ";
-                    $rightq .=", '".addslashes($this->$k)."' ";
-                } else {
-                    $leftq = "$k ";
-                    $rightq .="'".addslashes($this->$k)."' ";
-                }
+            if (!isset($this->$k)) {
+                continue;
             }
+            if ($leftq) {
+                $leftq .= ", ";
+                $rightq .=", ";
+            }
+            $leftq .= "$k ";
+            if ($v & DB_DATAOBJECT_STR) {
+                $rightq .="'".addslashes($this->$k)."' ";
+                continue;
+            }
+            if (is_numeric($this->$k)) {
+                $rightq .=" {$this->$k} ";
+                continue;
+            }
+            // at present we only cast to integers 
+            // - V2 may store additional data about float/int 
+            $rightq .=" " . intval($this->$k) . " ";
+            
         }
         if ($leftq) {
             $this->_query("INSERT INTO {$this->__table} ($leftq) VALUES ($rightq) ");
@@ -565,14 +576,30 @@ Class DB_DataObject {
         }
         $datasaved=1;
         $settings ="";
+        
+        
         foreach($items as $k=>$v) {
-            if (isset($this->$k) && !in_array($k, $keys)) {
-                if ($settings)  {
-                    $settings .=", ";
-                }
+            if (!isset($this->$k)) {
+                continue;
+            }
+            if ($settings)  {
+                $settings .=", ";
+            }
+            if ($v & DB_DATAOBJECT_STR) {
                 $settings .="$k = '".addslashes($this->$k)."' ";
-  	    }
+                continue;
+            }
+            if (is_numeric($this->$k)) {
+                $settings .="$k = {$this->$k} ";
+                continue;
+            }
+            // at present we only cast to integers 
+            // - V2 may store additional data about float/int 
+            $settings .="$k = ". intval($this->$k) . " ";
+            
         }
+        
+         
 
         //$this->_condition=""; // dont clear condition
         if (!$GLOBALS['_DB_DATAOBJECT_PRODUCTION']) {
@@ -838,9 +865,10 @@ Class DB_DataObject {
         $location = $options['schema_location'];
         $definitions[$database] = parse_ini_file($location."/{$database}.ini",TRUE);
         /* load the link table if it exists. */
-        if (file_exists($location."/{$database}.links.ini")) {
+        if (file_exists("{$location}/{$database}.links.ini")) {
             $links = &PEAR::getStaticProperty('DB_DataObject', "{$database}.links");
-            $linkConfig = parse_ini_file("config/{$database}.links.ini", true);
+            /* not sure why $links = ... here  - TODO check if that works */
+            $linkConfig = parse_ini_file("{$location}/{$database}.links.ini", true);
             $links = $linkConfig;
         }
         return $definitions[$database][$table];
@@ -1117,9 +1145,13 @@ Class DB_DataObject {
 		$cols = $this->_get_table();
 		$links = &PEAR::getStaticProperty('DB_DataObject',"{$this->_database}.links");
 		if ($links) {
-			foreach(array_keys($links[$this->__table]) as $key) {
-				$k = "_{$key}";
-				$this->$k = $this->getLink($key);
+			foreach($links[$this->__table] as $key=>$match) {
+                list($table,$link) = explode(':',$match);
+				$k = "_".str_replace('.','_',$key);
+				if ($p = strpos($row,".")) {
+                    $key = substr($key,0,$p);
+                }
+                $this->$k = $this->getLink($key,$table,$link);
 			}
 			return;
 		}
@@ -1144,17 +1176,31 @@ Class DB_DataObject {
     * looks up table xxxxx, for value id=$this->xxxxx
     * stores it in $this->_xxxxx_yyyyy
     *
+    * you can also use $this->getLink('rowname.othertablecol','table','othertablecol')
+    *
+    *
+    * @param string $row             either row or row.xxxxx
+    * @param string optional $table  name of table to look up value in
+    * @param string optional $link   name of column in other table to match
+    *
+    *
     * @author Tim White <tim@cyface.com>
     * @access	public
     * @return mixed object on success
     */
-    function &getLink($row, $table=NULL) {
-		$links = &PEAR::getStaticProperty('DB_DataObject',"{$this->_database}.links");
-		$link = FALSE;
+    function &getLink($row, $table=NULL,$link = FALSE) {
+        /* see if autolinking is available 
+       This will do a recursive call! 
+        */
 		if ($table === NULL) {
+            $links = &PEAR::getStaticProperty('DB_DataObject',"{$this->_database}.links");
 			if (@$links[$this->__table]) {
 				if ( @$links[$this->__table][$row]) {
 					list($table,$link) = explode(':',$links[$this->__table][$row]);
+                    if ($p = strpos($row,".")) {
+                        $row = substr($row,0,$p);
+                    }
+                    return $this->getLink($row,$table,$link);
 				} else {
 					DB_DataObject::raiseError("getLink: $row is not defined as a link", DB_DATAOBJECT_ERROR_NODATA);
 					return; // technically a possible error condition?
@@ -1164,6 +1210,7 @@ Class DB_DataObject {
 					return;
 				}
 				$table = substr($row,0,$p);
+                return $this->getLink($row,$table);
 			}
 		}
 		if (!isset($this->$row)) {

@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for section
-* CVS Info: $Id: Section.php,v 1.4 2002/07/17 23:26:48 cyface Exp $
+* CVS Info: $Id: Section.php,v 1.5 2002/10/16 18:25:52 cyface Exp $
 */
 
 
@@ -22,18 +22,18 @@ class DataObjects_Section extends DB_DataObject {
     var $date;                    		  // date(10)  not_null
     var $start_time;                      // time(8)  not_null
     var $end_time;                        // time(8)  not_null
-    var $location;                        // string(255)  
-    var $num_registered;                  // int(4)  
-    var $max_registered;                  // int(4)  
-	var $registrations_open;              // int(4)  
-    var $event_full;                      // string(7)  
-    var $results_entered;                 // string(7)  
+    var $location;                        // string(255)
+    var $num_registered;                  // int(4)
+    var $max_registered;                  // int(4)
+	var $registrations_open;              // int(4)
+    var $event_full;                      // string(7)
+    var $results_entered;                 // string(7)
     var $event_ran;                       // string(7)  not_null
-    var $notes;                           // string(80)  
-    var $slots_left;                      // string(1)  
-    var $numeric_section;                 // int(4)  
-    var $advance_to_section;              // string(10)  
-    var $round;                           // string(2)  
+    var $notes;                           // string(80)
+    var $slots_left;                      // string(1)
+    var $numeric_section;                 // int(4)
+    var $advance_to_section;              // string(10)
+    var $round;                           // string(2)
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
@@ -44,16 +44,10 @@ class DataObjects_Section extends DB_DataObject {
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	
+
 	function insert() {
 		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
-		
-		return DB_DataObject::insert(); //Call the parent method
-	}
-	
-	function update() {
-		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
-		
+
 		//Set the event_full indicator & registrations_open
 		$this->registrations_open = $this->max_registered - $this->num_registered;
 		if ($this->registrations_open <= 0) {
@@ -61,33 +55,47 @@ class DataObjects_Section extends DB_DataObject {
 		} else {
 			$this->event_full = 'N';
 		}
-		
+
+		return DB_DataObject::insert(); //Call the parent method
+	}
+
+	function update() {
+		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
+
+		//Set the event_full indicator & registrations_open
+		$this->registrations_open = $this->max_registered - $this->num_registered;
+		if ($this->registrations_open <= 0) {
+			$this->event_full = 'CHECKED';
+		} else {
+			$this->event_full = 'N';
+		}
+
 		return DB_DataObject::update(); //Call the parent method
 	}
-	
+
 	/*
 	* includedInsert - You are either registering them, or adding them to a packet.
 	*          As a result, there are a lot of things that have to happen.  That stuff happens here.
-	* 
+	*
 	* @param string inValue - search value
 	*/
 	function includedInsert($inValue) {
 		//Based on the supplied slot number, look up the default slot information
 		//Find the slot row that matches the slot that was input
 		$slotObject = DB_DataObject::staticGet('DataObjects_Slot','slot_number',$inValue);
-		
+
 		//Error if that slot wasn't found
 		if (!$slotObject) {
 			require_once('PEAR.php');
 			return new PEAR_Error('That Slot Does Not Exist.  Edit Your Convention To Add This Slot.');
 		}
-		
+
 		//Copy the default information from the slot record to this object
 		$this->section_number = $slotObject->slot_number;
 		$this->date = $slotObject->date;
 		$this->start_time = $slotObject->start_time;
 		$this->end_time = $slotObject->end_time;
-		
+
 		return DB_DataObject::insert(); //Call the parent method
 	} //End function includedInsert
 }

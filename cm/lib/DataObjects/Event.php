@@ -46,7 +46,7 @@ class DataObjects_Event extends DB_DataObject {
 		if ($this->rpga == 'CHECKED') {$rpgaStr = 'RPGA ';}
 		if ($this->scenario_name !='') {' ' . $scenarioStr = $this->scenario_name;}
 		if ($this->rpga_event_type !='') {' ' . $typeStr = $this->rpga_event_type;}
-		$this->event_name = $rpgaStr . $this->game_system . $typeStr . ':' . $scenarioStr;
+		$this->event_name = $rpgaStr . $this->game_system . ' ' . $typeStr . ':' . $scenarioStr;
 
 		return DB_DataObject::insert(); //Call the parent method
 	}

@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0>
+<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 onLoad="setOrderBy('{orderBy}')">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
@@ -15,32 +15,47 @@
 <span class="FormTitle"> Event Search Form</span> 
 <form name="search_form" method="post" action="form.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr>
+    <tr> 
       <td><span class="FieldName">Event Name</span></td>
-      <td>
+      <td> 
         <input type="text" name="search[event_name]" value="{search[event_name]}" class="FieldData">
       </td>
       <td><span class="FieldName">Type</span></td>
-      <td>
+      <td> 
         <select name="search[type]" class="FieldData">
-		  <option></option>
+          <option></option>
           <option selected>{search[type]}</option>
           <!-- START BLOCK : form_constants[event_type]_row -->
-		  <option>{form_constants[event_type][name]}</option>
-		  <!-- END BLOCK : form_constants[event_type]_row -->
-		  <option>Other</option>
+          <option>{form_constants[event_type][name]}</option>
+          <!-- END BLOCK : form_constants[event_type]_row -->
+          <option>Other</option>
         </select>
       </td>
     </tr>
-    <tr>
+    <tr> 
       <td><span class="FieldName">Description</span></td>
-      <td>
+      <td> 
         <input type="text" name="search[description]" value="{search[description]}" class="FieldData">
       </td>
       <td><span class="FieldName">Event Number</span></td>
-      <td>
+      <td> 
         <input type="text" name="search[event_number]" value="{search[event_number]}" class="FieldData">
       </td>
+    </tr>
+    <tr>
+      <td width="10%" class="FieldName">Sort By</td>
+      <td width="38%"> 
+        <select name="orderBy" class="FieldData">
+          <option value="event_number">Event Number</option>
+          <option value="event_name">Event Name</option>
+          <option value="game_system">Game System</option>
+          <option value="type,event_number">Type</option>
+          <option value="scenario_name">Scenario Name</option>
+          <option value="rpga_event_type">RPGA Event Type</option>
+        </select>
+      </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
   <div align="center"> 

@@ -6,14 +6,14 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body  class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0>
+<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 onLoad="setOrderBy('{orderBy}')">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
   </tr>
 </table>
 <span class="FormTitle"> Score Packet Search Form</span> 
-<form name="person_search_form" method="post" action="score_packet.php">
+<form name="search_form" method="post" action="score_packet.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
     <tr> 
       <td width="10%" class="FieldName">Packet ID</td>
@@ -35,6 +35,17 @@
       <td width="38%"> 
         <input type="text" name="search[event_name]" value="{search[event_name]}" class="FieldData">
       </td>
+    </tr>
+    <tr>
+      <td width="10%" class="FieldName">Sort By</td>
+      <td width="38%">
+        <select name="orderBy" class="FieldData">
+		  <option value="score_packet.id">Packet Id</option>
+          <option value="event.event_number,section.section_number">Event Number</option>
+        </select>
+      </td>
+      <td width="10%" class="FieldName">&nbsp;</td>
+      <td width="38%">&nbsp;</td>
     </tr>
   </table>
   <div align="center">

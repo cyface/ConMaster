@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0>
+<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 onLoad="setOrderBy('{orderBy}')">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
@@ -52,6 +52,21 @@
       <td> 
         <input type="text" name="search[location]" value="{search[location]}" class="FieldData">
       </td>
+    </tr>
+    <tr>
+      <td width="10%" class="FieldName">Sort By</td>
+      <td width="38%"> 
+        <select name="orderBy" class="FieldData">
+          <option value="event_number,section_number" selected>Event Number</option>
+          <option value="event_full,event_number,section_number">Event Full</option>
+          <option value="section_number,event_number,section_number">Section Number</option>
+          <option value="location,event_number,section_number">Location</option>
+          <option value="registrations_open,event_number,section_number">Registrations 
+          Open</option>
+        </select>
+      </td>
+      <td class="FieldName">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
   <div align="center">

@@ -6,7 +6,7 @@
  *
  * @see FormObject for usage information
  *
- * CVS Info: $Id: ScorePacketFormObject.php,v 1.5 2002/08/15 19:58:23 cyface Exp $
+ * CVS Info: $Id: ScorePacketFormObject.php,v 1.6 2002/10/16 18:25:52 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -14,10 +14,6 @@
  * @copyright This class is copyright (c) 2002 by Tim White
  **/
 
-require_once('PEAR.php'); //Main PEAR stuff
-require_once('DataObject.php'); //Database Access Object
-require_once('./lib/class.TemplatePower.inc.php'); //Main TemplatePower Stuff
-require_once('./lib/TemplateHelpers.inc.php'); //Custom class that adds convienience methods for dealing with Templates
 require_once('./lib/FormObject.php'); //Custom class that adds convienience methods for dealing with Templates
 
 /**
@@ -52,7 +48,7 @@ class ScorePacketFormObject extends FormObject {
 		$eventClass = DB_DataObject::staticAutoloadTable('event');
 		$this->eventObject = new $eventClass;
 		$this->eventObject->whereAdd("type = 'Role-Playing'");
-		$this->eventObject->orderBy("event_name");
+		$this->eventObject->orderBy("scenario_name");
 		$this->eventObject->find();
 
 		while ($this->eventObject->fetch()) { // Pull the results through the object and put them on the form
@@ -64,7 +60,7 @@ class ScorePacketFormObject extends FormObject {
 
 		$sectionClass = DB_DataObject::staticAutoloadTable('section');
 		$this->sectionObject = new $sectionClass;
-		$this->sectionObject->query("SELECT section.* FROM section,event WHERE section.event_id = event.id AND event.type = 'Role-Playing'");
+		$this->sectionObject->query("SELECT section.* FROM section,event WHERE section.event_id = event.id AND event.type = 'Role-Playing' ORDER BY section_number");
 
 		while ($this->sectionObject->fetch()) { // Pull the results through the object and put them on the form
 				$this->template->newBlock('SectionList_row'); //create a new result row
@@ -74,8 +70,7 @@ class ScorePacketFormObject extends FormObject {
 		$this->template->gotoBlock("_ROOT");
 
 		$this->edit();
-		return true;
-	}
+			}
 
 	/**
 	 * edit overloads FormObject->edit() to allow error checking and precise control over the included stuff
@@ -89,10 +84,19 @@ class ScorePacketFormObject extends FormObject {
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
 
 		if ($this->template->getVarValue('form_error') != '') {  //If there is an error, skip the rest
-			return true;
+			return;
 		}
 
-		if ($this->incDataObject) {
+		if ($this->included_table) {
+			//Set up the included object
+			$this->incDataObject = new $this->included_class;
+			if ($this->data['included_order_by']) {
+				$this->incDataObject->orderBy($this->data['included_order_by']);
+			}
+			if ($this->data['included_where']) {
+				$this->incDataObject->whereAdd($this->data['included_where']);
+			}
+
 			$this->template->newBlock('included_header'); //create a new header for the included rows
 			objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
 			rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
@@ -139,6 +143,9 @@ class ScorePacketFormObject extends FormObject {
 					$this->template->assign('packet_position',$nextPosition);
 					$this->template->assign('position_disp',$nextPosition);
 				}
+				if ($this->data['no_vote'] == 'CHECKED') {
+					$this->template->assign('score',10);
+				}
 				$this->template->gotoBlock('_ROOT');
 				$this->template->assign('status','Incomplete');
 				$this->dataObject->status = 'Incomplete';
@@ -146,31 +153,33 @@ class ScorePacketFormObject extends FormObject {
 				$numMissing = $this->dataObject->number_of_players - ($this->incDataObject->N - 1);
 				$this->errorString .= " You must add $numMissing participants(s) to complete this packet.";
 				$this->template->assign('form_error', $this->errorString);
-				return true;
+				return;
 			}
 
 			//Begin error checking
 			$status = 'Complete';  //Optimistic, eh?
 
-			if ($player_total_score != ($this->dataObject->number_of_players+2) * 10) {
-				$this->errorString .= ' The player scores must total ' . ($this->dataObject->number_of_players+2) * 10 . ", but they total $player_total_score.";
-			}
+			if ($this->dataObject->no_vote != 'CHECKED') {  //Only error-check voting packets.
+				$scoreTotals = array(3=>39,4=>56,5=>70,6=>80,7=>90);
+				if ($player_total_score != $scoreTotals[$this->dataObject->number_of_players]) {
+					$this->errorString .= ' The player scores must total ' . $scoreTotals[$this->dataObject->number_of_players] . ', but they total ' . $player_total_score;
+				}
 
-			$placeTotals = array(3=>6,4=>10,5=>15,6=>21,7=>28);
-			if ($player_total_places != $placeTotals[$this->dataObject->number_of_players] ) {
-				$this->errorString .= ' The player places must total ' . $placeTotals[$this->dataObject->number_of_players] . ', but they total $player_total_places.';
-			}
+				$placeTotals = array(3=>6,4=>10,5=>15,6=>21,7=>28);
+				if ($player_total_places != $placeTotals[$this->dataObject->number_of_players] ) {
+					$this->errorString .= ' The player places must total ' . $placeTotals[$this->dataObject->number_of_players] . ', but they total ' . $player_total_places;
+				}
 
-			if ($this->dataObject->group_score < 6 OR $this->dataObject->group_score > 30) {
-				$this->errorString .= ' The group score must be between 6 and 30';
-			}
+				if ($this->dataObject->group_score < 6 OR $this->dataObject->group_score > 30) {
+					$this->errorString .= ' The group score must be between 6 and 30';
+				}
 
-			$scenario_score_max = ($this->dataObject->number_of_players + 1) * 15;
-			$scenario_score_min = ($this->dataObject->number_of_players + 1) * 3;
-			if ($this->dataObject->scenario_score < $scenario_score_min OR $this->dataObject->scenario_score > $scenario_score_max ) {
-				$this->errorString .= " The scenario score must be between $scenario_score_min and $scenario_score_max";
+				$scenario_score_max = ($this->dataObject->number_of_players + 1) * 15;
+				$scenario_score_min = ($this->dataObject->number_of_players + 1) * 3;
+				if ($this->dataObject->scenario_score < $scenario_score_min OR $this->dataObject->scenario_score > $scenario_score_max ) {
+					$this->errorString .= " The scenario score must be between $scenario_score_min and $scenario_score_max";
+				}
 			}
-
 			$this->template->gotoBlock('_ROOT');
 
 			if ($this->errorString != '') {
@@ -182,8 +191,7 @@ class ScorePacketFormObject extends FormObject {
 			$this->dataObject->status = $status;
 			$this->dataObject->update();
 		} //End "If incDataObject...
-        return true;
-	}
+    }
 
 	/**
 	 * save tweaks some data, then calls FormObject's save() method
@@ -191,8 +199,12 @@ class ScorePacketFormObject extends FormObject {
      **/
 	function save()
 	{
-		$scenario_max = $this->data['number_of_players'] * 15;
-		$this->data['prorated_scenario_score'] = round(($this->data['scenario_score'] / $scenario_max) * 105);
+		if ($this->data['number_of_players'] != 6) {
+			$scenario_max = ($this->data['number_of_players'] + 1) * 15;
+			$this->data['prorated_scenario_score'] = round(($this->data['scenario_score'] / $scenario_max) * 105);
+		} else {
+			$this->data['prorated_scenario_score'] = $this->data['scenario_score'];
+		}
 		return FormObject::save(); //Call parent object's method
 	}
 
@@ -202,14 +214,16 @@ class ScorePacketFormObject extends FormObject {
      **/
 	function addParticipant()
 	{
-		//Set up the master data object with the correct stuff
-		$this->dataObject->get($this->data['parent_id']);
+		//***Locate the person who's RPGA number was entered
 
-		//Locate the person who's RPGA number was entered
+		//***Start by looking for them in the person table
 		$personClass = DB_DataObject::staticAutoloadTable('person');
-		if (intval(rtrim($this->data['included_search'])) == 0) { //Only search if something reasonable was entered.
+		if (intval(rtrim($this->data['included_search'])) != 0) { //Only search if something reasonable was entered.
 			$personObject = DB_DataObject::staticGet($personClass,'rpga_number',rtrim($this->data['included_search']));
 		}
+		//echo '<pre>Person Object'; print_r($personObject); echo 'Included Search' . rtrim($this->data['included_search']) .'</pre>';
+
+		//***If we didn't find them in the person table, look in the RPGAList.txt file
 		if (!$personObject) { //If the rpga number was not found
 			if (file_exists('resources/RPGAList.txt')) {
 				$fp = fopen("resources/RPGAList.txt",'r');
@@ -219,6 +233,7 @@ class ScorePacketFormObject extends FormObject {
 						break;
 					}
 				}
+				//***If we found that RPGA Number in the file, see if their name is in the person table
 				if (isset($foundData)) {
 					$personObject = new $personClass;
 					$personObject->first_name = $data[1];
@@ -228,42 +243,41 @@ class ScorePacketFormObject extends FormObject {
 
 					$personObject->find();
 
-					if ($personObject->N !=0) { //We found them!
+					//***If their name is in the person table, just update the rec with the RPGA number
+					if ($personObject->N !=0) {
 						$personObject->fetch();
 						if ($personObject->rpga_number == 0) {
 							$personObject->rpga_number = $data[0];
 							$personObject->update();
 						}
-					} else { //no luck
+					//***If their name isn't in the person table, insert the data from RPGAList.txt into person
+					} else {
 						$personObject->rpga_number = $data[0];
 						$personObject->country = $data[5];
-						$id = $personObject->insert();
-						$personObject->id = $id;
+						$personObject->id = $personObject->insert();
 					}
 					//echo '<pre>'; print_r($personObject); echo '</pre>';
 				}
 			}
 
-			if (!$personObject) { //Still can't find them
+			//***If they aren't in the person table or RPGAList.txt, throw an error and exit
+			if (!$personObject) {
 				$this->errorString .= ' That RPGA Number Does Not Exist.';
 				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
-				$incClassName = get_class($this->incDataObject);
-				$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
-				if ($this->data['included_order_by']) {
-					$this->incDataObject->orderBy($this->data['included_order_by']);
-				}
 				$this->edit();
-				return true;
+				return;
 			}
 		}
 
-		//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
+		//***Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
 		$personSectionClass = DB_DataObject::staticAutoloadTable('person_section');
 		$personSectionObject = new $personSectionClass;
 		$personSectionObject->person_id = $personObject->id;
 		$personSectionObject->event_id = $this->data['event_id'];
 		$personSectionObject->section_id = $this->data['section_id'];
+		$personSectionObject->score_packet_id = '';
 		$personSectionObject->find();
+		//***If they are registered, assign that person_section record to this packet
 		if ($personSectionObject->N > 0) {//Found a match
 			$personSectionObject->fetch(); //get the found record
 			$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
@@ -279,7 +293,8 @@ class ScorePacketFormObject extends FormObject {
 				$this->dataObject->person_id = $personSectionObject->person_id;
 				$this->dataObject->update();
 			}
-		} else { //We need to create a new Person Section Record for this combo
+		//***They aren't registered, we need to create a new Person Section Record
+		} else {
 			$personSectionObject = new $personSectionClass; //Have to start over with a new object due to a DB_DataObject "feature"
 
 			$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
@@ -305,13 +320,26 @@ class ScorePacketFormObject extends FormObject {
 			}
 		} //End 'if existing person section record not found...'
 
-		$incClassName = get_class($this->incDataObject);
-		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
-		if ($this->data['included_order_by']) {
-			$this->incDataObject->orderBy($this->data['included_order_by']);
+		//***Auto-calculate the places of all the participants
+		$personSectionObject = new $personSectionClass;
+		$personSectionObject->score_packet_id = $this->data['score_packet_id'];
+		$personSectionObject->orderBy('score desc,packet_position');
+		$personSectionObject->find();
+
+		$place = 0;
+		while ($personSectionObject->fetch()) {
+			$updateObject = $personSectionObject;
+			//echo '<pre>'; print_r($this->data); echo '</pre>';
+			if (($place > 0) && ($this->data['no_vote'] == 'CHECKED')) {
+				$updateObject->place = 4;
+			} else {
+				$updateObject->place = $place;
+			}
+			$updateObject->update();
+			$place++;
 		}
+
 		$this->edit();
-		return true;
 	} //End function addParticipant
 
 	/**
@@ -320,12 +348,7 @@ class ScorePacketFormObject extends FormObject {
 	 **/
 	function saveIncluded ()
 	{
-		if (!isset($this->data['parent_id'])) { // If parent_id is null, either the form is hosed, or they somehow didn't save the main record before adding children.
-			echo "No parent_id.";
-			return false;
-		}
-
-		$this->dataObject->get($this->data['parent_id']); //Use the parent id to load up the master object
+		$this->incDataObject = new $this->included_class;
 		$this->incDataObject->setFrom($this->data); //Copy the form data into the included object.
 
 		///Calculate prorated score
@@ -359,8 +382,7 @@ class ScorePacketFormObject extends FormObject {
 			$this->incDataObject->orderBy($this->data['included_order_by']);
 		}
 		$this->edit();
-        return true;
-	}
+    }
 
 	/**
 	 * deleteIncluded overloads FormObject->deleteIncluded, and allows non-Score Packet person sections to survive
@@ -375,9 +397,9 @@ class ScorePacketFormObject extends FormObject {
 			$incClassName = get_class($this->incDataObject);
 			$this->incDataObject = new $incClassName; //reinit the object to get around DataObject bug
 			$this->edit();
-			return false;
 		}
 
+		$this->incDataObject = new $this->included_class;
 		$this->incDataObject->get($this->data['included_id']);
 
 		if ($this->incDataObject->reg_type == 'Score Packet') {
@@ -407,7 +429,6 @@ class ScorePacketFormObject extends FormObject {
 			$this->incDataObject->orderBy($this->data['included_order_by']);
 		}
 		$this->edit();
-		return true;
 	}
 
 	/**
@@ -440,6 +461,13 @@ class ScorePacketFormObject extends FormObject {
                     $query .= ' AND ' . $whereLine;
                 }
             }
+
+            if ($this->data['orderBy']) {
+				$query .= ' ORDER BY ' . $this->data['orderBy'];
+			} else {
+				$query .= ' ORDER BY id';
+        	}
+
 			//Run the query
             $result = $this->dataObject->query($query);
             if (PEAR::isError($result)) {
@@ -456,9 +484,7 @@ class ScorePacketFormObject extends FormObject {
                 objectValueFill($this->dataObject, $this->template);
             }
         }
-        return true;
-	}
-
+    }
 }  //End class ScorePacketFormObject
 
 ?>

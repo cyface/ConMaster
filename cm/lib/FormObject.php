@@ -7,11 +7,11 @@
  * @see DataObject <http://pear.php.net/manual/en/packages.database.db-dataobject.php>
  *
  * To use:
- *	 Create forms with Template power with names of the form: 
+ *	 Create forms with Template power with names of the form:
  *		 <table>_edit.html
  *		 <table>_search.html
  *
- *	 Create a php script to catch the results of the form. 
+ *	 Create a php script to catch the results of the form.
  *	 In that script, create a new FormObject, passing in $_GET and $_POST.
  *	 If the create returns true, call the processAction() method.
  *	 FormObject will display the results of the action you specified
@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.22 2002/08/16 23:47:43 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.23 2002/10/16 18:25:51 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -31,6 +31,7 @@
 
 require_once('PEAR.php'); //Main PEAR stuff
 require_once('DataObject.php'); //Database Access Object
+require_once('./lib/ErrorCheck.php'); //Error Checking Code
 require_once('./lib/class.TemplatePower.inc.php'); //Main TemplatePower Stuff
 require_once('./lib/TemplateHelpers.inc.php'); //Custom class that adds convienience methods for dealing with Templates
 
@@ -45,7 +46,7 @@ class FormObject {
 
 	/**
 	 * Constructor takes uses the config params passed in sets up the DataObject and Template
-	 * 
+	 *
 	 * Input parameters passed in via $_GET or $_POST:
 	 *	table - name of the primary database table the form should access REQUIRED NO DEFAULT
 	 *	action - action to take on that table (edit, save, search, delete, saveIncluded) REQUIRED NO DEFAULT
@@ -71,7 +72,7 @@ class FormObject {
 	function FormObject ($inGet, $inPost)
 	{
 		//Set the data of this object using POST or GET
-		if ($inPost) { 
+		if ($inPost) {
 			$this->data = $inPost;
 		} else {
 			$this->data = $inGet;
@@ -81,7 +82,7 @@ class FormObject {
 		if (!$this->data['table'] or !$this->data['action']) {
 			return PEAR::raiseError('No table or action');
 		}
-		
+
 		// initialize DataObject from the ini files in the config directory
 		$options = &PEAR::getStaticProperty('DB_DataObject', 'options');
 		$config = parse_ini_file('config/conmaster.ini', true);
@@ -92,8 +93,11 @@ class FormObject {
 		$this->form_constants = $this->data['form_constants']; //Copy any passed in constants to the property
 		$this->form_constants['table'] = $this->table;  //Some forms need to have the table name passed in
 		$this->action = $this->data['action'];
-		$this->included_table = $this->data['included_table'];
-		$this->included_class = DB_DataObject::staticAutoloadTable($this->included_table); //@ means 'ignore errors'
+
+		if ($this->data['included_table']) {
+			$this->included_table = $this->data['included_table'];
+			$this->included_class = DB_DataObject::staticAutoloadTable($this->included_table); //@ means 'ignore errors'
+		}
 
 		//Load the appropriate DataObject for this form
 		$class = DB_DataObject::staticAutoloadTable($this->table); //Name of DataObject subclass to use for data access
@@ -117,8 +121,8 @@ class FormObject {
 
 		//If constants weren't disabled, build the form_constants array
 		$this->loadConstants();
-		
-		return true;
+
+
 	}  //End constructor FormObject
 	/**
 	 * ProcessAction executes the method named in $this->action
@@ -173,25 +177,25 @@ class FormObject {
 	{
 		//Load any related tables' data
 		$this->dataObject->getLinks();
-		
+
 		//Fill in the form variables on the form
 		objectValueFill($this->dataObject, $this->template);
-		
+
 		//Fill in the constants on the form
 		rowFill(array('form_constants' => $this->form_constants),$this->template);
-		
+
 		//Process the included table, if one was specified
 		if ($this->included_table) {
 			$this->editIncluded();
 		}
 	}  //End function edit
-	
+
 	/**
 	 * EditIncluded builds the rows for the included table.
 	 * Depends on: $this->dataObject, $this->template, $this->included_table
 	 * @access private
 	 **/
-	function editIncluded() 
+	function editIncluded()
 	{
 		//Set up the included object
 		$this->incDataObject = new $this->included_class;
@@ -201,12 +205,12 @@ class FormObject {
 		if ($this->data['included_where']) {
 			$this->incDataObject->whereAdd($this->data['included_where']);
 		}
-		
+
 		//Display the included Header
 		$this->template->newBlock('included_header'); //create a new header for the included rows
 		objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
-		
+
 		//Search for the included table's records that are related to the master object
 		if ($this->data['included_parent_id_col']) {
 			$parent_id_col = $this->data['included_parent_id_col'];
@@ -215,16 +219,16 @@ class FormObject {
 		}
 		$this->incDataObject->$parent_id_col = $this->dataObject->id;
 		$this->incDataObject->find(); //Try and load it with the current data
-		
+
 		//Pull each included record and create a new form block for it
 		while ($this->incDataObject->fetch()) { // Pull the results through the object and put them on the form
 			$this->incDataObject->getLinks();
 			$this->template->newBlock($this->included_table . '_row'); //create a new result row
 			objectValueFill($this->incDataObject, $this->template); //Fill in values on the included row
 			rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included row
-		}	
+		}
 	}
-	
+
 	/**
 	 * Save copies the $this->data variables with matching names to this object, and updates them in the DB
 	 * Depends on: $this->dataObject, $this->template, form info in $this->data
@@ -233,8 +237,8 @@ class FormObject {
 	function save()
 	{
 		//Copy the form data into the object
-		$this->dataObject->setFrom($this->data); 
-		
+		$this->dataObject->setFrom($this->data);
+
 		//Update/Insert the record in the database
 		if ($this->dataObject->id) {
 			$result = $this->dataObject->update();
@@ -242,14 +246,14 @@ class FormObject {
 			$result = $this->dataObject->insert();
 			$this->dataObject->id = $result;
 		}
-		
+
 		errorCheck($result); //If $result is an error, display the message and exit
-		
+
 		$this->template->assign('action_message', 'Saved');
-		
+
 		$this->edit();
 	}  //End function save
-	
+
 	/**
 	 * saveIncluded copies the $this->data variables with matching names to this object's includedObject, and updates the included rec the DB
 	 * Depends on: $this->dataObject, $this-incDataObject, $this->template
@@ -275,14 +279,14 @@ class FormObject {
 		}
 
 		$errorMessage = errorCheck($result); //If $result is an error, print message and exit
-		
+
 		if ($errorMessage) {
 			$this->template->assign('form_error', $errorMessage);
 			$this->template->assign('action_message', 'Error!');
 		} else {
 			$this->template->assign('action_message', 'Saved');
 		}
-		
+
 		$this->edit();
 	}  //End function saveIncluded
 
@@ -291,11 +295,11 @@ class FormObject {
 	 * @access private
 	 **/
 	function delete()
-	{		
+	{
 		errorCheck( $this->dataObject->delete() ); //Try to delete the record in the DB using the object
-		
+
 		$this->template = new TemplatePower('./templates/deleted.html'); //switch to the delete template
-		$this->template->prepare(); //let TemplatePower do its thing, parsing etc.		
+		$this->template->prepare(); //let TemplatePower do its thing, parsing etc.
 	}  //End function delete
 
 	/**
@@ -307,17 +311,17 @@ class FormObject {
 		if (!$this->data['included_id']) { // No id for this record
 			PEAR::raiseError('No included_id');
 		}
-		
+
 		$this->incDataObject = new $this->included_class;
 		$this->incDataObject->get($this->data['included_id']);
-		
+
 		errorCheck($this->incDataObject->delete()); //Try to delete the record in the DB using the object
-		
+
 		$this->template->assign('action_message', 'Row Deleted');
-		
+
 		$this->edit();
 	}  //End function deleteIncluded
-	
+
 	/**
 	 * search uses the $this->data(search[]) variables with matching names to this object, and returns matching rows from the DB
 	 * @access private
@@ -329,12 +333,12 @@ class FormObject {
 		$this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
 		valueFill($this->data, $this->template); //Put the search values back in the form fields
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the search form
-		
+
 		// Only continue if they submitted critera
 		if (!$this->data['search']) { // Only bother to search if they submit critera, show the blank form regardless
 			return;
 		}
-		
+
 		//Build up the search criteria
 		foreach ($this->data['search'] as $field => $value) {
 			$whereLine = $this->buildWhereLine($field, $this->data['search_operators'][$field], $value);
@@ -342,12 +346,18 @@ class FormObject {
 				$this->dataObject->whereAdd($whereLine);
 			}
 		}
-		
+
+		if ($this->data['orderBy']) {
+			$this->dataObject->orderBy($this->data['orderBy']);
+		} else {
+			$this->dataObject->orderBy('id');
+        }
+
 		//Search
 		errorCheck ( $this->dataObject->find() );
-		
+
 		$this->template->assign('action_message', $this->dataObject->N . ' Found');
-		
+
 		//Populate the search results on the form
 		while ($this->dataObject->fetch()) { // Pull the results through the object and put them on the form
 			$this->dataObject->getLinks();

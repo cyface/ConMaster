@@ -4,12 +4,7 @@ require_once('PEAR.php'); //Main PEAR stuff
 require_once('DB.php'); //Database Access Interface
 require_once('./lib/class.TemplatePower.inc.php'); //Main TemplatePower Stuff
 require_once('./lib/TemplateHelpers.inc.php'); //Custom class that adds convienience methods for dealing with Templates
-
-function handle_pear_error ($error) {
-    echo "An error occurred while trying to run your query.<br>\n";
-    echo "Error message: " . $error->getMessage() . "<br>\n";
-    echo "A more detailed error description: " . $error->getDebugInfo() . "<br>\n";
-}
+require_once('./lib/ErrorCheck.php'); //Error Checking Code
 
 /**
  * ReportObject is an object that allows predefined queries to be run and displayed or export
@@ -50,16 +45,23 @@ class ReportObject {
 		}
 		$this->query = implode('',file($queryFile,1));
 
+		//echo "Query: $this->query \n";
+
 		// get DataObject's config - so we can use the config directly.
 		$options = &PEAR::getStaticProperty('DB_DataObject', 'options');
 		$config = parse_ini_file('config/conmaster.ini', true);
 		$options = $config['DB_DataObject'];
 
-		PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'handle_pear_error');
-
 		$db = DB::connect($options['database']);
 
+		errorCheck($db); //If $db is an error, display the message and exit
+
 		$this->result = $db->getAll($this->query,null,DB_FETCHMODE_ASSOC);
+
+		errorCheck($this->result); //If $this-result is an error, display the message and exit
+
+		//echo '<pre>'; print_r($this->result); echo '</pre>';
+
 		$this->columnNames = array_keys($this->result[0]);
 	}
 

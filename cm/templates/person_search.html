@@ -6,36 +6,48 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0>
+<body class="BodyClass" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 onLoad="setOrderBy('{orderBy}')">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
   </tr>
 </table>
 <span class="FormTitle">Person Search Form</span> 
-<form name="person_search_form" method="post" action="form.php">
+<form name="search_form" method="post" action="form.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr>
+    <tr> 
       <td width="10%" class="FieldName">Last Name</td>
-      <td width="38%">
+      <td width="38%"> 
         <input type="text" name="search[last_name]" value="{search[last_name]}" class="FieldData">
       </td>
       <td width="10%"><span class="FieldName">First Name</span></td>
-      <td width="38%">
+      <td width="38%"> 
         <input type="text" name="search[first_name]" value="{search[first_name]}" class="FieldData">
       </td>
     </tr>
-    <tr>
+    <tr> 
       <td width="10%" class="FieldName">RPGA Number</td>
-      <td width="38%">
+      <td width="38%"> 
         <input type="text" name="search[rpga_number]" value="{search[rpga_number]}" class="FieldData">
         <input type="hidden" name="search_operators[rpga_number]" value="equals">
       </td>
       <td width="10%" class="FieldName">Badge Number</td>
-      <td width="38%">
+      <td width="38%"> 
         <input type="text" name="search[badge_number]" value="{search[badge_number]}" class="FieldData">
         <input type="hidden" name="search_operators[badge_number]" value="equals">
       </td>
+    </tr>
+    <tr>
+      <td width="10%" class="FieldName">Sort By</td>
+      <td width="38%"> 
+        <select name="orderBy" class="FieldData">
+          <option value="last_name" selected>Last Name</option>
+          <option value="badge_number,last_name">Badge Number</option>
+          <option value="rpga_number">RPGA Number</option>
+        </select>
+      </td>
+      <td width="10%" class="FieldName">&nbsp;</td>
+      <td width="38%">&nbsp;</td>
     </tr>
   </table>
   <div align="center">

@@ -133,7 +133,6 @@
       </td>
     </tr>
   </table>
-<hr>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td>
@@ -146,8 +145,7 @@
           <input type="button" name="cancel" value="Cancel" onClick="window.close()">
         </div>
       </td>
-      <td>
-        <div align="center"><span class="FieldName"> 
+      <td align="center">
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="event_name" value="{event_name}">
@@ -157,18 +155,13 @@
           <input type="hidden" name="included_order_by" value="section_number">
           <input type="hidden" name="convention_id" value="1">
           <input type="submit" name="save" value="Save">
-        </span></div>
       </td>
     </tr>
   </table>
-  <hr>
 </form>
- <hr>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <form name="actions_form">
-      <tr>
-        <td align="center">&nbsp;</td>
-        
+      <tr>        
       <td align="center">&nbsp;</td>
         <td align="center">
         <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=event&action=edit&included_table=note&included_order_by=last_modified desc&included_id_col=id&id={id}&template=note_edit.html&form_constants[form_label]=Event%20{event_number}','note_edit');return false">
@@ -176,7 +169,7 @@
       </tr>
     </form>
   </table>
-  <hr>
+<hr>
 <!-- START BLOCK : included_header -->
 <p><span class="FormTitle">Sections</span>
 </p>
@@ -206,8 +199,8 @@
       <td class="TableDataBold"><span class="FieldName"> 
         <input type="hidden" name="table" value="event">
         <input type="hidden" name="action" value="saveIncluded">
-        <input type="hidden" name="id" value="{id}">
         <input type="hidden" name="convention_id" value="{convention_id}">
+        <input type="hidden" name="id" value="{id}">
         <input type="hidden" name="event_id" value="{id}">
         <input type="hidden" name="event_number" value="{event_number}">
         <input type="hidden" name="included_table" value="section">
@@ -247,6 +240,7 @@
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="event_id" value="{event_id}">
+        <input type="hidden" name="event_number" value="{event_number}">
         <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 

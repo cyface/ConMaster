@@ -18,6 +18,16 @@ function deleteCheck(table,id) {
 	 }
 }
 
+function setOrderBy(inOrderBy) {
+	if (inOrderBy) {
+		for (i=0;i<document.search_form.orderBy.options.length;i++) {
+			if (document.search_form.orderBy.options[i].value == inOrderBy) {
+				document.search_form.orderBy.options[i].selected=true;
+			}
+		}
+	}
+}
+
 function GP_popupConfirmMsg(msg) { //v1.0
   document.MM_returnValue = confirm(msg);
 }
