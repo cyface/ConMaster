@@ -1,3 +1,5 @@
+<?php
+
 /**
  * TemplateHelpers
  *
@@ -6,7 +8,7 @@
  *
  * These are mainly used by FormObject.php and form_merge.php
  *
- * CVS Info: $Id: TemplateHelpers.inc.php,v 1.6 2002/07/17 23:29:58 cyface Exp $
+ * CVS Info: $Id: TemplateHelpers.inc.php,v 1.7 2002/07/17 23:58:36 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -15,8 +17,6 @@
  * @see TemplatePower
  * @see DBObject
  **/
-
-<?php
 
 require_once('./lib/class.TemplatePower.inc.php');
 
