@@ -4,6 +4,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
+<script language="JavaScript">
+
+function fmtShortTime (inTimeStr) {
+	var formattedTime;
+	var dateObj;
+	formattedTime = "January 01, 2002 " + inTimeStr;
+	dateObj = new Date(formattedTime);
+	return dateObj.getHours();
+}
+
+</script>
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{first_name} {last_name} Person Record'" class="BodyClass">
@@ -163,8 +174,8 @@
         </span> </td>
     <td class="TableData">&nbsp;</td>
     <td class="TableData">&nbsp;</td>
-    <td class="TableData">&nbsp;</td>
-    <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp; </td>
 	</form>
   </tr>
   <!-- START BLOCK : person_section_row -->
@@ -180,7 +191,7 @@
     </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
       <td class="TableData"><a href="form_handler.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_event_id[event_name]}</a></td>
-      <td class="TableData">{_section_id[start_time]}-{_section_id[end_time]}</td>
+      <td class="TableData"><script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>-{_section_id[end_time]}</td>
     <td class="TableData">${price}</td>
     <td class="TableData">
       <input type="checkbox" name="judge2" value="CHECKED" {judge}>
