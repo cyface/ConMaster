@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.14 2002/07/26 23:07:42 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.15 2002/07/26 23:49:26 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -64,8 +64,10 @@ class FormObject {
 
 		//Init this object's private properties from $this->data
         $this->table = $this->data['table'];
+		$this->form_constants = $this->data['form_constants']; //Copy any passed in constants to the property
 		$this->form_constants['table'] = $this->table;  //Some forms need to have the table name passed in
-        $this->action = $this->data['action'];
+        
+		$this->action = $this->data['action'];
 
         // initialize DataObject
         $options = &PEAR::getStaticProperty('DB_DataObject', 'options');

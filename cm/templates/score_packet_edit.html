@@ -61,15 +61,7 @@ function searchSections(inEventId) {
 	document.event_edit.section_id.value=resultArray[0].id;
 }
 
-function popSetup() {
-	setEventList();
-	if (document.event_edit.section_id.value != '') {
-		document.event_edit.events.size=1;
-		document.event_edit.sections.size=1;
-		searchSections(document.event_edit.event_id.value);
-		searchEvents(document.event_edit.event_id.value);
-	}
-}
+
 
 function searchEvents(inEventId) {
 	for (i=0;i<document.event_edit.events.options.length;i++) {
@@ -92,6 +84,16 @@ function eventChange(inEventId) {
 	searchSections(inEventId);
 	document.event_edit.event_id.value=inEventId;
 	setRPGAType(inEventId);
+}
+
+function popSetup() {
+	setEventList();
+	if (document.event_edit.section_id.value != '') {
+		document.event_edit.events.size=1;
+		document.event_edit.sections.size=1;
+		searchSections(document.event_edit.event_id.value);
+		searchEvents(document.event_edit.event_id.value);
+	}
 }
 
 </script>
@@ -190,9 +192,21 @@ function eventChange(inEventId) {
       </td>
     </tr>
   </table>
-  <hr>
-
 </form>
+<hr><input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form name="actions_form">
+      <tr>
+        <td align="center">&nbsp;</td>
+        
+      <td align="center">&nbsp;</td>
+        <td align="center">
+        
+      </td>
+      </tr>
+    </form>
+  </table>
+  <hr>
 <p>
   <!-- START BLOCK : included_header -->
   <span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 

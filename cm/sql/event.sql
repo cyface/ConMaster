@@ -4,43 +4,42 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 17, 2002 at 10:25 AM
-# Server version: 3.23.51
+# Generation Time: Jul 26, 2002 at 04:48 PM
+# Server version: 3.22.32
 # PHP Version: 4.1.2
-# Database : `cyface`
+# Database : cyface
 # --------------------------------------------------------
 
 #
-# Table structure for table `event`
+# Table structure for table event
 #
 
 DROP TABLE IF EXISTS event;
 CREATE TABLE event (
-  id int(10) unsigned NOT NULL auto_increment,
-  event_number int(10) unsigned NOT NULL default '0',
-  event_name text,
-  game_system varchar(255) default NULL,
-  scenario_name varchar(255) default NULL,
-  author_name varchar(255) default NULL,
-  rpga varchar(7) default NULL,
-  rpga_event_type varchar(10) default NULL,
-  round_count int(10) unsigned NOT NULL default '1',
-  description text,
-  price decimal(10,0) default NULL,
-  level varchar(50) default NULL,
-  type varchar(50) default NULL,
-  contact_person_id int(10) unsigned default NULL,
-  rpga_only varchar(7) default NULL,
-  sponsor varchar(50) default NULL,
-  rpga_event_code varchar(30) default NULL,
-  convention_id int(10) unsigned NOT NULL default '1',
-  last_modified timestamp(14) NOT NULL,
-  PRIMARY KEY  (id),
-  UNIQUE KEY event_number (event_number,convention_id)
-) TYPE=MyISAM COMMENT='Events';
+   id int(11) unsigned DEFAULT '0' NOT NULL auto_increment,
+   event_number smallint(6),
+   event_name text,
+   game_system varchar(255),
+   scenario_name varchar(255),
+   author_name varchar(255),
+   rpga varchar(7),
+   rpga_event_type varchar(10),
+   round_count smallint(6),
+   description text,
+   price decimal(10,0),
+   level varchar(50),
+   type varchar(50),
+   contact_person_id int(11) unsigned,
+   rpga_only varchar(7),
+   sponsor varchar(50),
+   rpga_event_code varchar(30),
+   convention_id int(11) unsigned DEFAULT '1' NOT NULL,
+   last_modified timestamp(14),
+   PRIMARY KEY (id)
+);
 
 #
-# Dumping data for table `event`
+# Dumping data for table event
 #
 
 INSERT INTO event VALUES (2, 1, 'T-Shirts, Small', 'T-Shirts, Small', NULL, NULL, NULL, NULL, 0, NULL, '18', NULL, 'Merchandise', NULL, '', NULL, NULL, 0, 20020714202833);
@@ -155,15 +154,15 @@ INSERT INTO event VALUES (110, 504, 'RPGA AD&D: Information Please', 'AD&D', 'In
 INSERT INTO event VALUES (111, 505, 'RPGA AD&D GrandMasters: Freudian Slips', 'AD&D', 'Freudian Slips', 'Tom Prusa', 'CHECKED', 'GM', 1, '\'I am Sigmund\'s Strength.  It is the best of all of Sigmund\'s attributes, the one that makes him succeed at his most important job of peasant hero.  No, I am Sigmund\'s Wisdom, the peacemaker, the driving force behind Sigmund.  No, I am Sigmund\'s...\'  Help Sigmund make it through the day, facing all the challenges together, so to speak.', '3', 'Advanced', 'Role-Playing', NULL, NULL, 'the RPGA', 'FRSLl1AD', 1, 20020714202833);
 INSERT INTO event VALUES (112, 506, 'RPGA AD&D - Living City Benefit: Night of the Lunar Eclipse', 'AD&D - Living City', 'Night of the Lunar Eclipse', 'James Alan', 'CHECKED', 'BE', 1, 'Strange events have always occurred on nights such as these.  You have been roused on this dark night by the Temple of Selune.  You must find an ancient artifact before others with evil intent do.  Will you succeed, or will Raven\'s Bluff fall to the forces of evil?', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', 'NTLUE1LC', 1, 20020714202833);
 INSERT INTO event VALUES (113, 507, 'RPGA AD&D - Living City Benefit: Aethlaynmur\'s Plight', 'AD&D - Living City', 'Aethlaynmur\'s Plight', 'Jean Rabe', 'CHECKED', 'BE', 1, 'Aethlymur is in need of your assistance once again.  This time, though, he is not flying quite as high.  Help him to regain his celestial integrity, before all is lost.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
-INSERT INTO event VALUES (114, 508, 'RPGA AD&D - Living City: Crawl II: Another Temple, Another Time', 'AD&D - Living City', 'Crawl II: Another Temple, Another Time', 'Kevin Polster', 'CHECKED', NULL, 1, 'Yes, it\'s time again to go through another ruin, to discover what riches possibly lie within.   Of course, there\'s always the possibility that this is nothing more than what it is, a ruin.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
+INSERT INTO event VALUES (114, 508, 'RPGA AD&D - Living City: Crawl II: Another Temple, Another Time', 'AD&D - Living City', 'Crawl II: Another Temple, Another Time', 'Kevin Polster', 'CHECKED', 'BE', 1, 'Yes, it\'s time again to go through another ruin, to discover what riches possibly lie within.   Of course, there\'s always the possibility that this is nothing more than what it is, a ruin.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020726164736);
 INSERT INTO event VALUES (115, 509, 'RPGA AD&D - Living City Interactive Benefit: The Night Chicago', 'AD&D - Living City Interactive', 'The Night Chicago Died', 'Tim Creese', 'CHECKED', 'BE', 1, 'Have you ever dreamed of having a rich uncle who left you a fortune? I\r\nknow I do - especially when the work day\'s grueling...   Come pay your last respect to Chicago and perhaps garner some respect for yourself as well...', '3', 'Beginner', 'Role-Playing', NULL, '', 'the RPGA', NULL, 0, 20020714202833);
 INSERT INTO event VALUES (116, 510, 'RPGA AD&D - Living Jungle Benefit: Terror From Below', 'AD&D - Living Jungle', 'Terror From Below', 'Leonard Dessert', 'CHECKED', 'BE', 1, 'You have been sent on a mission that you cannot tell anyone about even when you are done with it.  It seems like the world is coming apart at the seams, and you thought you were just attending a birthday party.  Good luck.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
 INSERT INTO event VALUES (117, 511, 'RPGA AD&D - Living Death Jorvik', 'AD&D - Living Death', 'Jorvik', 'Robert Tomihiro', 'CHECKED', 'BE', 1, 'The town of Camden, South Carolina was a quiet town.  Now it is a different case.  What could be causing the problems?  That is for you to find out, as well as live to tell the tale.', '3', 'Beginner', 'Role-Playing', NULL, '', 'the RPGA', NULL, 1, 20020714202833);
-INSERT INTO event VALUES (118, 512, 'RPGA AD&D - Living Procampur: Deglath\'s Lament', 'AD&D - Living Procampur', 'Deglath\'s Lament', NULL, 'CHECKED', NULL, 1, 'The Lord Grimm requires your help once again.  A murder has been committed and he is the prime suspect!  Will you be able to find the necessary information in time to save him from the gallows?', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
-INSERT INTO event VALUES (119, 513, 'RPGA Call of Cthulhu: Head of the Master', 'Call of Cthulhu', 'Head of the Master', 'Gary and Kimberly Labrecque', 'CHECKED', NULL, 1, 'The Head of the Master has been stolen from the Miskatonic University!!  Professor Bradley has requested you to help him. Find the artifact and who stole it before....well, who knows what could happen.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', 'CT', 1, 20020714202833);
-INSERT INTO event VALUES (120, 514, 'RPGA Dragonlance 5th Age: Nightsinger\'s Flight', 'Dragonlance 5th Age', 'Nightsinger\'s Flight', 'Jacqulyne Cassada, Anne Rea, Carla Holla', 'CHECKED', NULL, 1, 'The characters travel to the forbidden, beleaguered land of Silvanesti to find an artifact from the Age of Dreams, but have they reached the right place?  Fourth in the Visions of Destiny campaign series.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', 'D5', 1, 20020714202833);
+INSERT INTO event VALUES (118, 512, 'RPGA AD&D - Living Procampur: Deglath\'s Lament', 'AD&D - Living Procampur', 'Deglath\'s Lament', NULL, 'CHECKED', 'BE', 1, 'The Lord Grimm requires your help once again.  A murder has been committed and he is the prime suspect!  Will you be able to find the necessary information in time to save him from the gallows?', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020726164704);
+INSERT INTO event VALUES (119, 513, 'RPGA Call of Cthulhu: Head of the Master', 'Call of Cthulhu', 'Head of the Master', 'Gary and Kimberly Labrecque', 'CHECKED', 'BE', 1, 'The Head of the Master has been stolen from the Miskatonic University!!  Professor Bradley has requested you to help him. Find the artifact and who stole it before....well, who knows what could happen.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', 'CT', 1, 20020726164717);
+INSERT INTO event VALUES (120, 514, 'RPGA Dragonlance 5th Age: Nightsinger\'s Flight', 'Dragonlance 5th Age', 'Nightsinger\'s Flight', 'Jacqulyne Cassada, Anne Rea, Carla Holla', 'CHECKED', 'BE', 1, 'The characters travel to the forbidden, beleaguered land of Silvanesti to find an artifact from the Age of Dreams, but have they reached the right place?  Fourth in the Visions of Destiny campaign series.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', 'D5', 1, 20020726164750);
 INSERT INTO event VALUES (121, 515, 'RPGA Star Wars Benefit: Trilogy-3', 'Star Wars', 'Trilogy-3', 'Jean Rabe', 'CHECKED', 'BE', 1, NULL, '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
-INSERT INTO event VALUES (122, 516, 'RPGA Paranoia: Nothing Complex', 'Paranoia', 'Nothing Complex', 'Don Bingle', 'CHECKED', NULL, 1, 'Life was wonderful until you became a Troubleshooter.  Surely your ensemble can convince the Wizard of Programming to renew your Tri-Dee show.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020714202833);
+INSERT INTO event VALUES (122, 516, 'RPGA Paranoia: Nothing Complex', 'Paranoia', 'Nothing Complex', 'Don Bingle', 'CHECKED', 'BE', 1, 'Life was wonderful until you became a Troubleshooter.  Surely your ensemble can convince the Wizard of Programming to renew your Tri-Dee show.', '3', 'Beginner', 'Role-Playing', NULL, NULL, 'the RPGA', NULL, 1, 20020726164727);
 INSERT INTO event VALUES (123, 517, 'Deadlands: Bar Brawl ', 'Deadlands', 'Bar Brawl', 'Aric Wieder', NULL, NULL, 1, 'Come learn the ways of the Wierd West in this action packed, rough and tough event in the town of Rolling Rock.  During the towns first ever Fists of Steel competition, something goes terribly wrong, and its up to the heroes to find out before the fights start.  This is a beginner adventure.', '3', 'Beginner-Rules Taught', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (124, 518, 'Deadlands: Valley Run', 'Deadlands', 'Valley Run', 'Aric Wieder', NULL, NULL, 1, 'When the good folks of Red Valley need supplies for a war with a local road gang the Heroes are asked to help.  All they need to do is deliver the goods through hostile territory, and return the payment to the main store.  Sound simple enough for ya? Come test your skills.  Please make characters prior to the event.  I will have a meeting prior to the event to go over characters.', '3', 'Intermediate', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (125, 519, 'Providence: A New Beginning', 'Providence', 'A New Beginning', 'Aric Wieder', NULL, NULL, 1, 'Welcome to Providence. Here you can learn to be a hero again in this\r\nintroductory adventure. There has been a recent sighting of one of the\r\nGreat Gates in the jungles outside of a deserted city. You will have to\rsolve the mystery of the forgotten city to find out if the rumor is\r\ntrue. Characters will be provided and rules will be taught.\r\nLimit of 6 players.\r\n', '3', 'Beginner', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
@@ -171,7 +170,7 @@ INSERT INTO event VALUES (126, 520, 'Legend of the Five Rings: The Curse of Myot
 INSERT INTO event VALUES (127, 521, 'Legend of the Five Rings: The Art of Intrigue', 'Legend of the Five Rings', 'The Art of Intrigue', 'Chris Weeda', NULL, NULL, 1, 'The Scorpion Clan is the best at finding out everyone\'s dirty little secrets.  Of course, they also have their own habits as well.  Will you be able to find out their vices before they put you in one of their own?', '3', 'Beginner', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (128, 522, 'Universe: Always Faithful', 'Universe', 'Always Faithful', 'Michael Wilkinson', NULL, NULL, 1, 'You\'re a soldier attached to the Supremacy National Army\'s \r\nPowered Assault Armor Division.  It is your responsibility to\r\nrecapture the Harrana Foothills.  Beginner-Rules Taught.\r\n', '3', 'Beginner-Rules Taught', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (129, 523, 'Universe: What\'s that Green Stuff?!!', 'Universe', 'What\'s that Green Stuff?!!', 'Michael Wilkinson', NULL, NULL, 1, 'You\'re part of a starship crew that makes a long run to a very \r\nremote government installation to deliver supplies and pick \r\nup a mysterious cargo.  The job is tedious, but the pay is great.\r\nBeginner-Rules Taught.\r\n', '3', 'Beginner-Rules Taught', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
-INSERT INTO event VALUES (130, 524, 'Universe: Piece of Mind\r', 'Universe', 'Piece of Mind\r', 'Markus Wilkinson', NULL, NULL, 1, 'Living on the edge of civilization always appealed to you, so you \r\nsigned up with a construction company to help build a remote \r\ncolony.  When you arrive, you\'re met by angry colonists bearing \r\ntorches and pichforks.  Don\'t you love life on the frontier?  \r\nBeginner-Rules Taught.\r\n', '3', 'Beginner-Rules Taught', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
+INSERT INTO event VALUES (130, 524, 'Universe: Piece of Mind', 'Universe', 'Piece of Mind', 'Markus Wilkinson', NULL, NULL, 1, 'Living on the edge of civilization always appealed to you, so you \r\nsigned up with a construction company to help build a remote \r\ncolony.  When you arrive, you\'re met by angry colonists bearing \r\ntorches and pichforks.  Don\'t you love life on the frontier?  \r\nBeginner-Rules Taught.\r\n', '3', 'Beginner-Rules Taught', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020726163250);
 INSERT INTO event VALUES (131, 525, 'Call of Cthulhu: You too can Cthulhu', 'Call of Cthulhu', 'You too can Cthulhu', 'Jefferey M. Carey', NULL, NULL, 1, 'This event is primarily designed fo rhtose who have never palyed Call of Cthulu, but want to learn!  A friend has called for your help.  Can you arrive to aid him in time and solve an ancient mystery in the process?  Players will be allowed to partially make their own characters.', '3', 'Beginner', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (132, 526, 'Call of Cthulhu: Grace Under Pressure', 'Call of Cthulhu', 'Grace Under Pressure', 'John Tynes', NULL, NULL, 1, 'As a member of a deep-sea expedition team you are sent to discover new mysteries.  But nothing could prepare you for the unfathomable horror that reaches out from below.  This definitely was not in the job description!', '3', 'Beginner', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);
 INSERT INTO event VALUES (133, 527, 'Cyberpunk 2020: 1st Annual Desert Rat Extravaganza', 'Cyberpunk 2020', '1st Annual Desert Rat Extravaganza', 'Dave Grant and Martin Linck', NULL, NULL, 1, 'Your local fixer has hired you out for an exciting assignment full of blood, mayhem, and prizes, prizes, prizes!!!  Battle it out with other players in this Loki\'s Wine style free-for-all.  Prizes include a brand new BMW Aerodyne, an all expenses paid trip to the Pacific Rim, and maybe even your life!  Players will be asked to submit their own characters as per the rules available at Con HQ.  A revised edition of Friday Night Firefight will also be available.  There will be real prizes available for the winners.  If you have any questions, please call the judge at 303-758-2920', '3', 'Beginner', 'Role-Playing', NULL, NULL, NULL, NULL, 1, 20020714202833);

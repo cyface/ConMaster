@@ -173,7 +173,7 @@
         
       <td align="center">&nbsp;</td>
         <td align="center">
-        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=event&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=event&form_constants[form_label]={event_number}','note_edit');return false">
+        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=event&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[form_label]=Event%20{event_number}','note_edit');return false">
       </td>
       </tr>
     </form>
@@ -185,7 +185,7 @@
   <tr> 
     <td class="TableTitle" colspan="2">Action</td>
     <td class="TableTitle">Section Number</td>
-    <td class="TableTitle">Max Registered</td>
+    <td class="TableTitle">Max Register</td>
     <td class="TableTitle">Date</td>
     <td class="TableTitle">Start Time</td>
     <td class="TableTitle">End Time</td>
@@ -197,15 +197,17 @@
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
+        <input type="hidden" name="table" value="event">
+        <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="parent_id" value="{id}">
         <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="event_id" value="{id}">
         <input type="hidden" name="event_number" value="{event_number}">
-        <input type="hidden" name="table" value="event">
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
-        <input type="hidden" name="action" value="saveIncluded">
-        <input type="hidden" name="load_constants[1]" value="event_type">
+        <input type="hidden" name="load_constants[event_type]" value="constant">
+		<input type="hidden" name="load_constants[event_level]" value="constant">
+		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
         </span> </td>
       <td class="TableData">&nbsp;</td>
@@ -226,7 +228,9 @@
         <input type="hidden" name="parent_id" value="{event_id}">
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
-        <input type="hidden" name="load_constants[1]" value="event_type">
+        <input type="hidden" name="load_constants[event_type]" value="constant">
+		<input type="hidden" name="load_constants[event_level]" value="constant">
+		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -239,7 +243,9 @@
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="event_id" value="{event_id}">
-        <input type="hidden" name="load_constants[1]" value="event_type">
+        <input type="hidden" name="load_constants[event_type]" value="constant">
+		<input type="hidden" name="load_constants[event_level]" value="constant">
+		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
