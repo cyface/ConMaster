@@ -59,6 +59,18 @@ class DataObjects_Event extends DB_DataObject {
 		if ($this->scenario_name !='') {$scenarioStr = ' ' . $this->scenario_name;}
 		if ($this->rpga_event_type !='') {$typeStr = ' ' . $this->rpga_event_type;}
 		$this->event_name = $rpgaStr . $this->game_system . $typeStr . ':' . $scenarioStr;
+		
+		//Update the section records attached to this event
+		$sectionClass = DB_DataObject::staticAutoloadTable('section');
+		$sectionObject = new $sectionClass;
+		$sectionObject->event_id = $this->id;
+		$sectionObject->find();
+		//echo '<PRE> Found Section Objects\n'; print_r($sectionObject); echo '<PRE>'; //Testing Only
+
+		while ($sectionObject->fetch()) {
+			$sectionObject->event_number = $this->event_number;
+			$sectionObject->update();
+		}
 
 		return DB_DataObject::update(); //Call the parent method
 	}
@@ -69,7 +81,6 @@ class DataObjects_Event extends DB_DataObject {
 		$sectionObject = new $sectionClass;
 		$sectionObject->event_id = $this->id;
 		$sectionObject->find();
-		echo '<PRE> Found Section Objects'; print_r($sectionObject); echo '<PRE>'; //Testing Only
 
 		while ($sectionObject->fetch()) {
 			//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>'; //Testing Only
