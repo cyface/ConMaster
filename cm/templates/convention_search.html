@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" class="BodyClass" onLoad="person_search_form.submit()">
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
@@ -14,7 +14,7 @@
 </table>
 <span class="FormTitle">Convention Search Form</span> 
 <hr noshade>
-<form name="person_search_form" method="post" action="form.php">
+<form name="convention_search_form" method="post" action="form.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
     <tr>
       <td width="10%" class="FieldName"> Name</td>
@@ -57,7 +57,7 @@
   <tr> 
     <td class="TableDataBold"><a href="" class="TableData" onclick="popwin('form.php?table=convention&action=edit&included_table=slot&included_order_by=slot_number&id={id}','convention_edit');return false">{name}</a></td>
     <td class="TableData">{sponsor_organization}</td>
-    <td class="TableData">{street}</td>
+    <td class="TableData"><a href="{web_site_url}" target="_blank">{web_site_url}</a></td>
     <td class="TableData">{rpga_convention_code} 
   </tr>
   <!-- END BLOCK : result_row -->
