@@ -1,10 +1,10 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.0-rc2
+# version 2.3.0-rc4
 # http://phpwizard.net/phpMyAdmin/
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 29, 2002 at 02:43 PM
+# Generation Time: Jul 31, 2002 at 08:32 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -59,4 +59,10 @@ INSERT INTO constant VALUES (25, 'event_level', 'Beginner - Rules Taught', NULL,
 INSERT INTO constant VALUES (26, 'event_level', 'Beginner', NULL, NULL, NULL, 1, 20020722105530);
 INSERT INTO constant VALUES (27, 'event_level', 'Intermediate', NULL, NULL, NULL, 1, 20020722105542);
 INSERT INTO constant VALUES (28, 'event_level', 'Advanced', NULL, NULL, NULL, 1, 20020722105546);
+INSERT INTO constant VALUES (29, 'payment_type', 'Cash', NULL, NULL, 10, 1, 20020729160434);
+INSERT INTO constant VALUES (30, 'payment_type', 'Check', NULL, NULL, 20, 1, 20020729160450);
+INSERT INTO constant VALUES (31, 'payment_type', 'Visa', NULL, NULL, 30, 1, 20020729160505);
+INSERT INTO constant VALUES (32, 'payment_type', 'MasterCard', NULL, NULL, 40, 1, 20020729160634);
+INSERT INTO constant VALUES (33, 'payment_type', 'On-Line', NULL, NULL, 50, 1, 20020729160819);
+INSERT INTO constant VALUES (34, 'payment_type', 'PayPal', NULL, NULL, 60, 1, 20020729160558);
 
