@@ -1,41 +1,41 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.0-rc4
+# version 2.3.0-rc2
 # http://phpwizard.net/phpMyAdmin/
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 31, 2002 at 08:32 AM
-# Server version: 3.23.51
+# Generation Time: Jul 31, 2002 at 09:06 AM
+# Server version: 3.22.32
 # PHP Version: 4.1.2
-# Database : `cyface`
+# Database : cyface
 # --------------------------------------------------------
 
 #
-# Table structure for table `constant`
+# Table structure for table constant
 #
 
 DROP TABLE IF EXISTS constant;
 CREATE TABLE constant (
-  id int(10) unsigned NOT NULL auto_increment,
-  constant varchar(255) NOT NULL default '',
-  name varchar(255) NOT NULL default '',
-  value varchar(255) default NULL,
-  extra_info varchar(255) default NULL,
-  ordinal int(10) default NULL,
-  convention_id int(10) unsigned NOT NULL default '1',
-  last_modified timestamp(14) NOT NULL,
-  PRIMARY KEY  (id)
-) TYPE=MyISAM COMMENT='Constants, such as lists of values';
+   id int(10) unsigned DEFAULT '0' NOT NULL auto_increment,
+   constant varchar(255) NOT NULL,
+   name varchar(255) NOT NULL,
+   value varchar(255),
+   extra_info varchar(255),
+   ordinal int(10),
+   convention_id int(10) unsigned DEFAULT '1' NOT NULL,
+   last_modified timestamp(14),
+   PRIMARY KEY (id)
+);
 
 #
-# Dumping data for table `constant`
+# Dumping data for table constant
 #
 
 INSERT INTO constant VALUES (1, 'reg_type', 'Pre-Reg', '10', 'Pre', 1, 1, 20020719113717);
 INSERT INTO constant VALUES (2, 'reg_type', 'FRI Only', '10', 'One-Day', 3, 1, 20020719113737);
 INSERT INTO constant VALUES (3, 'reg_type', 'SAT Only', '10', 'One-Day', 4, 1, 20020719113742);
 INSERT INTO constant VALUES (4, 'reg_type', 'SUN Only', '10', 'One-Day', 5, 1, 20020719113752);
-INSERT INTO constant VALUES (5, 'reg_type', 'Weekend', '15', 'On-Site', 2, 1, 20020719113831);
+INSERT INTO constant VALUES (5, 'reg_type', 'Reg', '15', 'On-Site', 2, 1, 20020731085502);
 INSERT INTO constant VALUES (6, 'reg_type', 'VIP', '150', NULL, 6, 1, 20020719113912);
 INSERT INTO constant VALUES (7, 'reg_type', 'THU Only', '10', NULL, 7, 1, 20020719114022);
 INSERT INTO constant VALUES (8, 'reg_type', 'Staff', '0', NULL, 10, 1, 20020719140804);
@@ -65,4 +65,13 @@ INSERT INTO constant VALUES (31, 'payment_type', 'Visa', NULL, NULL, 30, 1, 2002
 INSERT INTO constant VALUES (32, 'payment_type', 'MasterCard', NULL, NULL, 40, 1, 20020729160634);
 INSERT INTO constant VALUES (33, 'payment_type', 'On-Line', NULL, NULL, 50, 1, 20020729160819);
 INSERT INTO constant VALUES (34, 'payment_type', 'PayPal', NULL, NULL, 60, 1, 20020729160558);
+INSERT INTO constant VALUES (35, 'reg_type', 'Judge Only', '0', NULL, NULL, 1, 20020731085638);
+INSERT INTO constant VALUES (36, 'reg_type', 'Ben Con Jr.', '7', NULL, NULL, 1, 20020731085723);
+INSERT INTO constant VALUES (37, 'reg_type', 'Dealer', '0', 'Dealer', NULL, 1, 20020731085754);
+INSERT INTO constant VALUES (38, 'reg_type', 'Non-Gamer', '0', 'Non-Gamer', NULL, 1, 20020731085814);
+INSERT INTO constant VALUES (39, 'reg_type', 'EB VIP', '50', 'VIP', NULL, 1, 20020731085848);
+INSERT INTO constant VALUES (40, 'reg_type', 'Early Bird', '12', 'Pre', NULL, 1, 20020731085909);
+INSERT INTO constant VALUES (41, 'reg_type', 'Special Guest', '0', 'guest', NULL, 1, 20020731085935);
+INSERT INTO constant VALUES (42, 'reg_type', 'Playing Judge', '10', 'Judge', NULL, 1, 20020731085947);
+INSERT INTO constant VALUES (43, 'reg_type', 'MON Only', '10', 'Reg', NULL, 1, 20020731085959);
 
