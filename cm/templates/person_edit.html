@@ -235,19 +235,20 @@ function setRegTypeList() {
 <span class="FormTitle">Events {action_message}</span> <span class="FieldError">{form_error} </span> 
 <table width="100%" border="1">
   <tr> 
-	<td class="TableTitle" align="left">Print Select</td>
+    <td class="TableTitle" align="left">Print Select</td>
     <td class="TableTitle" width="5%" colspan=2 align="center">Action</td>
     <td class="TableTitle" width="5%">Event Num</td>
     <td class="TableTitle"> Event Name</td>
-    <td class="TableTitle" width="10%"> Time</td>
+    <td class="TableTitle"> Time</td>
     <td class="TableTitle">Reg</td>
     <td class="TableTitle" width="75"> Price</td>
+    <td class="TableTitle">Place</td>
     <td class="TableTitle">Judge</td>
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="form.php">
       <td>&nbsp; </td>
-      <td align="right" colspan=2>
+      <td align="right" colspan=2> 
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"> 
@@ -263,9 +264,10 @@ function setRegTypeList() {
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
       </td>
       <td class="TableData">&nbsp;</td>
-      <td class="TableData" width="10%">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData" width="75">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp; </td>
     </form>
   </tr>
@@ -303,7 +305,7 @@ function setRegTypeList() {
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
       <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_event_id[event_name]}</a></td>
-      <td class="TableData" width="10%"> 
+      <td class="TableData"> 
         <script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>
         - 
         <script language="JavaScript">document.write(fmtShortTime("{_section_id[end_time]}"));</script>
@@ -312,6 +314,7 @@ function setRegTypeList() {
       <td class="TableData" width="75">$ 
         <input type="text" name="price" size="5" maxlength="10" class="FieldData" value="{price}">
       </td>
+      <td class="TableData"> {place}</td>
       <td class="TableData"> 
         <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">
       </td>

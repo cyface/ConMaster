@@ -12,8 +12,7 @@
     <td>&nbsp;</td>
   </tr>
 </table>
-<span class="FormTitle"> Score Packet Search Form</span>
-<hr noshade>
+<span class="FormTitle"> Score Packet Search Form</span> 
 <form name="person_search_form" method="post" action="score_packet.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
     <tr> 
@@ -53,6 +52,7 @@
     <td class="TableTitle">Event Name</td>
     <td class="TableTitle"> Judge Name</td>
     <td class="TableTitle"> Players</td>
+    <td class="TableTitle">Status</td>
   </tr>
   <!-- START BLOCK : result_row -->
   <tr> 
@@ -61,13 +61,14 @@
     <td class="TableData">{_event_id[event_name]}</td>
     <td class="TableData">{_person_id[first_name]} {_person_id[last_name]} 
     <td class="TableData">{number_of_players}</td>
+    <td class="TableData">{status}</td>
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="FieldName"><a href="" onClick="popWin('score_packet.php?table=score_packet&action=edit&load_constants[rpga_event_type]=constant','score_packet_edit');return false">Create 
+    <td class="FieldName"><a href="" onClick="popWin('score_packet.php?table=score_packet&action=newPacket&load_constants[rpga_event_type]=constant','score_packet_edit');return false">Create 
       a New Score Packet</a></td>
     <td class="FieldName"><a href="export.php?queryFile=rpga_export_query.sql&filename=scores.txt&format=tab&quotes=off">Download 
       RPGA Score File</a></td>

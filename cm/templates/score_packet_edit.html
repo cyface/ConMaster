@@ -23,6 +23,9 @@ function initEvents() {
 	<!-- START BLOCK : EventList_row -->
 	this["{id}"] = new Event({id},"{rpga_event_type}","{event_name}");
     <!-- END BLOCK : EventList_row -->
+	if ("{_event_id[id]}" != "") {
+		this["{_event_id[id]}"] = new Event("{_event_id[id]}","{_event_id[rpga_event_type]}","{_event_id[event_name]}");
+	}
 }
 var events = new initEvents();
 
@@ -38,6 +41,9 @@ function initSections() {
 	<!-- START BLOCK : SectionList_row -->
 	this["{id}"] = new Section({id},{event_id},"{complete_event_number}: {date} {start_time}-{end_time}");
     <!-- END BLOCK : SectionList_row -->
+	if ("{_section_id[id]}" != "") {
+		this["{_section_id[id]}"] = new Section("{_section_id[id]}","{_section_id[event_id]}","{_section_id[complete_event_number]}: {_section_id[date]} {_section_id[start_time]}-{_section_id[end_time]}");
+	}
 }
 var sections = new initSections();
 
@@ -93,19 +99,19 @@ function popSetup() {
 		searchEvents(document.event_edit.event_id.value);
 	} else {
 		document.event_edit.events.size=15;
-		document.event_edit.sections.size=16;
+		document.event_edit.sections.size=8;
 	}
 }
 
 </script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{id} {last_name} Score Packet Record';popSetup()" class="BodyClass">
+<body bgcolor="#FFFFFF" text="#000000" onLoad="document.title = '{id} {last_name} Score Packet Record';popSetup()" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
-    <td class="FormTitle">{id}</td>
+    <td class="FormTitle">Packet {id}</td>
     <td class="FormTitle">
-      <div align="right"></div>
+      <div align="right"><b>{status}</b></div>
     </td>
   </tr>
 </table>
@@ -141,7 +147,7 @@ function popSetup() {
         </select>
       </td>
       <td class="FieldName">Number of Players</td>
-      <td>
+      <td> 
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
         <b class="FieldError">{number_of_players_error}</b> </td>
     </tr>
@@ -157,54 +163,39 @@ function popSetup() {
         <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
       </td>
     </tr>
-    <tr> 
-      <td class="FieldName">&nbsp;</td>
-      <td>&nbsp;</td>
-      <td class="FieldName">&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
   </table>
 
-   <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td>
-        <div align="center">
-          <input type="button" name="delete" value="Delete" onClick="deleteCheck('score_packet','{id}');return document.MM_returnValue">
+   
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td> 
+        <div align="center"> 
+           <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=score_packet&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
         </div>
       </td>
-      <td align="center">
-          <input type="button" name="cancel" value="Cancel" onClick="window.close()">
+      <td><input type="button" name="delete2" value="Delete" onClick="deleteCheck('score_packet','{id}');return document.MM_returnValue"></td>
+      <td align="center"> 
+        <input type="button" name="cancel" value="Cancel" onClick="window.close()">
       </td>
-      <td align="center">
-          <input type="hidden" name="id" value="{id}">
-          <input type="hidden" name="last_modified" value="{last_modified}">
-          <input type="hidden" name="badge_number" value="{badge_number}">
-          <input type="hidden" name="table" value="score_packet">
-          <input type="hidden" name="included_table" value="person_section">
-          <input type="hidden" name="action" value="save">
-          <input type="hidden" name="convention_id" value="1">
-          <input type="submit" name="save" value="Save">
+      <td align="center"> 
+        <input type="hidden" name="id" value="{id}">
+        <input type="hidden" name="last_modified" value="{last_modified}">
+        <input type="hidden" name="badge_number" value="{badge_number}">
+        <input type="hidden" name="table" value="score_packet">
+        <input type="hidden" name="included_table" value="person_section">
+        <input type="hidden" name="included_order_by" value="packet_position">
+        <input type="hidden" name="action" value="save">
+        <input type="hidden" name="convention_id" value="1">
+        <input type="submit" name="save" value="Save">
       </td>
     </tr>
   </table>
 </form>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <form name="actions_form">
-      <tr>
-        <td align="center">&nbsp;</td>
-        
-      <td align="center">&nbsp;</td>
-        
-      <td align="center"> 
-        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=score_packet&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
-      </td>
-      </tr>
-    </form>
-  </table>
-  <p>
+<p> 
   <!-- START BLOCK : included_header -->
   <span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 
-  <span class="FieldError">{form_error} </span> </p>
+  <span class="FieldError"><br>
+  {form_error}</span></p>
 <table width="100%" border="1">
   <tr> 
     <td class="TableTitle" width="5%" colspan=2>Action</td>
@@ -213,39 +204,6 @@ function popSetup() {
     <td class="TableTitle">Score</td>
     <td class="TableTitle">Place</td>
     <td class="TableTitle">Position</td>
-    <td class="TableTitle">Judge</td>
-  </tr>
-  <tr> 
-    <form name="person_section_add" method="post" action="score_packet.php">
-      <td colspan=2> 
-        <input type="submit" name="add" value="Add">
-      </td>
-      <td class="TableDataBold"><span class="FieldName"> 
-        <input type="hidden" name="table" value="score_packet">
-        <input type="hidden" name="action" value="addParticipant">
-        <input type="hidden" name="parent_id" value="{id}">
-        <input type="hidden" name="convention_id" value="{id}">
-        <input type="hidden" name="score_packet_id" value="{id}">
-        <input type="hidden" name="event_id" value="{event_id}">
-        <input type="hidden" name="section_id" value="{section_id}">
-        <input type="hidden" name="included_table" value="person_section">
-        <input type="hidden" name="included_order_by" value="packet_position">
-        <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
-        </span> </td>
-      <td class="TableData">&nbsp;</td>
-      <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="score" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="place" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="packet_position" size="6" maxlength="10" class="FieldData" value="{packet_position}">
-        </span></td>
-      <td class="TableData"> 
-        <input type="checkbox" name="judge" value="CHECKED">
-      </td>
-    </form>
   </tr>
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
@@ -265,12 +223,13 @@ function popSetup() {
       <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="packet_position" value="{packet_position}">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="parent_id" value="{score_packet_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
         <input type="hidden" name="score_packet_id" value="{score_packet_id}">
-		<input type="hidden" name="person_id" value="{person_id}">
+        <input type="hidden" name="person_id" value="{person_id}">
         <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold">{_person_id[rpga_number]}</td>
@@ -282,15 +241,40 @@ function popSetup() {
       <td class="TableData"><span class="FieldName"> 
         <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
         </span></td>
-      <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="packet_position" size="6" maxlength="10" class="FieldData" value="{packet_position}">
-        </span></td>
-      <td class="TableData"> 
-        <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">
-      </td>
+      <td class="TableDataBold"> {position_disp}</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_row -->
+  <!-- START BLOCK : person_section_footer -->
+  <tr> 
+    <form name="person_section_add" method="post" action="score_packet.php">
+      <td colspan=2> 
+        <input type="submit" name="add" value="Add">
+      </td>
+      <td class="TableDataBold"><span class="FieldName"> 
+        <input type="hidden" name="table" value="score_packet">
+        <input type="hidden" name="action" value="addParticipant">
+        <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="score_packet_id" value="{id}">
+        <input type="hidden" name="convention_id" value="{convention_id}">
+        <input type="hidden" name="event_id" value="{event_id}">
+        <input type="hidden" name="section_id" value="{section_id}">
+        <input type="hidden" name="included_table" value="person_section">
+        <input type="hidden" name="included_order_by" value="packet_position">
+        <input type="hidden" name="packet_position" value="{packet_position}">
+        <input type="text" name="included_search" size="8" maxlength="10" class="FieldData">
+        </span> </td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="score" size="6" maxlength="10" class="FieldData">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
+        </span></td>
+      <td class="TableDataBold"> {position_disp}</td>
+    </form>
+  </tr>
+  <!-- END BLOCK : person_section_footer -->
 </table>
 
 </body>
