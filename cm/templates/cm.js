@@ -1,7 +1,7 @@
 function popWin(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
-	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
+	window.open(url,windowName,'toolbar=no,status=yes,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
 }
 
 function popWinSmall(url,windowName) {
