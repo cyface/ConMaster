@@ -1,0 +1,12 @@
+UPDATE section SET location = NULL where LENGTH(location) = 0;
+UPDATE section SET event_full = NULL where LENGTH(event_full) = 0;
+UPDATE section SET event_full = 'N' where event_full = 'False';
+UPDATE section SET event_full = 'CHECKED' where event_full = 'True';
+UPDATE section SET results_entered = NULL where LENGTH(results_entered) = 0;
+UPDATE section SET results_entered = NULL where results_entered = 'False';
+UPDATE section SET results_entered = 'CHECKED' where results_entered = 'True';
+UPDATE section SET event_ran = NULL where LENGTH(event_ran) = 0;
+UPDATE section SET event_ran = NULL where event_ran = 'False';
+UPDATE section SET event_ran = 'CHECKED' where event_ran = 'True';
+UPDATE section SET advance_to_section = NULL where advance_to_section = 0;
+UPDATE section SET convention_id = 1;

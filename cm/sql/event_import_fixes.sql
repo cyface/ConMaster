@@ -1,0 +1,12 @@
+UPDATE event SET scenario_name = NULL where LENGTH(scenario_name) = 0;
+UPDATE event SET author_name = NULL where LENGTH(author_name) = 0;
+UPDATE event SET rpga = NULL where LENGTH(rpga) = 0;
+UPDATE event SET rpga = NULL where rpga = 'False';
+UPDATE event SET rpga = 'CHECKED' where rpga = 'True';
+UPDATE event SET rpga_event_type = NULL where LENGTH(rpga_event_type) = 0;
+UPDATE event SET description = NULL where LENGTH(description) = 0;
+UPDATE event SET level = NULL where LENGTH(level) = 0;
+UPDATE event SET type = NULL where LENGTH(type) = 0;
+UPDATE event SET sponsor = NULL where LENGTH(sponsor) = 0;
+UPDATE event SET rpga_event_code = NULL where LENGTH(rpga_event_code) = 0;
+UPDATE event SET contact_person_id = NULL where contact_person_id = 0;
