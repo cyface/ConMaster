@@ -4,6 +4,7 @@ require_once('./lib/class.TemplatePower.inc.php');
 require_once('./lib/TemplateHelpers.inc.php');
 
 if (!$_GET['template']) { //If they didn't pass a template name, exit
+	echo "No template specified.";
     return false;
 }
 
