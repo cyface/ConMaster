@@ -17,7 +17,7 @@
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: Autoloader.php,v 1.1 2002/07/05 17:18:28 cyface Exp $
+// $Id: Autoloader.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 
 if (!extension_loaded("overload")) {
     // die hard without ext/overload

@@ -15,7 +15,7 @@
 // | Authors: Alexander Merz <alexander.merz@t-online.de>                 |
 // +----------------------------------------------------------------------+
 //
-// $Id: IniFile.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: IniFile.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 
 require_once( "Config/Container.php" ) ;
 
@@ -26,7 +26,7 @@ require_once( "Config/Container.php" ) ;
 *
 * @author      Alexander Merz <alexander.merz@t-online.de>
 * @access      public
-* @version     $Id: IniFile.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+* @version     $Id: IniFile.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 * @package     Config
 */
 

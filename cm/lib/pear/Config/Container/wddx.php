@@ -17,7 +17,7 @@
 // |          Robert Janeczek <rashid@ds.pg.gda.pl>                      |
 // +---------------------------------------------------------------------+
 //
-// $Id: wddx.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: wddx.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 
 require_once( 'Config/Container.php' ) ;
 
@@ -28,7 +28,7 @@ require_once( 'Config/Container.php' ) ;
 *
 * @author      Robert Janeczek <rashid@ds.pg.gda.pl>
 * @access      public
-* @version     $Id: wddx.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+* @version     $Id: wddx.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 * @package     Config
 */
 

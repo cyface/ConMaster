@@ -17,7 +17,7 @@
 // |          Tomas V.V.Cox <cox@idecnet.com>                             |
 // +----------------------------------------------------------------------+
 //
-// $Id: DB.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: DB.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 //
 // Database independent query interface.
 //

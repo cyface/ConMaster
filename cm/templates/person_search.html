@@ -7,6 +7,11 @@
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
 <p><span class="FormTitle">Person Search Form</span> </p>
 <hr noshade>
 <form name="person_search_form" method="post" action="form_handler.php">
@@ -54,7 +59,7 @@
   <!-- START BLOCK : result_row -->
   <tr> 
     <td class="TableDataBold">{badge_number}</td>
-    <td class="TableData"><a href="form_handler.php?table_name=person&action=edit&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name}, 
+    <td class="TableData"><a href="form_handler.php?table_name=person&action=edit&load_children=true&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name}, 
       {first_name}</a></td>
     <td class="TableData">{street}</td>
     <td class="TableData">{city} 

@@ -7,13 +7,18 @@
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
-<span class="FormTitle"> Item Search Form</span> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<span class="FormTitle"> Item Search Form</span>
 <hr noshade>
 <form name="search_form" method="post" action="form_handler.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr> 
+    <tr>
       <td><span class="FieldName">Item Name</span> </td>
-      <td> 
+      <td>
         <input type="text" name="search[name]" value="{name}" class="FieldData">
       </td>
       <td><span class="FieldName">Type</span></td>
@@ -21,9 +26,9 @@
         <input type="text" name="search[type]" value="{type}" class="FieldData">
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td><span class="FieldName">Description</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[description]" value="{description}" class="FieldData">
       </td>
       <td><span class="FieldName">Category</span></td>
@@ -32,23 +37,23 @@
       </td>
     </tr>
   </table>
-  <p align="center"> 
+  <p align="center">
     <input type="hidden" name="table_name" value="item">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
   </form>
 <hr noshade>
-<span class="FormTitle">Search Results</span> 
+<span class="FormTitle">Search Results</span>
 <table width="100%" border="1">
-  <tr> 
+  <tr>
     <td class="TableTitle"> Name</td>
     <td class="TableTitle"> Type</td>
     <td class="TableTitle"> Category</td>
     <td class="TableTitle"> Description</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr> 
+  <tr>
     <td><a href="form_handler.php?table_name=item&action=edit&id={id}" target="popup" onclick="popwin()">{name}</a></td>
     <td>{type}</td>
     <td>{category}
@@ -57,7 +62,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=item&action=new" target="popup" onclick="popwin()">Create a New Item</a></span> 
+<span class="FieldName"><a href="form_handler.php?table_name=item&action=new" target="popup" onclick="popwin()">Create a New Item</a></span>
 <hr noshade>
 </body>
 </html>

@@ -16,7 +16,7 @@
 // | Authors: Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Auth.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: Auth.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 //
 
 require_once "PEAR.php";
@@ -132,7 +132,7 @@ require_once "PEAR.php";
  *
  * @author  Martin Jansen <mj@php.net>
  * @package Auth
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 define("AUTH_IDLED",       -1);

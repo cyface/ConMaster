@@ -16,7 +16,7 @@
 // |          Christian Stocker <chregu@phant.ch>                         |
 // +----------------------------------------------------------------------+
 //
-// $Id: Config.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: Config.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 
 require_once( "PEAR.php") ;
 
@@ -36,7 +36,7 @@ require_once( "PEAR.php") ;
 *
 * @author      Alexander Merz <alexander.merz@t-online.de>
 * @access      public
-* @version     $Id: Config.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+* @version     $Id: Config.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 * @package     Config
 */
 

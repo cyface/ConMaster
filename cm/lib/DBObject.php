@@ -1,7 +1,7 @@
 <?php
 
-include_once("DB.php"); //PEAR Database Access Code
-include_once("Log.php"); //PEAR Database Access Code
+require_once("pear/DB.php"); //PEAR Database Access Code
+include_once("pear/Log.php"); //PEAR Database Access Code
 
 /**
 * DBObject is the Generic DB Interface Object
@@ -23,7 +23,7 @@ class DBObject {
     function DBObject ($inTableName) {
 		$log = &Log::singleton('file', 'logs/db.log', 'db_log');
 		$log->log('DB Object Created for ' . $inTableName);
-		
+
 		$this->table_name = $inTableName;
 
 		$this->DB_Connect();
@@ -33,6 +33,7 @@ class DBObject {
 		$result = $this->db->query($query);
 
 		if (DB::isError($result)) {
+			$log->log('DB Error!');
 			$this->handle_pear_error($result);
 			return false;
 		}
@@ -53,7 +54,7 @@ class DBObject {
 		//Reinitalize the validation_results field
 		$this->validation_results = '';
 		$validation_status = true;
-		
+
 		//For each field, look for a matching value in the inHash
 		//If you find it, call its validation function if there is one
 		foreach ($inHash as $key => $value) {
@@ -94,9 +95,9 @@ class DBObject {
 	function save_all () {
 		//echo 'Attempting Save All<br>'; //Testing only
 		$this->DB_Connect();
-		
+
 		$whereClause = 'id = ' . $this->data['id'];
-		
+
 		if ($this->data['id'] < 1) {
 			//echo 'Insert Mode<br>';  //Testing Only
 			$func = DB_AUTOQUERY_INSERT;
@@ -111,21 +112,21 @@ class DBObject {
 				$this->handle_pear_error($last_modified);
 				return false;
 			}
-			
+
 			if ($last_modified != $this->data['last_modified']) {
 				$this->validation_results['form'] .= '<br> Record has been modified since last load.  Form now shows latest values from DB.  Please repeat your edits and resave. ';
 				$this->load_all($this->data['id']); //get the values from the DB for redisplay
 				return false;
 			}
 		}
-		
+
 		unset($this->data['last_modified']); //Clear it out so that it gets updated automatically by MySQL.
-		
+
 		$fieldNames = array_keys($this->get_data());
 		$fieldValues = array_values($this->get_data());
-		
+
 		$stmt = $this->db->autoPrepare($this->table_name,$fieldNames,$func,$whereClause);
-		
+
 		/*
 		echo 'fieldNames:<br>'; //Testing only
 		foreach ($fieldNames as $key => $value) {
@@ -140,7 +141,7 @@ class DBObject {
 		*/
 
 		$result = $this->db->execute($stmt,$fieldValues);
-		
+
 		if (DB::isError($result)) {
 			$this->handle_pear_error($result);
 			return false;
@@ -161,7 +162,7 @@ class DBObject {
 				return false;
 			}
 		//echo 'Last Mod: ' . $this->data['last_modified'] . '<br>'; //Testing Only
-		
+
 		$this->DB_Disconnect();
 		return true;
 	} //End function save_all
@@ -172,13 +173,13 @@ class DBObject {
 	* @param string $primary_key - the primary key of the row to load
 	* @param boolean $lock - true if you want to lock the row in the DB, defaults to false
 	*/
-	function load_all ($inKey, $lock = false) {
+	function load_all ($inKey, $inLoadChildren = false, $lock = false) {
 		$this->DB_Connect();
 
 		if ($lock) {
-			$row = $this->db->getRow("SELECT * FROM $this->table_name FOR UPDATE WHERE id = \'$inKey\'",DB_FETCHMODE_ASSOC);
+			$row = $this->db->getRow("SELECT * FROM $this->table_name FOR UPDATE WHERE id = $inKey",DB_FETCHMODE_ASSOC);
 		} else {
-			$row = $this->db->getRow("SELECT * FROM $this->table_name WHERE id = '$inKey'",DB_FETCHMODE_ASSOC);
+			$row = $this->db->getRow("SELECT * FROM $this->table_name WHERE id = $inKey",DB_FETCHMODE_ASSOC);
 		}
 
 		if (DB::isError($row)) {
@@ -190,11 +191,18 @@ class DBObject {
 			$this->validation_results['form'] .= '<br> Tried to load a non-existent record.';
 			return false;
 		}
+
+		$row = $this->load_related($row); //Add sub-arrays for each related table
 		
-		//Assign each field from the row to the data array
-		foreach ($this->data as $key => $value) {
+		if ($inLoadChildren) {
+		    $row = $this->load_children($row); //Add sub-arrays for each related child row
+		}
+		
+		//Assign each field from the row to the data array of this object
+		foreach ($row as $key => $value) {
 			$this->data[$key] = $row[$key];
 		}
+		
 		return true;
 	} //End function load_all
 
@@ -250,7 +258,7 @@ class DBObject {
 	* @param array $inCriteria Hashtable field_name => search value
 	* @param array $inOperators Optional Hashtable of field_name => search operator
 	*/
-	function find_all ($inCriteria, $inOperators = false) {
+	function find_all ($inCriteria, $inOperators = false, $inLoadChildren = false) {
 		$this->DB_Connect();
 
 		foreach ($inCriteria as $field => $value) {
@@ -295,32 +303,121 @@ class DBObject {
 		$whereClause = substr_replace($whereClause,'',strlen($whereClause)-5,5); //Strip off the trailing AND
 		//echo "WhereClause: $whereClause <br>"; //Testing Only
 
-		if ($whereClause == '') {
+		if ($whereClause == '') { //If they submit no criteria, find everything
 			$whereClause = '1';
 		}
-		
+
 		$results = $this->db->getAll("SELECT * FROM $this->table_name WHERE " . $whereClause,DB_FETCHMODE_ASSOC);
 
 		if (DB::isError($results)) {
 			$this->handle_pear_error($results);
 			return false;
 		}
-
+		
+		foreach ($results as $rownum => $rowdata) {
+			$results[$rownum] = $this->load_related($rowdata);
+			if ($inLoadChildren) {
+			    $results[$rownum] = $this->load_children($rowdata);
+			}
+		}
+		
 		return $results;
 
 	} //End function find_all
 
 
 	/**
-	* find_parent
+	* relation_list
 	*
-	* @param array $inCriteria Hashtable field_name => search value
 	*/
-	function find_parent ($inCriteria, $inOperators = false) {
+	function relation_list ($inTableName, $inDirection = 'master') {
+		switch($inDirection){
+			case 'master':
+				$relations = $this->db->getAll('SELECT * FROM pma_relation WHERE ' . 'master_table = \'' . $inTableName . '\'',DB_FETCHMODE_ASSOC);
+				break;
+			case 'foreign':
+				$relations = $this->db->getAll('SELECT * FROM pma_relation WHERE ' . 'foreign_table = \'' . $inTableName . '\'',DB_FETCHMODE_ASSOC);
+				break;
+			default:
+				return false;
+		}
+		if (DB::isError($relations)) {
+			$this->handle_pear_error($relations);
+			return false;
+		}
+		//echo '<PRE>Relations:<br>';
+		//print_r($relations);
+		//echo '</PRE>';
+		return $relations;
+	}
+	
+	/**
+	* load_related - loads the related table information for a given table row
+	*
+	* @param array - inRow - a hash representing a single row of the table	
+	* @param array - inTableName - name of the table to load related records for - defaults to object's table_name
+	*/
+	function load_related ($inRow, $inTableName = false) {
+		if (!$inTableName) {
+		    $inTableName =$this->table_name;
+		}
+	
 		$this->DB_Connect();
-
-
-	} //End function find_parent
+		if (!$relations = $this->relation_list($inTableName)) {//Get list of relations
+				return $inRow;
+		}
+		
+		foreach ($relations as $relation) {
+			if ($inRow[$relation['master_field']] != '') {
+				$sql = 'SELECT * FROM ' . $relation['foreign_table'] . ' WHERE ' . $relation['foreign_field'] . ' = \'' . $inRow[$relation['master_field']] . '\'';
+				//echo 'SQL: ' . $sql . '<br>';
+				$result = $this->db->getRow($sql,DB_FETCHMODE_ASSOC);
+				
+				if (DB::isError($result)) {
+					$this->handle_pear_error($result);
+					return false;
+				}
+				
+				$inRow['related_' . $relation['foreign_table']] = $result;
+			}
+		}
+		return $inRow;
+	} //End function load_related
+		
+	/**
+	* load_children - loads the related table information for a given table row
+	*
+	* @param array - inRow - a hash representing a single row of the table
+	*/
+	function load_children ($inRow) {
+		$this->DB_Connect();
+		$relations = $this->db->getAll('SELECT * FROM pma_relation WHERE foreign_table = \'' . $this->table_name . '\'',DB_FETCHMODE_ASSOC);
+			
+		if (DB::isError($relations)) {
+				$this->handle_pear_error($relations);
+				return false;
+		}
+			
+		foreach ($relations as $relation) {
+			if ($inRow[$relation['foreign_field']] != '') {
+				$sql = 'SELECT * FROM ' . $relation['master_table'] . ' WHERE ' . $relation['master_field'] . ' = \'' . $inRow[$relation['foreign_field']] . '\'';
+				//echo 'SQL: ' . $sql . '<br>';
+				$results = $this->db->getAll($sql,DB_FETCHMODE_ASSOC);
+				
+				if (DB::isError($results)) {
+					$this->handle_pear_error($results);
+					return false;
+				}
+					
+				foreach ($results as $rownum => $rowdata) {
+					$results[$rownum] = $this->load_related($rowdata,$relation['master_table']);
+				}
+				
+				$inRow['child_' . $relation['master_table']] = $results;
+			}
+		}
+		return $inRow;
+	} //End function load_children
 
 	/**
 	* DB_Connect connects to the database and sets $this->db if not already set
@@ -328,8 +425,8 @@ class DBObject {
 	*/
 	function DB_Connect () {
 		if (!$this->db) {
-			require_once("config.inc.php"); //Has dsn in it.
-			$this->db = DB::connect($dsn);
+			require_once('config.inc.php'); //Has dsn in it.
+			$this->db = DB::connect($dsn,array('debug' => '5'));
 
 			if (DB::isError($this->db)) {
 				$this->handle_pear_error($this->db);
@@ -349,7 +446,7 @@ class DBObject {
 		if (DB::isError($this->db)) {
 			$this->handle_pear_error($this->db);
 		}
-	} //End function DB_Connect
+	} //End function DB_Disconnect
 
 	/**
 	* handle_pear_error echos any pear errors

@@ -2,7 +2,7 @@
 
 $dsn = array(
 	'phptype'  => "mysql",
-	'hostspec' => "cyface.com",
+	'hostspec' => "localhost",
 	'database' => "cyface",
 	'username' => "cyface",
 	'password' => "jmnd9ivb"

@@ -7,24 +7,29 @@
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
-<span class="FormTitle"> Section Search Form</span> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<span class="FormTitle"> Section Search Form</span>
 <hr noshade>
 <form name="search_form" method="post" action="form_handler.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr> 
+    <tr>
       <td><span class="FieldName">Section ID</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[id]" value="{id}" class="FieldData">
         <input type="hidden" name="search_operators[id]" value="equals">
       </td>
       <td><span class="FieldName">Complete Event Number</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[complete_event_number]" value="{complete_event_number}" class="FieldData">
       </td>
     </tr>
     <tr>
       <td><span class="FieldName">Event ID</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[event_id]" value="{event_id}" class="FieldData">
         <input type="hidden" name="search_operators[event_id]" value="equals">
       </td>
@@ -32,32 +37,32 @@
       <td class="FieldData">&nbsp;</td>
     </tr>
   </table>
-  <p align="center"> 
+  <p align="center">
     <input type="hidden" name="table_name" value="section">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
   </form>
 <hr noshade>
-<span class="FormTitle">Search Results</span> 
+<span class="FormTitle">Search Results</span>
 <table width="100%" border="1">
-  <tr> 
+  <tr>
     <td class="TableTitle"> Complete Event Number</td>
     <td class="TableTitle"> Section ID</td>
     <td class="TableTitle"> Event ID</td>
     <td class="TableTitle"> Location</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr> 
+  <tr>
     <td class="TableDataBold">{complete_event_number}</td>
     <td class="TableData"><a href="form_handler.php?table_name=section&action=edit&id={id}" target="popup" onclick="popwin()">{id}</a></td>
     <td class="TableData"><a href="form_handler.php?table_name=event&action=edit&id={event_id}" target="popup" onclick="popwin()">{event_id}</a></td>
-    <td class="TableData">{location} 
+    <td class="TableData">{location}
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=section&action=new" target="popup" onclick="popwin()">Create a New Section</a></span> 
+<span class="FieldName"><a href="form_handler.php?table_name=section&action=new" target="popup" onclick="popwin()">Create a New Section</a></span>
 <hr noshade>
 </body>
 </html>

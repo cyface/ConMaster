@@ -20,7 +20,7 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 //
 //
-// $Id: Pager.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: Pager.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 
 require_once 'PEAR.php';
 require_once 'DB.php';

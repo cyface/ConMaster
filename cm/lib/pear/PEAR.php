@@ -18,7 +18,7 @@
 // |          Tomas V.V.Cox <cox@idecnet.com>                             |
 // +----------------------------------------------------------------------+
 //
-// $Id: PEAR.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: PEAR.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 //
 
 define('PEAR_ERROR_RETURN',   1);

@@ -1,5 +1,5 @@
 <?php
-// $Id: sql.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: sql.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 // $Horde: horde/lib/Log/sql.php,v 1.12 2000/08/16 20:27:34 chuck Exp $
 
 require_once 'DB.php';
@@ -20,7 +20,7 @@ require_once 'DB.php';
  * );
  *
  * @author  Jon Parise <jon@horde.org>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @since   Horde 1.3
  * @package Log 
  */

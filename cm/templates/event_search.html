@@ -7,17 +7,22 @@
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
-<span class="FormTitle"> Event Search Form</span> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/bluebricktileh.jpg" height="100">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<span class="FormTitle"> Event Search Form</span>
 <hr noshade>
 <form name="search_form" method="post" action="form_handler.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr> 
+    <tr>
       <td><span class="FieldName">Event Name</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[event_name]" value="{event_name}" class="FieldData">
       </td>
       <td><span class="FieldName">Type</span></td>
-      <td> 
+      <td>
         <select name="search[type]" class="FieldData">
           <option selected></option>
           <option>Role-Playing</option>
@@ -34,9 +39,9 @@
         </select>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td><span class="FieldName">Description</span></td>
-      <td> 
+      <td>
         <input type="text" name="search[description]" value="{description}" class="FieldData">
       </td>
       <td><span class="FieldName">Event Number</span></td>
@@ -45,16 +50,16 @@
       </td>
     </tr>
   </table>
-  <p align="center"> 
+  <p align="center">
     <input type="hidden" name="table_name" value="event">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
   </form>
 <hr noshade>
-<span class="FormTitle">Search Results</span> 
+<span class="FormTitle">Search Results</span>
 <table width="100%" border="1">
-  <tr> 
+  <tr>
     <td class="TableTitle"> Number</td>
     <td class="TableTitle">Game System</td>
     <td class="TableTitle">Scenario Name</td>
@@ -62,17 +67,17 @@
     <td class="TableTitle"> Level</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr> 
+  <tr>
     <td>{event_number}</td>
     <td><a href="form_handler.php?table_name=event&action=edit&id={id}" target="popup" onClick="popwin()">{game_system}</a></td>
     <td>{scenario_name}</td>
     <td>{type}</td>
-    <td>{level} 
+    <td>{level}
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=event&action=new" target="popup" onclick="popwin()">Create a New Event</a></span> 
+<span class="FieldName"><a href="form_handler.php?table_name=event&action=new" target="popup" onclick="popwin()">Create a New Event</a></span>
 <hr noshade>
 </body>
 </html>

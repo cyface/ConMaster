@@ -1,5 +1,5 @@
 <?php
-// $Id: composite.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: composite.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 // $Horde: horde/lib/Log/composite.php,v 1.2 2000/06/28 21:36:13 jon Exp $
 
 /**
@@ -7,7 +7,7 @@
  * allows multiple Log implementations to get sent the same events.
  *
  * @author  Chuck Hagenbuch <chuck@horde.org>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @since Horde 1.3
  * @package Log 
  */

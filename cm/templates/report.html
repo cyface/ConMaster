@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>2 Col Report</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td width="40%"><b>{colAHeader}</b></td>
+    <td width="40%"><b>{colBHeader}</b></td>
+    <td width="20%"><b>Count</b></td>
+  </tr>
+  <tr> 
+    <td colspan="3">
+      <hr>
+    </td>
+  </tr>
+  <!-- START BLOCK : result_row -->
+  <tr> 
+    <td width="40%">{colA}</td>
+    <td width="40%">{colB}</td>
+    <td width="20%">{count}</td>
+  </tr>
+  <!-- START BLOCK : total_row -->
+  <tr> 
+    <td width="40%"></td>
+    <td width="40%"><b>{colA} Total</b></td>
+    <td width="20%"><b>{count}</b></td>
+  </tr>
+  <tr> 
+    <td width="40%" colspan=3> 
+      <hr>
+    </td>
+  </tr>
+  <!-- END BLOCK : total_row -->
+  <!-- END BLOCK : result_row -->
+</table>
+
+</body>
+</html>

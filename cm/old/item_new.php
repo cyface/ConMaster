@@ -1,0 +1,1 @@
+<?phpinclude_once('./lib/class.TemplatePower.inc.php');session_start(); //Just in case$tpl = new TemplatePower( "./item_edit.tpl" ); //make a new TemplatePower object$tpl->prepare(); //let TemplatePower do its thing, parsing etc.$tpl->assign('action_message', 'Create a New Item'); //Set the message on the form$tpl->printToScreen(); //output the form?>

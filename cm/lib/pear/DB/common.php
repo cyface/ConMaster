@@ -16,7 +16,7 @@
 // | Author: Stig Bakken <ssb@fast.no>                                    |
 // +----------------------------------------------------------------------+
 //
-// $Id: common.php,v 1.1 2002/07/05 17:18:27 cyface Exp $
+// $Id: common.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
 //
 // Base class for DB implementations.
 //

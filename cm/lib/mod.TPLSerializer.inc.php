@@ -28,7 +28,7 @@
 // | http://templatepower.codocad.com                                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: mod.TPLSerializer.inc.php,v 1.1 2002/07/05 17:18:50 cyface Exp $
+// $Id: mod.TPLSerializer.inc.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
 
 include("./class.TemplatePower.inc.php");
 

@@ -34,8 +34,14 @@ class FormObject {
 			$this->table_name = $this->data['table_name'];
 			$this->dataObject = new DBObject($this->table_name);
 			$this->action = $this->data['action'];
+			
+			if ($this->data['included_table_name']) {
+				$this->included_table_name = $this->data['included_table_name'];
+			    $this->incDataObject = new DBObject($this->included_table_name);
+			}
 			return true;
 		}
+
 	}//End constructor FormObject
 
 	/**
@@ -51,7 +57,7 @@ class FormObject {
 				$this->template->assign('action_message', '<font color="#66CC00">Create A New ' . ucwords(str_replace('_',' ',$this->table_name)) . '</font>');
 				break;
 			case 'edit':
-				$this->dataObject->load_all($this->data['id']);
+				$this->dataObject->load_all($this->data['id'],$this->data['load_children']);
 				objectValueFill($this->dataObject,$this->template);
 				break;
 			case 'save':
@@ -62,6 +68,17 @@ class FormObject {
 					$this->template->assign('action_message', '<font color="#FF0000">Save Failed, Please Correct Errors</font>');
 					objectValueFill($this->dataObject,$this->template); //Put the values back into the form
 					errorFill($this->dataObject,$this->template); //Fill in the error message placeholders with the save errors
+				}
+				break;
+			case 'save_included':
+				if ($this->incDataObject->update_all($this->data)) { //Try to save the values to the DB using the object
+				    $this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
+					$this->dataObject->load_all($this->data['parent_id'],$this->data['load_children']);
+					objectValueFill($this->dataObject,$this->template);
+				} else {
+					$this->template->assign('included_action_message', '<font color="#FF0000">Save Failed, Please Correct Errors</font>');
+					objectValueFill($this->incDataObject,$this->template); //Put the values back into the form
+					errorFill($this->incDataObject,$this->template); //Fill in the error message placeholders with the save errors
 				}
 				break;
 			case 'delete':
@@ -88,13 +105,10 @@ class FormObject {
 
 				if ($this->data['search']) {
 				    valueFill($this->data['search'],$this->template); //Put the search values back in the form fields
-					if ($this->data['search_operators']) {
-						$results = $this->dataObject->find_all($this->data['search'],$this->data['search_operators']);
-					} else {
-						$results = $this->dataObject->find_all($this->data['search']);
-					}
+					$results = $this->dataObject->find_all($this->data['search'],$this->data['search_operators'],$this->data['load_children']);
+					
 					foreach ($results as $row) {
-						$this->template->newBlock("result_row"); //create a new result_row block
+						$this->template->newBlock('result_row'); //create a new result_row block
 						valueFill($row,$this->template);
 					}
 				}
