@@ -1,0 +1,4 @@
+This directory contains a GUI for PHPUnit. Copy the file to 
+your web directory of your webserver and edit in gui.php 
+the $testName and $testFile variables to match your test suit.
+Then call with your web browser gui.php and enjoy :-)
