@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.12 2002/07/19 21:22:08 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.13 2002/07/24 21:43:58 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -55,23 +55,23 @@ class FormObject {
         } else {
             $this->data = $inGet; //Otherwise, use the get vars
         }
-		
+
 		//We have to have table and action in the data to continue
-        if (!$this->data['table'] or !$this->data['action']) { 
+        if (!$this->data['table'] or !$this->data['action']) {
             echo '<br>No Table or Action<br>';
             return false;
 		}
-        
+
 		//Init this object's private properties from $this->data
         $this->table = $this->data['table'];
-		$this->form_constants['table']->$this->table;  //Some forms need to have the table name passed in
+		$this->form_constants['table'] = $this->table;  //Some forms need to have the table name passed in
         $this->action = $this->data['action'];
 
         // initialize DataObject
         $options = &PEAR::getStaticProperty('DB_DataObject', 'options');
         $config = parse_ini_file('./lib/DataObjects/cyface.ini', true);
         $options = $config['DB_DataObject'];
-		
+
 		//Load the appropriate DataObject for this form
         $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
         if ($this->data['id']) { //If id is not null, we are loading a single record
@@ -80,7 +80,7 @@ class FormObject {
             require_once('./lib/DataObjects/' . ucwords($this->table) . '.php');
             $this->dataObject = new $objectName;
         }
-		
+
 		//Load the appropriate template and initialize it
 		if ($this->data['template']) {  //If a template specified, use it
 		  	$templateName = './templates/' . $this->data['template'];
@@ -89,12 +89,12 @@ class FormObject {
 		}
         $this->template = new TemplatePower($templateName); //make a new TemplatePower object with default 'Edit' template
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
-		
+
 		//If constants were specified, load them
 		if ($this->data['load_constants']) {
 			$this->loadConstants();
 		}
-		
+
 		//Set up the included object, if specified
         if ($this->data['included_table']) {
             $this->included_table = $this->data['included_table'];
@@ -107,7 +107,6 @@ class FormObject {
         }
         return true;
     }  //End constructor FormObject
-
 	/**
      * ProcessAction grabs the correct form template, connects to the DB if needed, and outputs the filled out form
      * Depends on: $this->action
@@ -148,7 +147,7 @@ class FormObject {
 	var $dataObject = false; //The dataObject associcated with this form 						@access private
     var $incDataObject = false; //The included dataObject associcated with this form (subform)	@access private
     var $template = false; //The template Object associcated with this form						@access private
-   
+
 	/* END PRIVATE PROPERTIES */
 
 	/* BEGIN PRIVATE METHODS */
@@ -164,11 +163,11 @@ class FormObject {
     {
         $this->dataObject->getLinks();
 		objectValueFill($this->dataObject, $this->template);
-		valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
+		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
             objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
-			valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
+			rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
 			if ($this->data['included_parent_id_col']) {
 				$parent_id_col = $this->data['included_parent_id_col'];
 			} else {
@@ -183,12 +182,11 @@ class FormObject {
                 $this->incDataObject->getLinks();
                 $this->template->newBlock($this->included_table . '_row'); //create a new result row
                 objectValueFill($this->incDataObject, $this->template); //Fill in values on the included row
-				valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included row
+				rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included row
             }
         }
         return true;
     }  //End function edit
-
 	/**
      * Save copies the $this->data variables with matching names to this object, and updates them in the DB
      * Depends on: $this->dataObject, $this->template
@@ -219,8 +217,7 @@ class FormObject {
         $this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
         $this->edit();
         return true;
-    }  //End function update
-
+    }  //End function save
 	/**
      * saveIncluded copies the $this->data variables with matching names to this object's includedObject, and updates the included rec the DB
      * Depends on: $this->dataObject, $this-incDataObject, $this->template
@@ -281,6 +278,7 @@ class FormObject {
         } else {
             $this->template = new TemplatePower('./templates/deleted.html'); //make a new TemplatePower objec
             $this->template->prepare(); //let TemplatePower do its thing, parsing etc.
+            valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the delete form
             $this->template->assign('action_message', '<font color="#FF0000">Deleted.</font>');
         }
 
@@ -320,8 +318,7 @@ class FormObject {
         }
         $this->edit();
         return true;
-    }  //End function delete
-
+    }  //End function deleteIncluded
 	/**
      * search uses the $this->data(search[]) variables with matching names to this object, and returns matching rows from the DB
 	 * @access private
@@ -331,6 +328,7 @@ class FormObject {
     {
         $this->template = new TemplatePower('./templates/' . $this->table . '_' . 'search' . '.html'); //make a new TemplatePower object
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
+        valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the search form
         if ($this->data['search']) { // Only bother to search if they submit critera, show the blank form regardless
             valueFill($this->data, $this->template); //Put the search values back in the form fields
             foreach ($this->data['search'] as $field => $value) {
@@ -356,7 +354,6 @@ class FormObject {
         }
         return true;
     }  //End function search
-
 	/**
      * report pulls the $this->data columns, and displays the results with breaks and subtotals
 	 * @access private
@@ -366,6 +363,7 @@ class FormObject {
     {
         $this->template = new TemplatePower('./templates/report_two_col.html'); //make a new TemplatePower object
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.
+        valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the report form
         // Using the arrays passed in via $this->data, set up the query
         if ($this->data['selcols']) {
             $this->dataObject->selectAdd(); //Clear the default '*'
@@ -447,49 +445,69 @@ class FormObject {
                 $this->template->newBlock('result_row');
                 $this->template->assign('col1', $col1);
                 break;
-        }  //end switch
-        $lastCol1 = $col1;
-        $subtotalCol1 += $col3;
-        $totalCol1 += $col3;
-        $this->template->assign('col2', $col2);
-        $this->template->assign('col3', $col3);
-    }
-    $this->template->newBlock("total_row"); //Final subtotal
-    $this->template->assign('col1', $lastCol1 . ' Subtotal');
-    $this->template->assign('col3', $subtotalCol1);
-    $this->template->newBlock("total_row"); //Final total
-    $this->template->assign('col1', 'Grand Total');
-    $this->template->assign('col3', $totalCol1);
+			}  //end switch
+			$lastCol1 = $col1;
+			$subtotalCol1 += $col3;
+			$totalCol1 += $col3;
+			$this->template->assign('col2', $col2);
+			$this->template->assign('col3', $col3);
+		}
+		$this->template->newBlock("total_row"); //Final subtotal
+		$this->template->assign('col1', $lastCol1 . ' Subtotal');
+		$this->template->assign('col3', $subtotalCol1);
+		$this->template->newBlock("total_row"); //Final total
+		$this->template->assign('col1', 'Grand Total');
+		$this->template->assign('col3', $totalCol1);
 
-    return true;
+    	return true;
 	}  //End function report
 	/**
 	 * loadConstants loads the groups in $this->data['load_constants'] into form_constants[] from constant
 	 * @access private
 	 **/
 	function loadConstants() {
-		foreach ($this->data['load_constants'] as $constant) {
+		foreach ($this->data['load_constants'] as $constant => $table) {
 			//Load the appropriate DataObject for this form
-        	require_once('./lib/DataObjects/Constant.php');
-           	$constantObject = new DataObjects_Constant;
-			$constantObject->whereAdd('constant = \'' . $constant . '\'');
-			$constantObject->orderBy('ordinal');
+			$objectName = 'DataObjects_' . ucwords($table); //Name of DataObject subclass to use for data access
+			require_once('./lib/DataObjects/' . ucwords($table) . '.php');  //Load the subclass definition
+			$constantObject = new $objectName;  //Create a new instance of the object
+
+			//Set up the search criteria for the object
+			if ($table == 'constant') {
+				$constantObject->whereAdd('constant = \'' . $constant . '\'');
+				$constantObject->orderBy('ordinal');
+			}
         	if ($this->data['load_constants_where']) {
 				if ($this->data['load_constants_where'][$constant]) {
-					$constantObject->whereAdd($this->data['load_constants_where'][$constant]);
+					$constantObject->whereAdd(urldecode(stripslashes($this->data['load_constants_where'][$constant])));
 				}
 			}
-			$optionsName = $constant . '_options';
-			$arrayName = $constant . '_array';
-			//echo '<pre>options:'; echo $this->form_constants[$optionsName]; echo '</pre>';
+
+			//Set the names for the result columns
+			$cols['name']='name';
+			$cols['value']='value';
+			$cols['ordinal']='ordinal';
+			$cols['extra_info']='extra_info';
+			if ($this->data['load_constants_cols']) {
+				if ($this->data['load_constants_cols'][$constant]) {
+					list($cols['name'],$cols['value'],$cols['ordinal'],$cols['extra_info'])=split(',',$this->data['load_constants_cols'][$constant]);
+				}
+			}
+			//echo "Columns:" . $cols['name'] . $cols['value'] . "<br>"; //Testing Only
+
+			//Search
 			$constantObject->find();
-			while ($constantObject->fetch()) {
-				//echo '<pre>Row:'; echo print_r($constantObject); echo '</pre>';
-				$this->form_constants[$optionsName] .= '<option value = "' . $constantObject->name . '">' . $constantObject->name . "</option>\n";
-				$this->form_constants[$arrayName] .= $constant . '["' . $constantObject->name . '"]="' . $constantObject->value . "\";\n";
-				//echo '<pre>options:'; echo $this->form_constants[$optionsName]; echo '</pre>';
+			$loopCnt = 0;
+			while ($constantObject->fetch()) {  //Loop through multiple results and assign to form_constants
+				$this->form_constants[$constant][$loopCnt]['name'] = $constantObject->$cols['name'];
+				$this->form_constants[$constant][$loopCnt]['value'] = $constantObject->$cols['value'];
+				$this->form_constants[$constant][$loopCnt]['ordinal'] = $constantObject->$cols['ordinal'];
+				$this->form_constants[$constant][$loopCnt]['extra_info'] = $constantObject->$cols['extra_info'];
+				$loopCnt++;
 			}
 		}
+	    //echo '<PRE> form_constants:<br>'; print_r($this->form_constants); echo '</PRE>';
+		return true;
 	} //End function loadConstants
 	/**
 	 * buildWhereLine takes a field, operator and value and builds a SQL where clause line

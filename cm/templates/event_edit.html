@@ -5,27 +5,8 @@
 <title>Event Edit</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
 <link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
-
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
-
-<script language="JavaScript">
-
-<!--
-
-function MM_goToURL() { //v3.0
-
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-
-}
-
-//-->
-
-</script>
-
 </head>
 
 
@@ -65,19 +46,12 @@ function MM_goToURL() { //v3.0
       <td colspan="3">
         <select name="type" class="FieldData">
           <option selected>{type}</option>
-          <option>Role-Playing</option>
-          <option>Boardgame</option>
-          <option>Miniatures</option>
-          <option>Card Game</option>
-          <option>LARP</option>
-          <option>Puffing Billy</option>
-          <option>Merchandise</option>
-          <option>Demonstration</option>
-          <option>Seminar</option>
-          <option>Special Event</option>
-          <option>Other</option>
+		  <!-- START BLOCK : form_constants[event_type]_row -->
+		  <option>{form_constants[event_type][name]}</option>
+		  <!-- END BLOCK : form_constants[event_type]_row -->
+		  <option>Other</option>
         </select>
-        <font color="#FF0000"><b class="FieldError">{type_error}</b></font> </td>
+        <font color="#FF0000"><b class="FieldError">{type_error}</b></font></td>
     </tr>
     <tr>
       <td class="FieldName" height="50">Game System</td>
@@ -100,28 +74,24 @@ function MM_goToURL() { //v3.0
       <td colspan="3">
         <select name="level" class="FieldData">
           <option selected>{level}</option>
-          <option>Beginner - Rules Taught</option>
-          <option>Beginner</option>
-          <option>Intermediate</option>
-          <option>Advanced</option>
+		  <!-- START BLOCK : form_constants[event_level]_row -->
+		  <option>{form_constants[event_level][name]}</option>
+		  <!-- END BLOCK : form_constants[event_level]_row -->
           <option></option>
         </select>
-        <font color="#FF0000"><b class="FieldError">{level_error}</b></font> </td>
+        <font color="#FF0000"><b class="FieldError">{level_error}</b></font></td>
     </tr>
     <tr>
       <td class="FieldName" width="4%">RPGA Type</td>
-      <td> <span class="FieldError"><font color="#FF0000"><b>
+      <td>
         <select name="rpga_event_type" class="FieldData">
           <option selected>{rpga_event_type}</option>
-          <option>BE</option>
-          <option>FE</option>
-          <option>MA</option>
-          <option>GM</option>
-          <option>PA</option>
-          <option>TE</option>
+		  <!-- START BLOCK : form_constants[rpga_event_type]_row -->
+		  <option>{form_constants[rpga_event_type][name]}</option>
+		  <!-- END BLOCK : form_constants[rpga_event_type]_row -->
           <option></option>
         </select>
-        {rpga_event_type_error}</b></font></span> </td>
+        <span class="FieldError">{rpga_event_type_error}</span> </td>
       <td class="FieldName">Author</td>
       <td colspan="3">
         <input type="text" name="author_name" value="{author_name}" maxlength="40" size="35" class="FieldData">
@@ -187,9 +157,9 @@ function MM_goToURL() { //v3.0
           <input type="hidden" name="action" value="save">
           <input type="hidden" name="included_order_by" value="section_number">
           <input type="hidden" name="convention_id" value="1">
-          </span>
-<input type="submit" name="save" value="Save">
-        </div>
+          <input type="hidden" name="load_constants[1]" value="event_type">
+          <input type="submit" name="save" value="Save">
+        </span></div>
       </td>
     </tr>
   </table>
@@ -235,6 +205,7 @@ function MM_goToURL() { //v3.0
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="load_constants[1]" value="event_type">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
         </span> </td>
       <td class="TableData">&nbsp;</td>
@@ -255,6 +226,7 @@ function MM_goToURL() { //v3.0
         <input type="hidden" name="parent_id" value="{event_id}">
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
+        <input type="hidden" name="load_constants[1]" value="event_type">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -267,6 +239,7 @@ function MM_goToURL() { //v3.0
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="event_id" value="{event_id}">
+        <input type="hidden" name="load_constants[1]" value="event_type">
         <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 

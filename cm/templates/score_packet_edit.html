@@ -40,10 +40,14 @@
 
   <table width="75%" border="0" cellspacing="2" cellpadding="2">
     <tr> 
-      <td class="FieldName" width="4%">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td class="FieldName" width="4%">Event</td>
+      <td rowspan="5"> 
+        <select name="event_name" size="15">
+		{form_constants[event_options]}
+        </select>
+      </td>
       <td class="FieldName">RPGA Type</td>
-      <td colspan="3"><span class="FieldError"><font color="#FF0000"><b> 
+      <td><span class="FieldError"><font color="#FF0000"><b> 
         <select name="rpga_event_type">
           <option selected>{rpga_event_type}</option>
           <option>BE</option>
@@ -56,11 +60,7 @@
         {rpga_event_type_error}</b></font></span> </td>
     </tr>
     <tr> 
-      <td class="FieldName" height="50">Judge ID</td>
-      <td width="33%" height="50"> 
-        <input type="text" name="person_id" value="{person_id}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{judge_id_error}</b></font></span> 
-      </td>
+      <td class="FieldName" height="50">&nbsp;</td>
       <td class="FieldName" width="4%" height="50">Scenario Score</td>
       <td class="FieldName" colspan="3" height="50"> 
         <input type="text" name="scenario_score" value="{scenario_score}" maxlength="100" size="10" class="FieldData">
@@ -68,15 +68,37 @@
       </td>
     </tr>
     <tr> 
+      <td class="FieldName" width="4%">&nbsp;</td>
+      <td class="FieldName">Number of Players</td>
+      <td> <font color="#FF0000"><b class="FieldError"> 
+        <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
+        {number_of_players_error}</b></font> </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">&nbsp;</td>
+      <td class="FieldName" height="50">Judge ID</td>
+      <td width="33%" height="50"> 
+        <input type="text" name="person_id" value="{person_id}" maxlength="40" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{judge_id_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">&nbsp;</td>
       <td class="FieldName" width="4%">Group Score</td>
       <td> 
         <input type="text" name="group_score" value="{group_score}" maxlength="40" size="10" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
       </td>
-      <td class="FieldName">Number of Players</td>
-      <td colspan="3"> <font color="#FF0000"><b class="FieldError"> 
-        <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
-        {number_of_players_error}</b></font> </td>
+    </tr>
+    <tr>
+      <td class="FieldName" width="4%">Section</td>
+      <td>
+        <select name="select" size="15">
+		{form_constants[section_options]}
+        </select>
+      </td>
+      <td class="FieldName" width="4%">&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
   </table>
 

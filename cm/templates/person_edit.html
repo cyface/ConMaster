@@ -26,12 +26,17 @@ function updateTicketList(id,checked) {
 	}
 }
 
+function initRegTypes() {
+	<!-- START BLOCK : form_constants[reg_type]_row -->
+	this["{form_constants[reg_type][name]}"] = "{form_constants[reg_type][value]}";
+	<!-- END BLOCK : form_constants[reg_type]_row -->
+}
+var regTypes = new initRegTypes();
+
 function regTypeLookup(inType) {
-	var reg_type = new Array()
-	{form_constants[reg_type_array]}
-	var old_cost = parseInt(reg_type[document.person_edit.old_reg_type.value])
+	var old_cost = parseInt(regTypes[document.person_edit.old_reg_type.value])
 	var old_value = parseInt(document.person_edit.total_fee.value)
-	var new_cost = parseInt(reg_type[inType])
+	var new_cost = parseInt(regTypes[inType])
 	var new_value = (old_value - old_cost) + new_cost
 	document.person_edit.total_fee_display.value = new_value;
 	document.person_edit.total_fee.value = new_value;
@@ -102,11 +107,15 @@ function regTypeLookup(inType) {
     </tr>
     <tr> 
       <td class="FieldName">Reg Type</td>
-      <td> 
-        <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[selectedIndex].text)">
-		<option value="{reg_type}">{reg_type}</option>
-		{form_constants[reg_type_options]}
-        </select>
+      <td>
+	  <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[selectedIndex].text)">
+	    <option selected>{reg_type}</option>	
+		<script language = "JavaScript">
+			for (var name in regTypes) {
+				document.writeln("<option>" + name + "</option>");
+			}
+		</script>
+	  </select>
         <b class="FieldError">
         <input type="hidden" name=old_reg_type value="{reg_type}">
         {reg_type_error}</b> </td>
@@ -158,7 +167,7 @@ function regTypeLookup(inType) {
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
           <input type="hidden" name="convention_id" value="1">
-          <input type="hidden" name="load_constants[1]" value="reg_type">
+          <input type="hidden" name="load_constants[reg_type]" value="constant">
           <input type="submit" name="save" value="Save">
       </td>
     </tr>
@@ -210,7 +219,7 @@ function regTypeLookup(inType) {
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="hidden" name="load_constants[1]2" value="reg_type">
+        <input type="hidden" name="load_constants[reg_type]" value="constant">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
       </td>
       <td class="TableData">&nbsp;</td>
@@ -234,7 +243,7 @@ function regTypeLookup(inType) {
         <input type="hidden" name="parent_id" value="{person_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="hidden" name="load_constants[1]4" value="reg_type">
+        <input type="hidden" name="load_constants[reg_type]" value="constant">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -248,7 +257,7 @@ function regTypeLookup(inType) {
         <input type="hidden" name="included_order_by" value="last_modified desc">
         <input type="hidden" name="old_price" value="{old_price}">
         <input type="hidden" name="person_id" value="{person_id}">
-        <input type="hidden" name="load_constants[1]3" value="reg_type">
+        <input type="hidden" name="load_constants[reg_type]" value="constant">
         <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
