@@ -89,10 +89,11 @@ function eventChange(inEventId) {
 function popSetup() {
 	setEventList();
 	if (document.event_edit.section_id.value != '') {
-		document.event_edit.events.size=1;
-		document.event_edit.sections.size=1;
 		searchSections(document.event_edit.event_id.value);
 		searchEvents(document.event_edit.event_id.value);
+	} else {
+		document.event_edit.events.size=15;
+		document.event_edit.sections.size=16;
 	}
 }
 
@@ -108,15 +109,13 @@ function popSetup() {
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
-<hr>
-
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
 <form name="event_edit" method="post" action="score_packet.php">
   <table border="0" cellspacing="2" cellpadding="2">
     <tr> 
       <td class="FieldName">Event</td>
-      <td class="FieldName" colspan="3"> 
-        <select name="events" size="15" onChange="eventChange(form.events.options[selectedIndex].value)">
+      <td colspan="3"> 
+        <select name="events" size="1" width="500" onChange="eventChange(form.events.options[selectedIndex].value)">
         </select>
         <font color="#FF0000"><b class="FieldError"> 
         <input type="hidden" name="event_id" value="{event_id}" maxlength="10" size="10" class="FieldData">
@@ -124,8 +123,8 @@ function popSetup() {
     </tr>
     <tr> 
       <td class="FieldName">Section</td>
-      <td class="FieldName" colspan="3"> 
-        <select name="sections" size="6" onChange="form.section_id.value=form.sections.options[selectedIndex].value">
+      <td colspan="3"> 
+        <select name="sections" size="1" width="500" onChange="form.section_id.value=form.sections.options[selectedIndex].value">
         </select>
         <font color="#FF0000"><b class="FieldError"> 
         <input type="hidden" name="section_id" value="{section_id}" maxlength="10" size="10" class="FieldData">
@@ -133,22 +132,22 @@ function popSetup() {
     </tr>
     <tr> 
       <td class="FieldName">RPGA Type</td>
-      <td><span class="FieldError"><font color="#FF0000"><b> 
+      <td> 
         <select name="rpga_event_type">
           <option selected>{rpga_event_type}</option>
           <!-- START BLOCK : form_constants[rpga_event_type]_row -->
           <option>{form_constants[rpga_event_type][name]}</option>
           <!-- END BLOCK : form_constants[rpga_event_type]_row -->
         </select>
-        {rpga_event_type_error}</b></font></span> </td>
+      </td>
       <td class="FieldName">Number of Players</td>
-      <td> <font color="#FF0000"><b class="FieldError"> 
+      <td>
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
-        {number_of_players_error}</b></font> </td>
+        <b class="FieldError">{number_of_players_error}</b> </td>
     </tr>
     <tr> 
       <td class="FieldName">Scenario Score</td>
-      <td class="FieldName"> 
+      <td> 
         <input type="text" name="scenario_score" value="{scenario_score}" maxlength="100" size="10" class="FieldData">
         <span class="FieldError"><font color="#FF0000"><b>{scenario_score_error}</b></font></span> 
       </td>
@@ -159,18 +158,14 @@ function popSetup() {
       </td>
     </tr>
     <tr> 
-      <td class="FieldName">Judge ID</td>
-      <td> 
-        <input type="text" name="person_id" value="{person_id}" maxlength="40" size="10" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
-      </td>
+      <td class="FieldName">&nbsp;</td>
+      <td>&nbsp;</td>
       <td class="FieldName">&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
   </table>
 
-   <hr>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td>
         <div align="center">
@@ -193,21 +188,20 @@ function popSetup() {
     </tr>
   </table>
 </form>
-<hr><input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
     <form name="actions_form">
       <tr>
         <td align="center">&nbsp;</td>
         
       <td align="center">&nbsp;</td>
-        <td align="center">
         
+      <td align="center"> 
+        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=score_packet&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
       </td>
       </tr>
     </form>
   </table>
-  <hr>
-<p>
+  <p>
   <!-- START BLOCK : included_header -->
   <span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 
   <span class="FieldError">{form_error} </span> </p>
@@ -223,7 +217,7 @@ function popSetup() {
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="score_packet.php">
-      <td class="TableDataBold" colspan=2> 
+      <td colspan=2> 
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
