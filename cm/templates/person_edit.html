@@ -13,6 +13,18 @@ function fmtShortTime (inTimeStr) {
 	dateObj = new Date(formattedTime);
 	return dateObj.getHours();
 }
+
+function updateTicketList(id,checked) {
+	if (checked) {
+		if (actions_form.ticketList.value == '') {
+			actions_form.ticketList.value = id;
+		} else {
+			actions_form.ticketList.value += ',' + id;
+		}
+	} else {
+		actions_form.ticketList.value = actions_form.ticketList.value.replace(',' + id,'');
+	}
+}
 //-->
 </script>
 </head>
@@ -148,12 +160,16 @@ function fmtShortTime (inTimeStr) {
     </tr>
   </table>
   </form>
-  <hr>
+<!-- START BLOCK : included_header -->
+<hr>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <form><tr>
+    <form name="actions_form"><tr>
       <td>
         <div align="center">
-          <input type="button" value="Print Badge" onClick="popwinsmall('form_merge.php?first_name={first_name}&last_name={last_name}&badge_number={badge_number}&rpga_number={rpga_number}&convention_name={_convention_id[name]}&logo_name=ben_con_2000.gif&template=badge.html')">
+          <input type="button" value="Print Badge" onClick="popwinsmall('form.php?table=person&action=edit&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
+          <input type="button" value="Print Badge & All Tickets" onClick="popwinsmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
+          <input type="hidden" name="ticketList">
+          <input type="button" name="selected_tix" value="Print Selected Tickets" onClick="popwinsmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}&template=tickets.html&logo_name={_convention_id[logo_file]}&included_where=id IN(' + ticketList.value + ')')">
         </div>
       </td>
       <td>&nbsp;</td>
@@ -161,12 +177,11 @@ function fmtShortTime (inTimeStr) {
     </tr></form>
   </table>
   <hr>
-<!-- START BLOCK : included_header -->
 <span class="FormTitle">Events</span> <span class="FormTitle">{action_message}</span> 
-<span class="FieldError">{form_error} </span>
+<span class="FieldError">{form_error} </span> 
 <table width="100%" border="1">
   <tr> 
-    <td class="TableTitle" width="5%" colspan=2>Action</td>
+    <td class="TableTitle" width="5%" colspan=3>Action</td>
     <td class="TableTitle" width="5%">Event Num</td>
     <td class="TableTitle"> Event Name</td>
     <td class="TableTitle" width="10%"> Time</td>
@@ -176,10 +191,10 @@ function fmtShortTime (inTimeStr) {
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="form.php">
-      <td class="TableDataBold" colspan=2> 
+      <td class="TableDataBold" colspan=3> 
         <input type="submit" name="add" value="Add">
       </td>
-      <td class="TableDataBold"><span class="FieldName"> 
+      <td class="TableDataBold"> 
         <input type="hidden" name="parent_id" value="{id}">
         <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="person_id" value="{id}">
@@ -189,7 +204,7 @@ function fmtShortTime (inTimeStr) {
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="hidden" name="included_order_by" value="last_modified desc">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
-        </span> </td>
+      </td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData" width="10%">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
@@ -199,10 +214,13 @@ function fmtShortTime (inTimeStr) {
   </tr>
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
-  <tr> 
+  <tr>
     <form name="person_section_delete" method="post" action="form.php">
+    <td class="TableData" width="5%">
+      <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},this.checked)">
+    </td>
       <td class="TableData" width="5%"> 
-        <input type="hidden" name="table2" value="person">
+        <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
         <input type="hidden" name="parent_id" value="{person_id}">
