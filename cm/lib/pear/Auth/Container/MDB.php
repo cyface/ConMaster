@@ -13,26 +13,26 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Martin Jansen <mj@php.net>                                  |
+// | Author: Lorenzo Alberton <l.alberton@quipo.it>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: DB.php,v 1.5 2003/09/16 19:18:08 cyface Exp $
+// $Id: MDB.php,v 1.1 2003/09/16 19:18:08 cyface Exp $
 //
 
 require_once 'Auth/Container.php';
-require_once 'DB.php';
+require_once 'MDB.php';
 
 /**
  * Storage driver for fetching login data from a database
  *
  * This storage driver can use all databases which are supported
- * by the PEAR DB abstraction layer to fetch login data.
+ * by the PEAR MDB abstraction layer to fetch login data.
  *
- * @author   Martin Jansen <mj@php.net>
+ * @author   Lorenzo Alberton <l.alberton@quipo.it>
  * @package  Auth
- * @version  $Revision: 1.5 $
+ * @version  $Revision: 1.1 $
  */
-class Auth_Container_DB extends Auth_Container
+class Auth_Container_MDB extends Auth_Container
 {
 
     /**
@@ -64,13 +64,12 @@ class Auth_Container_DB extends Auth_Container
      * @param  string Connection data or DB object
      * @return object Returns an error object if something went wrong
      */
-    function Auth_Container_DB($dsn)
+    function Auth_Container_MDB($dsn)
     {
         $this->_setDefaults();
 
         if (is_array($dsn)) {
             $this->_parseOptions($dsn);
-
             if (empty($this->options['dsn'])) {
                 PEAR::raiseError('No connection parameters specified!');
             }
@@ -92,11 +91,11 @@ class Auth_Container_DB extends Auth_Container
     function _connect($dsn)
     {
         if (is_string($dsn) || is_array($dsn)) {
-            $this->db = DB::Connect($dsn);
-        } elseif (get_parent_class($dsn) == "db_common") {
+            $this->db =& MDB::Connect($dsn);
+        } elseif (get_parent_class($dsn) == "mdb_common") {
             $this->db = $dsn;
-        } elseif (DB::isError($dsn)) {
-            return PEAR::raiseError($dsn->getMessage(), $dsn->getCode());
+        } elseif (is_object($dsn) && MDB::isError($dsn)) {
+            return PEAR::raiseError($dsn->getMessage(), $dsn->code);
         } else {
             return PEAR::raiseError('The given dsn was not valid in file ' . __FILE__ . ' at line ' . __LINE__,
                                     41,
@@ -104,10 +103,11 @@ class Auth_Container_DB extends Auth_Container
                                     null,
                                     null
                                     );
+
         }
 
-        if (DB::isError($this->db) || PEAR::isError($this->db)) {
-            return PEAR::raiseError($this->db->getMessage(), $this->db->getCode());
+        if (MDB::isError($this->db) || PEAR::isError($this->db)) {
+            return PEAR::raiseError($this->db->getMessage(), $this->db->code);
         } else {
             return true;
         }
@@ -127,13 +127,7 @@ class Auth_Container_DB extends Auth_Container
      */
     function _prepare()
     {
-        if (!DB::isConnection($this->db)) {
-            $res = $this->_connect($this->options['dsn']);
-            if(DB::isError($res) || PEAR::isError($res)){
-                return $res;
-            }
-        }
-        return true;
+        return $this->_connect($this->options['dsn']);
     }
 
     // }}}
@@ -148,7 +142,7 @@ class Auth_Container_DB extends Auth_Container
      *
      * @access public
      * @param  string Query string
-     * @return mixed  a DB_result object or DB_OK on success, a DB
+     * @return mixed  a MDB_result object or MDB_OK on success, a MDB
      *                or PEAR error on failure
      */
     function query($query)
@@ -195,14 +189,6 @@ class Auth_Container_DB extends Auth_Container
                 $this->options[$key] = $value;
             }
         }
-
-        /* Include additional fields if they exist */
-        if(!empty($this->options['db_fields'])){
-            if(is_array($this->options['db_fields'])){
-                $this->options['db_fields'] = join($this->options['db_fields'], ', ');
-            }
-            $this->options['db_fields'] = ', '.$this->options['db_fields'];
-        }
     }
 
     // }}}
@@ -229,28 +215,28 @@ class Auth_Container_DB extends Auth_Container
             return PEAR::raiseError($err->getMessage(), $err->getCode());
         }
 
-        // Find if db_fileds contains a *, i so assume all col are selected
-        if(strstr($this->options['db_fields'], '*')){
-            $sql_from = "*";
-        }
-        else{
-            $sql_from = $this->options['usernamecol'] . ", ".$this->options['passwordcol'].$this->options['db_fields'];
+        // Include additional fields if they exist
+        $cols = '';
+        if (!empty($this->options['db_fields'])) {
+            $cols = ',' . $this->options['db_fields'];
         }
 
-        $query = "SELECT ! FROM ! WHERE ! = ?";
-        $query_params = array(
-                         $sql_from,
+        $query = sprintf("SELECT %s FROM %s WHERE %s = %s",
+                         $this->options['usernamecol'] . ', '
+                         . $this->options['passwordcol']
+                         . $cols,
                          $this->options['table'],
                          $this->options['usernamecol'],
-                         $username
+                         $this->db->getTextValue($username)
                          );
-        $res = $this->db->getRow($query, $query_params, DB_FETCHMODE_ASSOC);
 
-        if (DB::isError($res)) {
+        $res = $this->db->getRow($query, null, null, null, MDB_FETCHMODE_ASSOC);
+
+        if (MDB::isError($res) || PEAR::isError($res)) {
             return PEAR::raiseError($res->getMessage(), $res->getCode());
         }
         if (!is_array($res)) {
-            $this->activeUser = '';
+            $this->activeUser = "";
             return false;
         }
         if ($this->verifyPassword(trim($password),
@@ -284,21 +270,14 @@ class Auth_Container_DB extends Auth_Container
 
         $retVal = array();
 
-        // Find if db_fileds contains a *, i so assume all col are selected
-        if(strstr($this->options['db_fields'], '*') || empty($this->options['db_fields'])){
-            $sql_from = "*";
-        }
-        else{
-            $sql_from = $this->options['usernamecol'] . ", ".$this->options['passwordcol'].$this->options['db_fields'];
-        }
-
-        $query = sprintf("SELECT %s FROM %s",
-                         $sql_from,
+        $query = sprintf('SELECT %s FROM %s',
+                         (empty($this->options['db_fields']) ? '*' : $this->options['db_fields']),
                          $this->options['table']
                          );
-        $res = $this->db->getAll($query, null, DB_FETCHMODE_ASSOC);
 
-        if (DB::isError($res)) {
+        $res = $this->db->getAll($query, null, null, null, MDB_FETCHMODE_ASSOC);
+
+        if (MDB::isError($res)) {
             return PEAR::raiseError($res->getMessage(), $res->getCode());
         } else {
             foreach ($res as $user) {
@@ -335,27 +314,27 @@ class Auth_Container_DB extends Auth_Container
 
         if (is_array($additional)) {
             foreach ($additional as $key => $value) {
-                $additional_key .= ', ' . $key;
-                $additional_value .= ", '" . $value . "'";
+                $additional_key   .= ', ' . $key;
+                $additional_value .= ', ' . $this->db->getTextValue($value);
             }
         }
 
-        $query = sprintf("INSERT INTO %s (%s, %s%s) VALUES ('%s', '%s'%s)",
+        $query = sprintf("INSERT INTO %s (%s, %s%s) VALUES (%s, %s%s)",
                          $this->options['table'],
                          $this->options['usernamecol'],
                          $this->options['passwordcol'],
                          $additional_key,
-                         $username,
-                         $cryptFunction($password),
+                         $this->db->getTextValue($username),
+                         $this->db->getTextValue($cryptFunction($password)),
                          $additional_value
                          );
 
         $res = $this->query($query);
 
-        if (DB::isError($res)) {
-           return PEAR::raiseError($res->getMessage(), $res->getCode());
+        if (MDB::isError($res)) {
+            return PEAR::raiseError($res->getMessage(), $res->code);
         } else {
-          return true;
+            return true;
         }
     }
 
@@ -372,16 +351,16 @@ class Auth_Container_DB extends Auth_Container
      */
     function removeUser($username)
     {
-        $query = sprintf("DELETE FROM %s WHERE %s = '%s'",
+        $query = sprintf("DELETE FROM %s WHERE %s = %s",
                          $this->options['table'],
                          $this->options['usernamecol'],
-                         $username
+                         $this->db->getTextValue($username)
                          );
 
         $res = $this->query($query);
 
-        if (DB::isError($res)) {
-           return PEAR::raiseError($res->getMessage(), $res->getCode());
+        if (MDB::isError($res)) {
+           return PEAR::raiseError($res->getMessage(), $res->code);
         } else {
           return true;
         }

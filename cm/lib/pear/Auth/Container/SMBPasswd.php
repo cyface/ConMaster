@@ -13,32 +13,37 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Stefan Ekman <stekman@sedata.org>                           |
-// |          Martin Jansen <mj@php.net>                                  |
-// |          Mika Tuupola <tuupola@appelsiini.net>                       |
+// | Authors: Michael Bretterklieber <michael@bretterklieber.com>         |
 // +----------------------------------------------------------------------+
 //
-// $Id: File.php,v 1.5 2003/09/16 19:18:08 cyface Exp $
+// $Id: SMBPasswd.php,v 1.1 2003/09/16 19:18:08 cyface Exp $
 //
 
-require_once "File/Passwd.php";
+require_once "File/SMBPasswd.php";
 require_once "Auth/Container.php";
 require_once "PEAR.php";
 
 /**
- * Storage driver for fetching login data from an encrypted password file.
+ * Storage driver for fetching login data from an SAMBA smbpasswd file.
  *
- * This storage container can handle Unix style passwd, .htaccess, and
- * CVS pserver passwd files.
+ * This storage container can handle SAMBA smbpasswd files.
  *
- * @author   Stefan Ekman <stekman@sedata.net>
+ * Example:
+ * $a = new Auth("SMBPasswd", '/usr/local/private/smbpasswd');
+ * $a->start();
+ * if ($a->getAuth()) {
+ *     printf ("AUTH OK<br>\n");
+ *     $a->logout();
+ * }
+ *
+ * @author   Michael Bretterklieber <michael@bretterklieber.com>
  * @package  Auth
- * @version  $Revision: 1.5 $
+ * @version  $Revision: 1.1 $
  */
-class Auth_Container_File extends Auth_Container
+class Auth_Container_SMBPasswd extends Auth_Container
 {
     /**
-     * File_Passwd object
+     * File_SMBPasswd object
      * @var object
      */
     var $pwfile;
@@ -51,17 +56,15 @@ class Auth_Container_File extends Auth_Container
      * @param  $filename   string filename for a passwd type file
      * @return object Returns an error object if something went wrong
      */
-    function Auth_Container_File($filename)
+    function Auth_Container_SMBPasswd($filename)
     {
-        if (!is_file($filename)) {
-            return PEAR::raiseError("File \"$filename\" is not a valid filename.", 41);
+        $this->pwfile = new File_SMBPasswd($filename,0);
+
+        if (!$this->pwfile->load()) {
+            PEAR::raiseError("Error while reading file contents.", 41, PEAR_ERROR_DIE);
+            return;
         }
 
-        if (!$this->pwfile = new File_Passwd($filename,0)) {
-            return PEAR::raiseError("Error while reading file contents of file \"$filename\" .", 41);
-        }
-
-        $this->pwfile->close();
     }
 
     // }}}
@@ -76,9 +79,7 @@ class Auth_Container_File extends Auth_Container
      */
     function fetchData($username, $password)
     {
-        $result = $this->pwfile->verifyPassword($username, $password);
-        
-        return $result;
+        return $this->pwfile->verifyAccount($username, $password);
     }
 
     // }}}
@@ -86,49 +87,28 @@ class Auth_Container_File extends Auth_Container
     
     function listUsers()
     {
-        $users = $this->pwfile->listUsers();
-
-        if (!is_array($users)) {
-            return array();
-        }
-
-        foreach ($users as $key => $value) {
-            $cvsuser = $this->pwfile->getCvsUser($key);
-            $retVal[] = array("username" => $key, 
-                              "password" => $value,
-                              "cvsuser"  => $cvsuser);
-        }
-
-        return $retVal;
+        return $this->pwfile->getAccounts();
     }
 
     // }}}
+    // {{{ addUser()
 
     /**
      * Add a new user to the storage container
      *
      * @param string Username
      * @param string Password
-     * @param mixed  CVS username
+     * @param array  Additional information
      *
      * @return boolean
      */
-    function addUser($username, $password, $additional='')
+    function addUser($username, $password, $additional = '')
     {
-        if (!($this->pwfile->isLocked())) {
-            $this->pwfile->lock();
+        $res = $this->pwfile->addUser($user, $additional['userid'], $pass);
+        if ($res === true) {
+            return $this->pwfile->save();
         }
-
-        if (is_array($additional)) {
-            $cvsuser = $additional[cvsuser];
-        } else {
-            $cvsuser = $additional;
-        }
-
-        $retval = $this->pwfile->addUser($username, $password, $cvsuser);
-        $this->pwfile->close();
-
-        return($retval);
+        return $res;
     }
 
     // }}}
@@ -141,12 +121,11 @@ class Auth_Container_File extends Auth_Container
      */
     function removeUser($username)
     {
-        if (!($this->pwfile->isLocked())) {
-            $this->pwfile->lock();
+        $res = $this->pwfile->delUser($username);
+        if ($res === true) {
+            return $this->pwfile->save();
         }
-        $retval = $this->pwfile->delUser($username);  
-        $this->pwfile->close();
-        return($retval);
+        return $res;
     }
 
     // }}}
