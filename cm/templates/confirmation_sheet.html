@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Badge</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+<script language="JavaScript">
+	function printMe() {
+		window.print();
+	}
+</script>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" border=0 topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" onLoad="printMe();window.close()">
+<h1>{_convention_id[name]}</h1>
+<h2>Confirmation Sheet</h2>
+<h3>{<b>first_name} {last_name}</b> </h3>
+<p><b>Badge Number</b>: {badge_number}</p>
+<p><b>RPGA Number</b>: {rpga_number}</p>
+<hr>
+<h3>Events Registered For</h3>
+<table width="100%" border="1" cellspacing="0" cellpadding="2">
+  <tr> 
+    <td><b>Date</b></td>
+    <td><b>Time</b></td>
+    <td><b>Event #</b></td>
+    <td><b>Event Name</b></td>
+    <td><b>Price</b></td>
+  </tr>
+  <!-- START BLOCK : person_section_row -->
+  <tr> 
+    <td>{_section_id[date]}</td>
+    <td>{_section_id[start_time]}-{_section_id[end_time]}</td>
+    <td>{_section_id[complete_event_number]}</td>
+    <td>{_event_id[event_name]}</td>
+    <td>${price}</td>
+  </tr>
+</table>
+<p>
+  <!-- END BLOCK : person_section_row -->
+</p>
+</body>
+</html>
