@@ -1,0 +1,44 @@
+ConMaster5 Mac Installation Instructions
+
+These instructions were written for Apple MacIntosh computers, running OS X. They have only been confirmed using OS X 10.2 (Jaguar) and may or may not work with previous versions of OS X.
+
+1. Download conmaster5-v.91.zip from http://sourceforge.net/projects/conmaster. Load the cm folder into /Library/WebServer/Documents/.
+2. In the Sharing System Preference, Turn on Personal Web Sharing. This will activate the apache web server.
+3. Download and install PHP using the instructions given here: http://www.entropy.ch/software/macosx/php/#install
+4. Download and install mySQL using the instructions given here: http://www.entropy.ch/software/macosx/mysql/#install 
+5. To make sure that MySQL starts up automatically download and install the following package: http://www2.entropy.ch/download/mysql-startupitem.pkg.tar.gz
+6. Download phpMyAdmin from here: http://sourceforge.net/projects/phpmyadmin/ Place the resultant phpMyAdmin-xxxx folder into /Library/WebServer/Documents/. Remove the version ID from the folder name, so it is just phpMyAdmin
+7. Go in and edit the  /Library/WebServer/Documents/phpMyAdmin/config.inc.php file and find the line$cfg['PmaAbsoluteUri'] = '';  and change it to $cfg['PmaAbsoluteUri'] = ' http://127.0.0.1/phpMyAdmin/';
+8. Within the same file find the lines:
+$cfg['Servers'][$i]['user']          = 'root';      // MySQL user$cfg['Servers'][$i]['password']      = '';          // MySQL password (only neededModify them so that they match your MySQL user/password. Save the file.
+9. Start your favorite web browser, and enter the URL: http://127.0.0.1/phpMyAdmin/index.php phpMyAdmin should start up. 
+10. In the 'Create new database' box, type 'cyface' (no quotes), and then click 'Create'.
+11. Click on the 'SQL' tab link of the new web page that comes up.
+12. Click 'browse', and browse to /Library/WebServer/Documents/cm/sql/create_cyface_user.sql .
+13. Click 'Go'.  The cyface database user will be created.
+14. Click on the 'SQL' tab link of the new web page that comes up.
+15. Click 'browse', and browse to /Library/WebServer/Documents/cm/sql/complete_empty_install.sql .
+16. Click on the 'SQL' tab link of the new web page that comes up.
+17. Click 'browse', and browse to /Library/WebServer/Documents/cm/sql/default_constant.sql .
+18. Open a new web browser and browse to http://localhost/cm .
+
+That completes the basic ConMaster5 install.
+
+Recommended followup tasks:
+
+1. Change the password for the cyface user:
+	A. Use phpMyAdmin's 'Users' link to change the password.
+	B. Update cm/config/conmaster.ini with the new password ( mysql://cyface:password@localhost/cyface )
+2. Update the constants table to your needs
+	A. Use phpMyAdmin's browse function on the constant table in the cyface database.
+
+Setting Up A New Convention:
+
+1. Go to the Convention Info screen and create a record for your convention.
+2. Enter the Event Slots for your convention on the Convention record for your convention.
+3. Enter the Events and Sections for your convention.
+4. Import (via phpMyAdmin) your Person database, or enter Person records as folks register.
+5. Register people for events via the Person edit screen.
+6. Export Confirmation Cards to your Word Processing merge template via the Reports screen.
+6. Enter Score Packets for completed events via the Score Packet screen.
+7. Export your Score Packet data to a file from the Reports screen and email that file to the RPGA!
