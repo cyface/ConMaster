@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.10 2002/07/17 23:29:58 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.11 2002/07/18 21:32:45 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -153,10 +153,16 @@ class FormObject {
     {
         $this->dataObject->getLinks();
 		objectValueFill($this->dataObject, $this->template);
+		valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the main form
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
             objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
-			$parent_id_col = $this->table . '_id';
+			valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the included header
+			if ($this->data['included_parent_id_col']) {
+				$parent_id_col = $this->data['included_parent_id_col'];
+			} else {
+				$parent_id_col = $this->table . '_id';
+			}
             $this->incDataObject->$parent_id_col = $this->dataObject->id;
 			if ($this->data['included_where']) {
 			    $this->incDataObject->whereAdd($this->data['included_where']);
@@ -164,8 +170,9 @@ class FormObject {
             $this->incDataObject->find(); //Try and load it with the current data
             while ($this->incDataObject->fetch()) { // Pull the results through the object and put them on the form
                 $this->incDataObject->getLinks();
-                $this->template->newBlock($this->included_table . '_row'); //create a new result_row block
-                objectValueFill($this->incDataObject, $this->template);
+                $this->template->newBlock($this->included_table . '_row'); //create a new result row
+                objectValueFill($this->incDataObject, $this->template); //Fill in values on the included row
+				valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the included row
             }
         }
         return true;
