@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 <script language="JavaScript">
-
+<!--
 function fmtShortTime (inTimeStr) {
 	var formattedTime;
 	var dateObj;
@@ -13,73 +13,73 @@ function fmtShortTime (inTimeStr) {
 	dateObj = new Date(formattedTime);
 	return dateObj.getHours();
 }
-
+//-->
 </script>
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{first_name} {last_name} Person Record'" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
-  <tr> 
+  <tr>
     <td class="FormTitle">{first_name} {middle_name} {last_name}</td>
     <td class="FormTitle">
       <div align="right">Badge Number: <font color="#009900">{badge_number}</font></div>
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error} 
-</span> 
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}
+</span>
 <hr>
-<form name="person_edit" method="post" action="form_handler.php">
+<form name="person_edit" method="post" action="form.php">
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
-    <tr> 
+    <tr>
       <td class="FieldName">First Name</td>
-      <td> 
+      <td>
         <input type="text" name="first_name" value="{first_name}" maxlength="40" size="20" class="FieldData">
-        <b><font color="#FF0000" class="FieldError">{first_name_error}</font></b> 
+        <b><font color="#FF0000" class="FieldError">{first_name_error}</font></b>
       </td>
       <td class="FieldName">Last Name</td>
-      <td> 
+      <td>
         <input type="text" name="last_name" value="{last_name}" maxlength="40" size="20" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{last_name_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{last_name_error}</b></font></span>
       </td>
       <td class="FieldName">Middle Name</td>
-      <td colspan="3"> 
+      <td colspan="3">
         <input type="text" name="middle_name" value="{middle_name}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{middle_name_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{middle_name_error}</b></font></span>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">Street</td>
-      <td> <span class="FieldError"><font color="#FF0000"><b> 
+      <td> <span class="FieldError"><font color="#FF0000"><b>
         <input type="text" name="street" value="{street}" maxlength="40" size="20" class="FieldData">
         {street_error}</b></font></span> </td>
       <td class="FieldName">City</td>
-      <td> 
+      <td>
         <input type="text" name="city" value="{city}" maxlength="40" size="20" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{city_error}</b></font> </td>
       <td class="FieldName">State</td>
-      <td> 
+      <td>
         <input type="text" name="state" value="{state}" maxlength="40" size="2" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{state_error}</b></font> </td>
       <td class="FieldName">Zip</td>
-      <td> 
+      <td>
         <input type="text" name="zip" value="{zip}" maxlength="8" size="8" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{zip_error}</b></font> </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">Phone</td>
-      <td> 
+      <td>
         <input type="text" name="phone" value="{phone}" maxlength="20" size="20" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{phone_error}</b></font> </td>
       <td class="FieldName">Email</td>
-      <td colspan="5"> 
+      <td colspan="5">
         <input type="text" name="email_address" value="{email_address}" maxlength="40" size="20" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{email_address_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{email_address_error}</b></font>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">Reg Type</td>
-      <td> 
+      <td>
         <select name="reg_type" class="FieldData">
           <option selected>{reg_type}</option>
           <option>Pre-Reg</option>
@@ -90,30 +90,30 @@ function fmtShortTime (inTimeStr) {
           <option>SAT Only</option>
           <option>SUN Only</option>
         </select>
-        <font color="#FF0000"><b class="FieldError">{reg_type_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{reg_type_error}</b></font>
       </td>
       <td class="FieldName">&nbsp;</td>
       <td>&nbsp;</td>
       <td class="FieldName">Volunteer</td>
-      <td> 
+      <td>
         <input type="checkbox" name="volunteer" value="CHECKED"  {volunteer} class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{volunteer_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{volunteer_error}</b></font>
       </td>
       <td class="FieldName">Staff</td>
-      <td> 
+      <td>
         <input type="checkbox" name="staff" value="CHECKED" {staff} class="FieldData">
         <font color="#FF0000"><b class="FieldError">{staff_error}</b></font> </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">RPGA Number</td>
-      <td> 
+      <td>
         <input type="text" name="rpga_number" value="{rpga_number}" maxlength="20" size="20" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{rpga_number_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{rpga_number_error}</b></font>
       </td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td class="FieldName">Judge</td>
-      <td> 
+      <td>
         <input type="checkbox" name="judge" value="CHECKED" {judge} class="FieldData">
         <font color="#FF0000"><b class="FieldError">{judge_error}</b></font> </td>
       <td class="FieldName">&nbsp;</td>
@@ -122,26 +122,26 @@ function fmtShortTime (inTimeStr) {
   </table>
   <hr>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr> 
-      <td> 
-        <div align="center"> 
-          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table=person&action=delete&id={id}');return document.MM_returnValue">
+    <tr>
+      <td>
+        <div align="center">
+          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=person&action=delete&id={id}');return document.MM_returnValue">
         </div>
       </td>
-      <td> 
-        <div align="center"> 
+      <td>
+        <div align="center">
           <input type="button" name="cancel" value="Cancel" onClick="window.close()">
         </div>
       </td>
-      <td> 
-        <div align="center"><span class="FieldName"> 
+      <td>
+        <div align="center"><span class="FieldName">
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="badge_number" value="{badge_number}">
           <input type="hidden" name="table" value="person">
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
-          </span> 
+          </span>
           <input type="submit" name="save" value="Save">
         </div>
       </td>
@@ -151,16 +151,16 @@ function fmtShortTime (inTimeStr) {
 </form>
 <span class="FormTitle">Events</span>
 <table width="100%" border="1">
-  <tr> 
-    <td class="TableTitle">Action</td>
-    <td class="TableTitle">Event Num</td>
+  <tr>
+    <td class="TableTitle" width="5%" colspan=2>Action</td>
+    <td class="TableTitle" width="5%">Event Num</td>
     <td class="TableTitle"> Event Name</td>
-    <td class="TableTitle"> Time</td>
+    <td class="TableTitle" width="10%"> Time</td>
     <td class="TableTitle"> Price</td>
     <td class="TableTitle">Judge</td>
   </tr>
-  <tr> <form name="person_section_add" method="post" action="form_handler.php">
-    <td class="TableDataBold">
+  <tr> <form name="person_section_add" method="post" action="form.php">
+    <td class="TableDataBold" colspan=2>
         <input type="submit" name="add" value="Add">
     </td>
       <td class="TableDataBold"><span class="FieldName"> 
@@ -168,35 +168,50 @@ function fmtShortTime (inTimeStr) {
         <input type="hidden" name="person_id" value="{id}">
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_table" value="person_section">
-        <input type="hidden" name="action" value="save_included">
+        <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="reg_type" value="{reg_type}">
-        <input type="text" name="section_id" size="6" maxlength="10" class="FieldData">
+        <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="text" name="complete_event_number" size="6" maxlength="10" class="FieldData">
         </span> </td>
     <td class="TableData">&nbsp;</td>
-    <td class="TableData">&nbsp;</td>
+      <td class="TableData" width="10%">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp; </td>
 	</form>
   </tr>
   <!-- START BLOCK : person_section_row -->
-  <tr> 
-  	<form name="person_section_delete" method="post" action="form_handler.php" target="popup">
-    <td class="TableDataBold">
-        <span class="FieldName">
-        <input type="hidden" name="id" value="{id}">
-        <input type="hidden" name="table" value="person_section">
-        <input type="hidden" name="action" value="delete">
-        </span> 
-        <input type="submit" name="delete" value="Delete" onClick="popwin()">      
-    </td>
-      <td class="TableDataBold">{_section_id[complete_event_number]}</td>
-      <td class="TableData"><a href="form_handler.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_event_id[event_name]}</a></td>
-      <td class="TableData"><script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>-{_section_id[end_time]}</td>
-    <td class="TableData">${price}</td>
-    <td class="TableData">
-      <input type="checkbox" name="judge2" value="CHECKED" {judge}>
-    </td>
+  <tr>	
+    <form name="person_section_delete" method="post" action="form.php" target="popup">
+	  <td class="TableData" width="5%"> 
+        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="included_id" value="{id}">
+        <input type="hidden" name="action" value="deleteIncluded">
+        <input type="hidden" name="parent_id" value="{person_id}">
+        <input type="hidden" name="included_table" value="person_section">
+        <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="submit" name="delete" value="Delete" onClick="popwin()">
+	  </td>
 	</form>
+	<form name="person_section_save" method="post" action="form.php" target="popup">
+	  <td class="TableData" width="5%"> 
+        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="included_id" value="{id}">
+        <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="parent_id" value="{person_id}">
+        <input type="hidden" name="included_table" value="person_section">
+        <input type="hidden" name="included_order_by" value="last_modified desc">
+		<input type="submit" name="update" value="Update" onClick="popwin()">
+      </td>
+      <td class="TableDataBold">{complete_event_number}</td>
+      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_event_id[event_name]}</a></td>
+      <td class="TableData" width="10%">
+<script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>-<script language="JavaScript">document.write(fmtShortTime("{_section_id[end_time]}"));</script>
+      </td>
+      <td class="TableData">$<input type="text" name="price" size="6" maxlength="10" class="FieldData" value="{price}"></td>
+      <td class="TableData">
+        <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">
+	  </td>
+    </form>
   </tr>
   <!-- END BLOCK : person_section_row -->
 </table>

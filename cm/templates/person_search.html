@@ -14,26 +14,26 @@
 </table>
 <span class="FormTitle">Person Search Form</span>
 <hr noshade>
-<form name="person_search_form" method="post" action="form_handler.php">
+<form name="person_search_form" method="post" action="form.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr> 
+    <tr>
       <td width="10%" class="FieldName">Last Name</td>
-      <td width="38%"> 
+      <td width="38%">
         <input type="text" name="search[last_name]" value="{last_name}" class="FieldData">
       </td>
       <td width="10%"><span class="FieldName">First Name</span></td>
-      <td width="38%"> 
+      <td width="38%">
         <input type="text" name="search[first_name]" value="{first_name}" class="FieldData">
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td width="10%" class="FieldName">RPGA Number</td>
-      <td width="38%"> 
+      <td width="38%">
         <input type="text" name="search[rpga_number]" value="{rpga_number}" class="FieldData">
         <input type="hidden" name="search_operators[rpga_number]" value="equals">
       </td>
       <td width="10%" class="FieldName">Badge Number</td>
-      <td width="38%"> 
+      <td width="38%">
         <input type="text" name="search[badge_number]" value="{badge_number}" class="FieldData">
         <input type="hidden" name="search_operators[badge_number]" value="equals">
       </td>
@@ -49,7 +49,7 @@
 <span class="FieldName">
 <p>People</p>
 </span><table width="100%" border="1">
-  <tr> 
+  <tr>
     <td class="TableTitle">Badge Number</td>
     <td class="TableTitle"> Name</td>
     <td class="TableTitle"> Street</td>
@@ -57,18 +57,18 @@
     <td class="TableTitle">RPGA Number</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr> 
+  <tr>
     <td class="TableDataBold">{badge_number}</td>
-    <td class="TableData"><a href="form_handler.php?table=person&action=edit&included_table=person_section&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name}, 
+    <td class="TableData"><a href="form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name},
       {first_name}</a></td>
     <td class="TableData">{street}</td>
-    <td class="TableData">{city} 
-    <td class="TableData">{rpga_number} 
+    <td class="TableData">{city}
+    <td class="TableData">{rpga_number}
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table=person&action=new" target="popup" onclick="popwin()">Create a New Person</a></span> 
+<span class="FieldName"><a href="form.php?table=person&action=edit" target="popup" onclick="popwin()">Create a New Person</a></span>
 <hr noshade>
 </body>
 </html>

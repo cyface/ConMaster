@@ -53,6 +53,10 @@ function MM_swapImage() { //v3.0
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
 
+function MM_setTextOfTextfield(objName,x,newText) { //v3.0
+  var obj = MM_findObj(objName); if (obj) obj.value = newText;
+}
+
 function YY_checkform() { //v4.66
 //copyright (c)1998,2002 Yaromat.com
   var args = YY_checkform.arguments; var myDot=true; var myV=''; var myErr='';var addErr=false;var myReq;

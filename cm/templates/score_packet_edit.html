@@ -8,25 +8,25 @@
 
 <body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{id} {last_name} Score Packet Record'" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
-  <tr> 
+  <tr>
     <td class="FormTitle">{id}</td>
     <td class="FormTitle">
       <div align="right">{complete_event_number}</div>
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
 <hr>
-<form name="event_edit" method="post" action="form_handler.php">
+<form name="event_edit" method="post" action="form.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2">
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Complete Event Number</td>
-      <td> 
+      <td>
         <input type="text" name="complete_event_number" value="{complete_event_number}" maxlength="15" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{complete_event_number_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{complete_event_number_error}</b></font></span>
       </td>
       <td class="FieldName">RPGA Type</td>
-      <td colspan="3"><span class="FieldError"><font color="#FF0000"><b> 
+      <td colspan="3"><span class="FieldError"><font color="#FF0000"><b>
         <select name="rpga_event_type">
           <option selected>{rpga_event_type}</option>
           <option>BE</option>
@@ -38,35 +38,35 @@
         </select>
         {rpga_event_type_error}</b></font></span> </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName" height="50">Judge ID</td>
-      <td width="33%" height="50"> 
+      <td width="33%" height="50">
         <input type="text" name="judge_id" value="{judge_id}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{judge_id_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{judge_id_error}</b></font></span>
       </td>
       <td class="FieldName" width="4%" height="50">Scenario Score</td>
-      <td class="FieldName" colspan="3" height="50"> 
+      <td class="FieldName" colspan="3" height="50">
         <input type="text" name="scenario_score" value="{scenario_score}" maxlength="100" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{scenario_score_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{scenario_score_error}</b></font></span>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Group Score</td>
-      <td> 
+      <td>
         <input type="text" name="group_score" value="{group_score}" maxlength="40" size="10" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font>
       </td>
       <td class="FieldName">Number of Players</td>
       <td colspan="3"> <font color="#FF0000"><b class="FieldError">
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
         {number_of_players_error}</b></font> </td>
     </tr>
-    <tr> 
-      <td colspan="6"><span class="FieldName"> 
+    <tr>
+      <td colspan="6"><span class="FieldName">
         <p>Players</p>
-        </span> 
+        </span>
         <table width="100%" border="1">
-          <tr> 
+          <tr>
             <td class="TableTitle">RPGA Number</td>
             <td class="TableTitle"> Name</td>
             <td class="TableTitle"> Score</td>
@@ -74,13 +74,13 @@
             <td class="TableTitle">Judge</td>
           </tr>
           <!-- START BLOCK : event_row -->
-          <tr> 
+          <tr>
             <td class="TableDataBold">{rpga_number}</td>
-            <td class="TableData"><a href="item_edit.php?id={id}" target="_blank" class="TableData">{last_name}, 
+            <td class="TableData"><a href="item_edit.php?id={id}" target="_blank" class="TableData">{last_name},
               {first_name}</a></td>
             <td class="TableData">{score}</td>
-            <td class="TableData">{place} 
-            <td class="TableData">{judge} 
+            <td class="TableData">{place}
+            <td class="TableData">{judge}
           </tr>
           <!-- END BLOCK : event_row -->
         </table>
@@ -91,10 +91,10 @@
   <input type="hidden" name="last_modified" value="{last_modified}">
   <input type="hidden" name="table" value="score_packet">
   <input type="hidden" name="action" value="save">
-  <p class="FieldName"> 
+  <p class="FieldName">
     <input type="submit" name="save" value="Save">
     <input type="button" name="cancel" value="Cancel" onClick="window.close()">
-    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table=score_packet&action=delete&id={id}');return document.MM_returnValue">
+    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=score_packet&action=delete&id={id}');return document.MM_returnValue">
   </p>
 </form>
 <p>&nbsp; </p>

@@ -8,81 +8,81 @@
 
 <body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{complete_event_number} Section Record'" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
-  <tr> 
+  <tr>
     <td class="FormTitle">{person_name} {complete_event_number}</td>
     <td class="FormTitle">
       <div align="right"></div>
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
 <hr>
 <form name="event_edit" method="post" action="event_edit.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2">
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Person ID</td>
-      <td> 
+      <td>
         <input type="text" name="person_id" value="{person_id}" maxlength="15" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{person_id_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{person_id_error}</b></font></span>
       </td>
       <td class="FieldName">Section ID</td>
       <td> <font color="#FF0000"><b class="FieldError">
         <input type="text" name="person_id2" value="{section_id}" maxlength="15" size="10" class="FieldData">
         {section_id_error}</b></font> </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">Complete Event Number</td>
-      <td width="33%"> 
+      <td width="33%">
         <input type="text" name="complete_event_number2" value="{complete_event_number}" maxlength="100" size="50" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{complete_event_number_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{complete_event_number_error}</b></font></span>
       </td>
       <td class="FieldName" width="4%">Reg Type</td>
-      <td class="FieldName"> 
+      <td class="FieldName">
         <input type="text" name="reg_type" value="{reg_type}" maxlength="30" size="30" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{reg_type_error}</b></font></span> 
+        <span class="FieldError"><font color="#FF0000"><b>{reg_type_error}</b></font></span>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Judge</td>
-      <td> 
+      <td>
         <input type="checkbox" name="judge" value="CHECKED" {judge}>
         <font color="#FF0000"><b class="FieldError">{judge_error}</b></font> </td>
       <td class="FieldName" width="4%">Judge Score</td>
-      <td> 
+      <td>
         <input type="text" name="judge_score" value="{judge_score}" maxlength="5" size="5" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{judge_score_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{judge_score_error}</b></font>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Place</td>
-      <td> <span class="FieldError"><font color="#FF0000"><b> 
+      <td> <span class="FieldError"><font color="#FF0000"><b>
         <input type="text" name="packet_id2" value="{place}" maxlength="15" size="15">
         {place_error}</b></font></span> </td>
       <td class="FieldName" width="4%">Scenario Score</td>
-      <td> 
+      <td>
         <input type="text" name="scenario_score" value="{scenario_score}" maxlength="5" size="5" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{scenario_score_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{scenario_score_error}</b></font>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName" width="4%">Packet ID</td>
-      <td> 
+      <td>
         <input type="text" name="packet_id" value="{packet_id}" maxlength="15" size="15">
-        <font color="#FF0000"><b class="FieldError">{packet_id_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{packet_id_error}</b></font>
       </td>
       <td class="FieldName" width="4%">Packet Position</td>
-      <td> 
+      <td>
         <input type="text" name="packet_position" value="{packet_position}" maxlength="15" size="15">
-        <font color="#FF0000"><b class="FieldError">{packet_position_error}</b></font> 
+        <font color="#FF0000"><b class="FieldError">{packet_position_error}</b></font>
       </td>
     </tr>
-    <tr> 
+    <tr>
       <td class="FieldName">Score</td>
-      <td> 
+      <td>
         <input type="text" name="score" value="{score}" maxlength="5" size="5" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{score_error}</b></font> </td>
       <td class="FieldName">Price</td>
-      <td> 
+      <td>
         <input type="text" name="price" value="{price}" maxlength="5" size="5" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{price_error}</b></font> </td>
     </tr>
@@ -91,10 +91,10 @@
   <input type="hidden" name="id2" value="{id}">
   <input type="hidden" name="table" value="person_section">
   <input type="hidden" name="action" value="save">
-  <p class="FieldName"> 
+  <p class="FieldName">
     <input type="submit" name="save" value="Save">
     <input type="button" name="cancel" value="Cancel" onClick="window.close()">
-    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table=person_section&action=delete&id={id}');return document.MM_returnValue">
+    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form.php?table=person_section&action=delete&id={id}');return document.MM_returnValue">
   </p>
 </form>
 </body>
