@@ -1,0 +1,221 @@
+<HTML
+><HEAD
+><TITLE
+>Introduction</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><LINK
+REL="PREVIOUS"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><LINK
+REL="NEXT"
+TITLE="Mail"
+HREF="core.mail.mail.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.mail.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.mail.mail.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.mail.intro"
+>Introduction</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2185"
+></A
+>Introduction&nbsp;--&nbsp;A overview about Mail</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.intro.send"
+></A
+><H2
+>Sending EMails</H2
+><P
+>&#13;    <A
+HREF="core.mail.mail.html"
+><B
+CLASS="classname"
+>Mail</B
+></A
+> provides 
+    a API to send emails on different ways.
+    You may think this class isn't neccassery because of 
+    <A
+HREF="http://www.php.net/manual/en/ref.mail.php"
+TARGET="_top"
+><B
+CLASS="function"
+>mail()</B
+>
+    </A
+>. But this function limited to a local installed 
+    sendmail-compatible program. The class gives you the freedom to 
+    choose different backends for sending mails. So you can easily create a 
+    transportable application which is not bind to a working 
+    <B
+CLASS="function"
+>mail()</B
+>-function on the host computer.
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.intro.mime"
+></A
+><H2
+>Working with multipart messages and MIME messages</H2
+><P
+>&#13;    Especially in business enviroments, customers expect well formated emails 
+    including attachments. The <B
+CLASS="classname"
+>Mail_Mime</B
+>-classes 
+    offers you function to create and process MIME-formated emails easily.
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.intro.address"
+></A
+><H2
+>Working with email addresses</H2
+><P
+>&#13;    Dealing with email addresses is not easy. But validating and processing
+    email address is often a typical part of a web application. 
+    <B
+CLASS="classname"
+>Mail_RFC822</B
+> helps you to analyse email-addresses
+    according to <A
+HREF="http://www.faqs.org/rfcs/rfc822.html"
+TARGET="_top"
+>RFC 
+    822</A
+>.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.mail.mail.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PEAR Mail: Mail handling functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mail</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

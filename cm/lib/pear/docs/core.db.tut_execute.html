@@ -1,0 +1,447 @@
+<HTML
+><HEAD
+><TITLE
+>Execute</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="Sequences"
+HREF="core.db.tut_sequences.html"><LINK
+REL="NEXT"
+TITLE="DB::connect()"
+HREF="core.db.connect.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_sequences.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.connect.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.tut_execute"
+>Execute</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1133"
+></A
+>Execute&nbsp;--&nbsp;Prepare &#38; Execute/ExecuteMultiple</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1136"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1138"
+></A
+><H3
+>Purpose</H3
+><P
+>&#13;      <B
+CLASS="function"
+>Prepare()</B
+> and <B
+CLASS="function"
+>execute*()</B
+>
+      give you more power and flexibilty for query execution. You
+      can use them, if you have to do more than one equal query
+      (i.e. adding a list of adresses to a database) or if you want
+      to support different databases, which have different
+      implementations of the SQL standard.
+     </P
+><P
+>&#13;      Imagine you want to support two databases with different INSERT
+      syntax:
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>db1 : INSERT INTO tbl_name ( col1, col2 ... ) VALUES ( expr1, expr2 ... )
+db2 : INSERT INTO tbl_name SET col1=expr1, col2=expr2 ...</PRE
+></TD
+></TR
+></TABLE
+>
+      Correspondending to create multi-lingual scripts you can create
+      a array with queries like this:
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$statement['db1']['INSERT_PERSON'] = "INSERT INTO person ( surname, name, age ) VALUES ( ?, ?, ? )" ;
+$statement['db2']['INSERT_PERSON'] = "INSERT INTO person SET surname=?, name=?, age=?" ;</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1146"
+></A
+><H3
+>Prepare</H3
+><P
+>&#13;      To use the features give
+      in Purpose
+      you have to do two steps. Step one is to
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>prepare</I
+></SPAN
+> the statment and the second is
+      to <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>excute</I
+></SPAN
+> it.
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>Prepare()</B
+> has to be called with the generic
+      statment at least once. It returns a handle for the statment.
+     </P
+><P
+>&#13;      To create a generic statment is simple. Write the SQL query
+      as usual, i.e.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>SELECT surname, name, age FROM person
+   WHERE name = 'name_to_find' AND age &#60; 'age_limit'</PRE
+></TD
+></TR
+></TABLE
+>
+      Now check which parameters should be replaced while script
+      runtime. Substitute this parameters with a placeholder.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>SELECT surname, name, age FROM person WHERE name = ? AND age &#60; ?</PRE
+></TD
+></TR
+></TABLE
+>
+      So, thats all! Now you have a generic statement, required by
+      <B
+CLASS="function"
+>prepare()</B
+>.
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>Prepare()</B
+> can handle different types of
+      placeholders or wildcards.
+      <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>&#13;        ? - (recommended) stands for a scalar value like strings
+        or numbers, the value will be quoted depending of the database
+       </TD
+></TR
+><TR
+><TD
+>&#13;        ! - stands for a scalar value and will inserted into the
+        statement <SPAN
+CLASS="QUOTE"
+>"as is"</SPAN
+>.
+       </TD
+></TR
+><TR
+><TD
+>&#13;        &#38; - requires an existing filename, the content of this file
+        will be included into the statment (i.e. for saving binary
+        data of a graphic file in a database)
+       </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1165"
+></A
+><H3
+>Execute/ ExecuteMultiple</H3
+><P
+>&#13;      After preparing the statement, you can excute the query. This
+      means to assign the variables to the prepared statement. To do
+      this, <B
+CLASS="function"
+>execute()</B
+> requires two arguments, the
+      statement handle of <B
+CLASS="function"
+>prepare()</B
+> and an array
+      with the values to assign. The array has to be numerically
+      ordered. The first entry of the array represents the first
+      wildcard, the second the second wildcard etc. The order is
+      independent from the used wildcard char.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+// Example inserting data
+$alldata = array(  array(1, 'one', 'en'),
+                   array(2, 'two', 'to'),
+                   array(3, 'three', 'tre'),
+                   array(4, 'four', 'fire'));
+$sth = $dbh-&#62;prepare("INSERT INTO numbers VALUES(?,?,?)");
+foreach ($alldata as $row) {
+    $dbh-&#62;execute($sth, $row);
+}
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+      In the example the query is done four times:
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>INSERT INTO numbers VALUES( '1', 'one', 'en')
+INSERT INTO numbers VALUES( '2', 'two', 'to')
+INSERT INTO numbers VALUES( '3', 'three', 'tre')
+INSERT INTO numbers VALUES( '4', 'four', 'fire')</PRE
+></TD
+></TR
+></TABLE
+>
+      <B
+CLASS="function"
+>ExecuteMultiple()</B
+> works in the same way, but
+      requires a two dimensional array. So you can avoid the explicit
+      foreach in the eample above.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+// Example inserting data
+$alldata = array(  array(1, 'one', 'en'),
+                   array(2, 'two', 'to'),
+                   array(3, 'three', 'tre'),
+                   array(4, 'four', 'fire'));
+$sth = $dbh-&#62;prepare("INSERT INTO numbers VALUES(?,?,?)");
+$dbh-&#62;executeMultiple($sth, $alldata);
+}
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+      The result is the same. If one of the records failed, the
+      unfinished records will not be executed.
+     </P
+><P
+>&#13;      If <B
+CLASS="function"
+>execute*()</B
+> fails a
+      <B
+CLASS="classname"
+>DB_Error</B
+>, else a
+      <TT
+CLASS="parameter"
+><I
+>DB_OK</I
+></TT
+> will returned.
+     </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.tut_sequences.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.connect.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Sequences</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DB::connect()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,802 @@
+<HTML
+><HEAD
+><TITLE
+>Fetch</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="Query"
+HREF="core.db.tut_query.html"><LINK
+REL="NEXT"
+TITLE="Sequences"
+HREF="core.db.tut_sequences.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_query.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_sequences.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.tut_fetch"
+>Fetch</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1030"
+></A
+>Fetch&nbsp;--&nbsp;Fetching rows from the query</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1033"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1035"
+></A
+><H3
+>Fetch functions</H3
+><P
+>&#13;      The <B
+CLASS="classname"
+>DB_Result</B
+> object provides two
+      functions to fetch rows: <B
+CLASS="function"
+>fetchRow()</B
+> and
+      <B
+CLASS="function"
+>fetchInto()</B
+>. <B
+CLASS="function"
+>fetchRow()</B
+>
+      returns the row, null on no more data or a <B
+CLASS="classname"
+>DB_Error</B
+>,
+      when an error occurs.
+      <B
+CLASS="function"
+>fetchInto()</B
+> requires a variable, which be will
+      directly assigned by reference to the result row. It will return
+      null when result set is empty or a <B
+CLASS="classname"
+>DB_Error</B
+> too.
+     </P
+><P
+>&#13;      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+...
+$db = DB::connect($dsn);
+$res = $db-&#62;query("select * from mytable");
+
+// Get each row of data on each iteration until
+// there is no more rows
+while ($row = $res-&#62;fetchRow()) {
+    $id = $row[0];
+}
+// Or:
+// an example using fetchInto()
+while ($res-&#62;fetchInto($row)) {
+    $id = $row[0];
+}
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1047"
+></A
+><H3
+>Select the format of the fetched row</H3
+><P
+>&#13;      The fetch modes supported are:
+      <P
+></P
+><UL
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>DB_FETCHMODE_ORDERED</I
+></TT
+> (default)
+        </P
+><P
+>&#13;         The <B
+CLASS="function"
+>fetch*()</B
+> returns an ordered array.
+         The order is taken from the select statment.
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+$res = $db-&#62;query('select id, name, email from users');
+$row = $res-&#62;fetchRow(DB_FETCHMODE_ORDERED);
+/*
+$row will contain:
+array (
+    0 =&#62; &#60;column "id" data&#62;,
+    1 =&#62; &#60;column "name" data&#62;,
+    2 =&#62; &#60;column "email" data&#62;
+)
+*/
+// Access the data with:
+$id    = $row[0];
+$name  = $row[1];
+$email = $row[2];
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>DB_FETCHMODE_ASSOC</I
+></TT
+>
+        </P
+><P
+>&#13;         Returns an associative array with the column
+         names as the array keys
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+$res = $db-&#62;query('select id, name, email from users');
+$row = $res-&#62;fetchRow(DB_FETCHMODE_ASSOC);
+/*
+$row will contain:
+array (
+    'id'    =&#62; &#60;column "id" data&#62;,
+    'name'  =&#62; &#60;column "name" data&#62;,
+    'email' =&#62; &#60;column "email" data&#62;
+)
+*/
+// Access the data with:
+$id    = $row['id'];
+$name  = $row['name'];
+$email = $row['email'];
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>DB_FETCHMODE_OBJECT</I
+></TT
+>
+        </P
+><P
+>&#13;         Returns a DB_row object with column names
+         as properties
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+$res = $db-&#62;query('select id, name, email from users');
+$row = $res-&#62;fetchRow(DB_FETCHMODE_OBJECT);
+/*
+$row will contain:
+db_row Object
+(
+    [id]    =&#62; &#60;column "id" data&#62;,
+    [name]  =&#62; &#60;column "name" data&#62;,
+    [email] =&#62; &#60;column "email" data&#62;
+)
+*/
+// Access the data with:
+$id    = $row-&#62;id;
+$name  = $row-&#62;name;
+$email = $row-&#62;email;
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+></UL
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1067"
+></A
+><H3
+>Set the format of the fetched row</H3
+><P
+>&#13;      You can set the fetch mode for every call or for your whole DB
+      instance.
+
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+// 1) Set the mode per call:
+
+while ($row = $result-&#62;fetchRow(DB_FETCHMODE_ASSOC)) {
+    $id = $row['id'];
+}
+
+// 2) Set the mode for all calls:
+
+$db = DB::connect($dsn);
+// this will set a default fetchmode for this Pear DB instance
+// (for all queries)
+$db-&#62;setFetchMode(DB_FETCHMODE_ASSOC);
+
+$result = $db-&#62;query(...);
+
+while ($row = $result-&#62;fetchRow()) {
+    $id = $row['id'];
+}
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1071"
+></A
+><H3
+>Fetch rows by number</H3
+><P
+>&#13;      The PEAR DB fetch system also supports an extra parameter
+      to the fetch statement. So you can fetch rows from a result
+      by number. This is especially helpful if you only want to show
+      sets of an entire result (for example in building paginated
+      HTML lists), fetch rows in an special order, etc.
+
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+...
+// the row to start fetching
+$from = 50;
+
+// how many results per page
+$res_per_page = 10;
+
+// the last row to fetch for this page
+$to = $from + $res_per_page;
+
+foreach (range($from, $to) as $rownum) {
+    if (!$row = $res-&#62;fetchrow($fetchmode, $rownum)) {
+        break;
+    }
+    $id = $row[0];
+    ....
+}
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1075"
+></A
+><H3
+>Freeing the result set</H3
+><P
+>&#13;      It is recommended to finish the result set after processing in
+      order to to save memory.
+      Use <B
+CLASS="function"
+>free()</B
+> to do this.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+...
+$result = $db-&#62;query('SELECT * FROM clients');
+while ($row = $result-&#62;fetchRow()) {
+...
+}
+$result-&#62;free();
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1080"
+></A
+><H3
+>Quick data retrieving</H3
+><P
+>&#13;      PEAR DB provides some special ways to retrieve information
+      from a query without the need of using
+      <B
+CLASS="function"
+>fetch*()</B
+> and loop throw results.
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>getOne()</B
+> retrieves the first result of the
+      first column from a query
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$numrows = $db-&#62;getOne('select count(id) from clients');</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>getRow()</B
+> returns the first row and return
+      it as an array
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$sql = 'select name, address, phone from clients where id=1';
+if (is_array($row = $db-&#62;getRow($sql))) {
+    list($name, $address, $phone) = $row;
+}</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>getCol()</B
+> returns an array with the data
+      of the selected column. It accepts the column number to retrieve
+      as the second param.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$all_client_names = $db-&#62;getCol('select name from clients');</PRE
+></TD
+></TR
+></TABLE
+>
+      The above sentence could return for example:
+      $all_client_names = array('Stig', 'Jon', 'Colin');
+     </P
+><P
+>&#13;      <B
+CLASS="function"
+>getAssoc()</B
+> fetches the entire result set
+      of a query and return it as an associative array using the
+      first column as the key.
+      <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$data = getAssoc('SELECT name, surname, phone FROM mytable')
+/*
+Will return:
+array(
+  'Peter'      =&#62; array('Smith', '944679408'),
+  'Tomas' =&#62; array('Cox', '944679408'),
+  'Richard' =&#62; array('Merz', '944679408')
+)
+*/</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;       <B
+CLASS="function"
+>getAll()</B
+> fetches all the rows returned from
+       a query
+       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$data = getAll('SELECT id, text, date FROM mytable');
+/*
+Will return:
+array(
+   1 =&#62; array('4', 'four', '2004'),
+   2 =&#62; array('5', 'five', '2005'),
+   3 =&#62; array('6', 'six', '2006')
+)
+*/</PRE
+></TD
+></TR
+></TABLE
+>
+     </P
+><P
+>&#13;      The <B
+CLASS="function"
+>get*()</B
+> family methods will do all the
+      dirty job for you, this is: launch the query, fetch the data
+      and free the result. Please note that as all  PEAR DB functions
+      they will return a <B
+CLASS="classname"
+>PEAR DB_error</B
+> object
+      on errors.
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="AEN1102"
+></A
+><H3
+>Getting more information from query results</H3
+><P
+>&#13;      With PEAR DB you have many ways to retrieve useful information
+      from query results. These are:
+      <P
+></P
+><UL
+><LI
+><P
+>&#13;         <B
+CLASS="function"
+>numRows()</B
+>: Returns the total number of
+         rows returned from a "SELECT" query.
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>// Number of rows
+echo $res-&#62;numRows();</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+>&#13;         <B
+CLASS="function"
+>numCols()</B
+>: Returns the total number of
+         columns returned from a "SELECT" query.
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>// Number of cols
+echo $res-&#62;numCols();</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+>&#13;         <B
+CLASS="function"
+>affectedRows()</B
+>: Returns the number of rows
+         affected by a data manipulation query ("INSERT", "UPDATE" or
+         "DELETE").
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>// remember that this statement won't return a result object
+$db-&#62;query('DELETE * FROM clients');
+echo 'I have deleted ' . $db-&#62;affectedRows() . ' clients';</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+><LI
+><P
+>&#13;         <B
+CLASS="function"
+>tableInfo()</B
+>: Returns an associative array
+         with information about the returned fields from a "SELECT"
+         query.
+         <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>// Table Info
+print_r($res-&#62;tableInfo());</PRE
+></TD
+></TR
+></TABLE
+>
+        </P
+></LI
+></UL
+>
+      Don't forget to check if the returned result from your action is
+      a PEAR Error object. If you get a error message like
+      <SPAN
+CLASS="QUOTE"
+>"DB_error: database not capable"</SPAN
+>, that means that
+      your database backend doesn't support this action.
+     </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.tut_query.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.tut_sequences.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Query</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Sequences</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

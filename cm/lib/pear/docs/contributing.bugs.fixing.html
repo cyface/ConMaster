@@ -1,0 +1,382 @@
+<HTML
+><HEAD
+><TITLE
+>Fixing bugs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Reporting & fixing bugs"
+HREF="contributing.bugs.html"><LINK
+REL="PREVIOUS"
+TITLE="Reporting & fixing bugs"
+HREF="contributing.bugs.html"><LINK
+REL="NEXT"
+TITLE="Skeleton for creating PEAR docbook documentation"
+HREF="packages.skeleton.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="contributing.bugs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 7. Reporting &#38; fixing bugs</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.skeleton.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="contributing.bugs.fixing"
+>Fixing bugs</A
+></H1
+><P
+>&#13;    To submit a patch for a bug in a PEAR package, you have to create
+    a diff of your changes against the latest version of the code.
+    To do this, you can choose between the two following ways:
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN8412"
+>a) Creating a diff against a local copy</A
+></H2
+><P
+>&#13;     To fix the bug, copy the old version of the corrupted file to
+     lets say <TT
+CLASS="filename"
+>file.new</TT
+> and apply the fix to this
+     file. You now have two files: <TT
+CLASS="filename"
+>file.php</TT
+> is
+     the original file that still contains the bug.
+     <TT
+CLASS="filename"
+>file.new</TT
+> is the same file, but contains your
+     bug fix. To create a diff between this files, you have to use
+     <TT
+CLASS="filename"
+>diff -u</TT
+>.
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN8419"
+></A
+><P
+><B
+>Example 7-1. Local diff</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="prompt"
+>$ </TT
+><B
+CLASS="command"
+>cp file.php file.new</B
+>
+<TT
+CLASS="prompt"
+>$ </TT
+><B
+CLASS="command"
+>vi file.new</B
+>
+[Apply the bug fix to file.new]
+<TT
+CLASS="prompt"
+>$ </TT
+><B
+CLASS="command"
+>diff -u file.php file.new &#62; diff.txt</B
+></PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     This will result in a file <TT
+CLASS="filename"
+>diff.txt</TT
+> in the
+     same directory than <TT
+CLASS="filename"
+>file.new</TT
+>.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN8431"
+>b) Creating a diff against CVS</A
+></H2
+><P
+>&#13;     If you have checked out a clean and up-to-date version of the
+     PEAR CVS tree from cvs.php.net, you can also use CVS to create
+     the diff:
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN8434"
+></A
+><P
+><B
+>Example 7-2. CVS diff</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="prompt"
+>$ </TT
+><B
+CLASS="command"
+>vi file.php</B
+>
+[Apply the bug fix to file.php]
+<TT
+CLASS="prompt"
+>$ </TT
+><B
+CLASS="command"
+>cvs diff -u file.php &#62; diff.txt</B
+></PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;     This will result in a file <TT
+CLASS="filename"
+>diff.txt</TT
+> in the
+     same directory than <TT
+CLASS="filename"
+>file.php</TT
+>. You don't
+     need to copy <TT
+CLASS="filename"
+>file.php</TT
+> to
+     <TT
+CLASS="filename"
+>file.new</TT
+>, because you use the original
+     version on the CVS server to create the diff.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN8446"
+>Sending the diff</A
+></H2
+><P
+>&#13;     Once you have generated <TT
+CLASS="filename"
+>diff.txt</TT
+> in one of
+     the ways mentioned above, you have to send this patch to the
+     PEAR developers mailing list. To do this, attach <TT
+CLASS="filename"
+>&#13;     diff.txt</TT
+> to a new mail message and send it to
+     <A
+HREF="mailto:pear-dev@lists.php.net"
+TARGET="_top"
+>pear-dev@lists.php.net
+     </A
+>.
+    </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+      Please do not integrate long diffs directly into the message
+      body and please do not send HTML mails. If the diff is very
+      long, it is even better to put it somewhere on the web, so we
+      can download it there.
+     </P
+></BLOCKQUOTE
+></DIV
+><P
+>&#13;     In order to make our lives easier, you should describe the
+     problems that are fixed by your patch and how we can reproduce
+     this problems.
+    </P
+><P
+>&#13;     Once you have submitted your patch, the PEAR developers will
+     have a look at it. If it really fixes the bug and does not have
+     any further disadvantages, the patch will be finally applied. If
+     you don't get any reply for a longer period of time, you can send
+     us the patch again.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="contributing.bugs.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.skeleton.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Reporting &#38; fixing bugs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="contributing.bugs.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Skeleton for creating PEAR docbook documentation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

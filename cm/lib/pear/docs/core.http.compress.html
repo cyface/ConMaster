@@ -1,0 +1,273 @@
+<HTML
+><HEAD
+><TITLE
+>Compress</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="HTTP functions"
+HREF="http.html"><LINK
+REL="PREVIOUS"
+TITLE="HTTP"
+HREF="core.http.http.html"><LINK
+REL="NEXT"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.http.http.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.mail.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.http.compress"
+>Compress</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2143"
+></A
+>Compress&nbsp;--&nbsp;HTTP compression</DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN2146"
+></A
+><H2
+>Synopsis</H2
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>require_once "HTTP/Compress.php";
+
+     HTTP_Compress::start();
+
+     /** Your output goes here */
+
+     HTTP_Compress::output();</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN2148"
+></A
+><H2
+>Description</H2
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.http.compress.start"
+></A
+><H2
+>HTTP_Compress::start</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2153"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>HTTP_Compress::start</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Start the output buffer, and make sure that implicit flush is
+     off so that data is always buffered.
+    </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.http.compress.output"
+></A
+><H2
+>HTTP_Compress::output</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2161"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>HTTP_Compress::output</B
+></CODE
+> ([boolean compress [, boolean use_etag [, boolean send_body]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Output the contents of the output buffer, compressed if
+     desired, along with any relevant headers.
+    </P
+><P
+>&#13;     The first parameter <TT
+CLASS="parameter"
+><I
+>compress</I
+></TT
+> defines if
+     gzip compression should be used. (Note: The browser of the user
+     has to support gzip also). The second parameter <TT
+CLASS="parameter"
+><I
+>&#13;     use_etag</I
+></TT
+> defines wether to generate an ETag, and
+     don't send the body if the browser has the same object cached.
+     <TT
+CLASS="parameter"
+><I
+>send_body</I
+></TT
+> determines wether to send the
+     body of the request? (Might be false for HEAD requests.)
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.http.http.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>HTTP</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="http.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PEAR Mail: Mail handling functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

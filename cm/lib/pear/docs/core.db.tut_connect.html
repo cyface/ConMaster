@@ -1,0 +1,220 @@
+<HTML
+><HEAD
+><TITLE
+>Connect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="DSN"
+HREF="core.db.tut_dsn.html"><LINK
+REL="NEXT"
+TITLE="Query"
+HREF="core.db.tut_query.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_dsn.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_query.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.tut_connect"
+>Connect</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1004"
+></A
+>Connect&nbsp;--&nbsp;Connecting and disconnecting</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN1007"
+></A
+><H2
+>Description</H2
+><P
+>&#13;     To connect to a database you have to use the function
+     <B
+CLASS="function"
+>DB::connect()</B
+>, which requires a valid
+     DSN as parameter and
+     optional a boolean value, which determines wether to use a
+     persistent connection or not. In case of  success you get a new
+     instance of the database class. It is strongly recommened to
+     check this return value with <B
+CLASS="function"
+>DB::isError()</B
+>.
+     To disconnect use the method <B
+CLASS="function"
+>disconnect()</B
+>
+     from your database class instance.
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+require_once 'DB.php';
+
+$user = 'foo';
+$pass = 'bar';
+$host = 'localhost';
+$db_name = 'clients_db';
+
+// Data Source Name: This is the universal connection string
+$dsn = "mysql://$user:$pass@$host/$db_name";
+
+// DB::connect will return a PEAR DB object on success
+// or an PEAR DB Error object on error
+
+$db = DB::connect($dsn, true);
+
+// Alternatively: $db = DB::connect($dsn);
+
+// With DB::isError you can differentiate between an error or
+// a valid connection.
+if (DB::isError($db)) {
+    die ($db-&#62;getMessage());
+}
+
+....
+// You can disconnect from the database with:
+$db-&#62;disconnect();
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.tut_dsn.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.tut_query.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DSN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Query</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

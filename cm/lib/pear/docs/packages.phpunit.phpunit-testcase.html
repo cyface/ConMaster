@@ -1,0 +1,372 @@
+<HTML
+><HEAD
+><TITLE
+>PHPUnit_TestCase</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PHPUnit"
+HREF="packages.phpunit.html"><LINK
+REL="PREVIOUS"
+TITLE="PHPUnit"
+HREF="packages.phpunit.phpunit.html"><LINK
+REL="NEXT"
+TITLE="PHPUnit_Assert"
+HREF="packages.phpunit.phpunit-assert.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="packages.phpunit.phpunit.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.phpunit.phpunit-assert.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="packages.phpunit.phpunit-testcase"
+>PHPUnit_TestCase</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6372"
+></A
+>PHPUnit_TestCase&nbsp;--&nbsp;
+   Base class for creating a test suite class
+  </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-testcase.using"
+></A
+><H2
+>Using</H2
+><P
+>&#13;   Normally you did not use this class directly. For creating a test
+   case you write a class inheriting from <B
+CLASS="classname"
+>PHPUnit_TestCase
+   </B
+> and maybe have to overwrite 
+   <A
+HREF="packages.phpunit.phpunit-testcase.html#packages.phpunit.phpunit-testcase.setup"
+>&#13;   <B
+CLASS="function"
+>setUp()</B
+></A
+> and <A
+HREF="packages.phpunit.phpunit-testcase.html#packages.phpunit.phpunit-testcase.setup"
+>&#13;   <B
+CLASS="function"
+>tearDown()</B
+></A
+>. Then you add the test functions
+   to the class.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-testcase.phpunit-testcase"
+></A
+><H2
+>PHPUnit_TestCase::PHPUnit_TestCase</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6385"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>PHPUnit_TestCase::PHPUnit_TestCase</B
+></CODE
+> ([string $name = false])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Creates a test case with the given name
+  </P
+><DIV
+CLASS="refsect2"
+><A
+NAME="package.phpunit.phpunit-testcase.phpunit-testcase.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$name</I
+></TT
+> - name of the test case, normaly
+       the name of your test class
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-testcase.setup"
+></A
+><H2
+>PHPUnit_TestCase::setUp</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6402"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>PHPUnit_TestCase::setUp</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   This function is called before the test functions will be executed.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-testcase.teardown"
+></A
+><H2
+>PHPUnit_TestCase::tearDown</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6410"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>PHPUnit_TestCase::tearDown</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   This function is called after the test functions are executed.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-testcase.testfunction"
+></A
+><H2
+>PHPUnit_TestCase::test*</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6418"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>PHPUnit_TestCase::test*</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Every function in your test class beginning with <TT
+CLASS="literal"
+>test</TT
+>
+   is handled as a test function of your test class. In this functions,
+   you have to call your function or create a situation to test.
+   Make sure that every function calls a member of the 
+   <A
+HREF="packages.phpunit.phpunit-assert.html"
+>&#13;    <B
+CLASS="function"
+>assert*()</B
+></A
+>-family.
+  </P
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-testcase.testfunction.example"
+></A
+><H3
+>Example</H3
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>function testMe() {
+     $expected = ...
+     $result = ...
+     $this-&#62;assertTrue($expected == $result);
+}</PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="packages.phpunit.phpunit.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.phpunit.phpunit-assert.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHPUnit</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="packages.phpunit.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PHPUnit_Assert</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

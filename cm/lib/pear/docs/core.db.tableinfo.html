@@ -1,0 +1,345 @@
+<HTML
+><HEAD
+><TITLE
+>DB_Result::tableInfo()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="DB_Result::free()"
+HREF="core.db.free.html"><LINK
+REL="NEXT"
+TITLE="DB_Error"
+HREF="core.db.dberror.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.free.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.dberror.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.tableinfo"
+>DB_Result::tableInfo()</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2030"
+></A
+>DB_Result::tableInfo()&nbsp;--&nbsp;returns meta data about the result set</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.db.tableinfo.desc"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2035"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>tableInfo</B
+></CODE
+> (DB_Result $result [, mode
+      $mode])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$result</I
+></TT
+> - the result object to analyse
+      </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$mode</I
+></TT
+> - depends on database implementation
+        <P
+></P
+><UL
+><LI
+><P
+>&#13;            FrontBase, MS-SQL, MySQL, PostgreSQL
+            <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>false</I
+></TT
+> (default)
+             returns this array
+             <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>[0]["table"]  table name
+[0]["name"]   field name
+[0]["type"]   field type
+[0]["len"]    field length
+[0]["flags"]  field flags</PRE
+></TD
+></TR
+></TABLE
+>
+              </P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>DB_TABLEINFO_ORDER</I
+></TT
+>
+             returns this array
+             <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>["num_fields"] number of metadata records
+[0]["table"]  table name
+[0]["name"]   field name
+[0]["type"]   field type
+[0]["len"]    field length
+[0]["flags"]  field flags
+["order"][field name]  index of field named "field name"</PRE
+></TD
+></TR
+></TABLE
+>
+             The last one is used, if you have a field name, but no index.
+             Test:  if (isset($result['meta']['myfield'])) { ...
+              </P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>DB_TABLEINFO_ORDERTABLE</I
+></TT
+>
+             returns the same as above. But additionally
+             <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>["ordertable"][table name][field name] index of field named "field name"</PRE
+></TD
+></TR
+></TABLE
+>
+             This is, because if you have fields from different
+             tables with the same field name * they override each
+             other with <TT
+CLASS="parameter"
+><I
+>DB_TABLEINFO_ORDER</I
+></TT
+>.
+              </P
+></LI
+></UL
+>
+          </P
+></LI
+><LI
+><P
+>&#13;           InterBase, Informix, mSQL, Oracle8, ODBC, Sybase - No information
+          </P
+></LI
+></UL
+>
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - the result of the dropping query
+        or <B
+CLASS="classname"
+>DB_Error</B
+> when fail
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.free.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.dberror.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DB_Result::free()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DB_Error</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

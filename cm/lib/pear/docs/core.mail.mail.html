@@ -1,0 +1,717 @@
+<HTML
+><HEAD
+><TITLE
+>Mail</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><LINK
+REL="PREVIOUS"
+TITLE="Introduction"
+HREF="core.mail.intro.html"><LINK
+REL="NEXT"
+TITLE="Mail_mime"
+HREF="core.mail.mime.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.mail.intro.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.mail.mime.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.mail.mail"
+>Mail</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2206"
+></A
+>Mail&nbsp;--&nbsp;An interface for sending EMails</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mail.backend"
+></A
+><H2
+>Multiple backends</H2
+><P
+>&#13;    <B
+CLASS="classname"
+>Mail</B
+> supports different types of backends
+    to send email. So two steps are necessary to send an email.
+    <P
+></P
+><UL
+><LI
+><P
+>Step 1</P
+><P
+>&#13;       Create a new instance of a specific <B
+CLASS="classname"
+>Mail</B
+>
+       -Backend with the <A
+HREF="core.mail.mail.html#core.mail.mail.factory"
+>&#13;       <B
+CLASS="function"
+>factory()</B
+></A
+>-method.
+      </P
+></LI
+><LI
+><P
+>Step 2</P
+><P
+>&#13;       Send the mail using <A
+HREF="core.mail.mail.html#core.mail.mail.send"
+>&#13;       <B
+CLASS="function"
+>send()</B
+></A
+>.
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    <B
+CLASS="classname"
+>Mail</B
+> supports three types of backends:
+    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>mail</I
+></TT
+></P
+><P
+>&#13;       Sends a mail using PHPs build-in <B
+CLASS="function"
+>mail()</B
+>-function.
+      </P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>sendmail</I
+></TT
+></P
+><P
+>&#13;       Sends a mail using a sendmail program.
+      </P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>smtp</I
+></TT
+></P
+><P
+>&#13;       Sends a mail directly connecting to a smtp server.       
+      </P
+></LI
+></UL
+>    
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mail.factory"
+></A
+><H2
+>Mail::Factory()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2243"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>&#38;factory</B
+></CODE
+> (string $backend [, array $param = array()])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.factory.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     creates a instance of a backend-specific mail class
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.factory.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $backend</I
+></TT
+> - the name of the backend 
+	<TT
+CLASS="parameter"
+><I
+>"mail"</I
+></TT
+>,<TT
+CLASS="parameter"
+><I
+>"smtp"</I
+></TT
+>,
+	<TT
+CLASS="parameter"
+><I
+>"sendmail"</I
+></TT
+>
+       </P
+></LI
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>array $param</I
+></TT
+> - 
+         a array of backend specific parameters. See the Notes for possible              values. This parameter is marked as optional, but at the
+         moment every implemention requires this parameter.
+        </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.factory.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - a specific Mail instance or
+	a <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>-object, if fails
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.factory.note"
+></A
+><H3
+>Notes</H3
+><P
+>&#13;     List of parameter for the backends
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mail</I
+></TT
+>
+	<P
+></P
+><UL
+><LI
+><P
+>no additional options</P
+></LI
+></UL
+>
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>sendmail</I
+></TT
+>
+        <P
+></P
+><UL
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["sendmail_path"]</I
+></TT
+> -
+	   The location of the sendmail program on the 
+	   filesystem. Default is <TT
+CLASS="parameter"
+><I
+>/usr/bin/sendmail</I
+></TT
+>
+	  </P
+></LI
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["sendmail_args"]</I
+></TT
+> -
+	   Additional parameters to pass to the sendmail
+	   program.
+	  </P
+></LI
+></UL
+>
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>smtp</I
+></TT
+>
+	<P
+></P
+><UL
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["host"]</I
+></TT
+> - The server to connect.
+	   Default is <TT
+CLASS="parameter"
+><I
+>localhost</I
+></TT
+>
+	  </P
+></LI
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["port"]</I
+></TT
+> - The port to connect.
+	   Default is <TT
+CLASS="parameter"
+><I
+>25</I
+></TT
+>
+	  </P
+></LI
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["auth"]</I
+></TT
+> - Whether or not to use
+	   SMTP authentication.
+	   Default is <TT
+CLASS="parameter"
+><I
+>false</I
+></TT
+>
+	  </P
+></LI
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["username"]</I
+></TT
+> - The username to use
+	   for SMTP authentication.
+	  </P
+></LI
+><LI
+><P
+>&#13;	   <TT
+CLASS="parameter"
+><I
+>$param["password"]</I
+></TT
+> - The password to use
+	   for SMTP authentication.
+	  </P
+></LI
+></UL
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mail.send"
+></A
+><H2
+>Mail_*::send()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2321"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>send</B
+></CODE
+> (mixed $recipients, array $headers, string $body)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.send.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Sends a mail. The <B
+CLASS="function"
+>send()</B
+>-function is
+     provided by the object returned from 
+     <A
+HREF="core.mail.mail.html#core.mail.mail.factory"
+><B
+CLASS="function"
+>factory()</B
+>
+     </A
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.send.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed $recipients</I
+></TT
+> - An array or a string with 
+	comma separated recipients. 
+       </P
+></LI
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>array $headers</I
+></TT
+> - 
+	 An associative array of headers. The header name is used as key and 
+	 the header value as value.
+       </P
+></LI
+><LI
+><P
+>&#13;         <TT
+CLASS="parameter"
+><I
+>string $body</I
+></TT
+> - 
+	 The body of the email.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mail.send.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+> or
+	a <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>-object, if fails
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mail.example"
+></A
+><H2
+>Example</H2
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+include('Mail.php');
+
+$recipients = 'joe@example.com';
+
+$headers['From']    = 'richard@phpguru.org';
+$headers['To']      = 'joe@example.com';
+$headers['Subject'] = 'Test message';
+
+$body = 'Test message';
+
+$params['sendmail_path'] = '/usr/lib/sendmail';
+
+// Create the mail object using the Mail::factory method
+$mail_object =&#38; Mail::factory('sendmail', $params);
+
+$mail_object-&#62;send($recipients, $headers, $body);
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.mail.intro.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.mail.mime.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introduction</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mail_mime</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

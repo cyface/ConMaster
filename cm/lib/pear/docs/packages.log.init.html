@@ -1,0 +1,312 @@
+<HTML
+><HEAD
+><TITLE
+>Initialization</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Logging"
+HREF="packages.log.html"><LINK
+REL="PREVIOUS"
+TITLE="Logging container"
+HREF="packages.log.container.html"><LINK
+REL="NEXT"
+TITLE="Log"
+HREF="packages.log.log.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="packages.log.container.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.log.log.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="packages.log.init"
+>Initialization</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN4508"
+></A
+>Initialization&nbsp;--&nbsp;Creating a <B
+CLASS="classname"
+>Log</B
+> object</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN4512"
+></A
+><H2
+></H2
+><P
+>&#13;        There are three possible methods to create a <B
+CLASS="classname"
+>Log</B
+>
+        object. You can create a <B
+CLASS="classname"
+>Log_</B
+> object directly
+        or call either the <A
+HREF="packages.log.log.html#packages.log.log.singleton"
+><B
+CLASS="function"
+>&#13;        &#38;singleton()</B
+></A
+> or the
+        <A
+HREF="packages.log.log.html#packages.log.log.factory"
+><B
+CLASS="function"
+>factory()</B
+>
+        </A
+> method of the <B
+CLASS="classname"
+>Log</B
+> class.
+       </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN4522"
+></A
+><P
+><B
+>Example 1. Initialization examples</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>// direct initialization of the 'file' container 
+$log = new Log_file('log.txt', 'identity text');
+
+// initialization of the 'file' container through factory() 
+$log = Log::factory('file', 'log.txt', 'identity text');
+
+// initialization of the 'file' container through singleton()
+$log = &#38;Log::singleton('file', 'log.txt', 'identity text');</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;        Directly initializing an instance of the <B
+CLASS="classname"
+>Log</B
+> is
+        probably the easiest method to understand.
+       </P
+><P
+>&#13;        The second two approaches make use of software engineering design
+        patterns (the "factory" and "singleton" metaphors).
+       </P
+><P
+>&#13;        Specifically, calling the <B
+CLASS="function"
+>factory()</B
+> method will
+        create a new instance of one of the <B
+CLASS="classname"
+>Log_</B
+>
+        subclasses. The type of subclass that is returned is specified by the
+        first parameter (<TT
+CLASS="parameter"
+><I
+>log_type</I
+></TT
+>) passed to the
+        <B
+CLASS="function"
+>factory()</B
+> method. This approach effectively hides
+        the subclasses while still allowing the programmer to request a
+        concrete instance of a certain subclass. This is useful in cases where
+        the subclass type needs to be chosen at runtime.
+       </P
+><P
+>&#13;        The <B
+CLASS="function"
+>factory()</B
+> method must always be called using
+        PHP's static method notation - <TT
+CLASS="literal"
+>Log::factory</TT
+>.
+       </P
+><P
+> 
+        The <B
+CLASS="function"
+>singleton()</B
+> method is identical to the
+        <B
+CLASS="function"
+>factory()</B
+> method except that it guarantees that
+        only a single instance of the requested <B
+CLASS="classname"
+>Log_</B
+>
+        subclass exists. The <B
+CLASS="function"
+>singleton()</B
+> method bases each
+        instance's uniqueness on the parameters used in the instance's
+        creation. In other words, only one instance with a given set of
+        creation parameters will ever be returned by the
+        <B
+CLASS="function"
+>singleton()</B
+> method. The second invocation will
+        simply return a reference to the existing instance.
+       </P
+><P
+>&#13;        The <B
+CLASS="function"
+>singleton()</B
+> method must also be called
+        statically.  In addition, it requires PHP's reference notation -
+        <TT
+CLASS="literal"
+>&#38;Log::singleton</TT
+>.
+       </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="packages.log.container.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.log.log.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Logging container</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="packages.log.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Log</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

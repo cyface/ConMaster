@@ -1,0 +1,1176 @@
+<HTML
+><HEAD
+><TITLE
+>Mail_mime</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><LINK
+REL="PREVIOUS"
+TITLE="Mail"
+HREF="core.mail.mail.html"><LINK
+REL="NEXT"
+TITLE="Mail_mimePart"
+HREF="core.mail.mimepart.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.mail.mail.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.mail.mimepart.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.mail.mime"
+>Mail_mime</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2364"
+></A
+>Mail_mime&nbsp;--&nbsp;create multipart messages</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.desc"
+></A
+><H2
+>Description</H2
+><P
+>&#13;    A class to enable easy creation of complex multipart emails. 
+    If what you're after is a simple API for creating such emails, 
+    then this class will probably suffice. If on the other hand
+    you're after a higher degree of control over the email, 
+    then you might want to look at using 
+    <A
+HREF="core.mail.mimepart.html"
+><B
+CLASS="classname"
+>mimePart</B
+>
+    </A
+> 
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.mail_mime"
+></A
+><H2
+>Mail_mime::Mail_mime()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2374"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>Mail_mime <B
+CLASS="function"
+>Mail_mime</B
+></CODE
+> ([string $crlf = "\r\n"])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.mail_mime.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     returns a new instance of <B
+CLASS="classname"
+>Mail_mime</B
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.mail_mime.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $crlf</I
+></TT
+> - the type of
+        line end to use. Default is <TT
+CLASS="parameter"
+><I
+>CRLF</I
+></TT
+>.        
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.mail_mime.note"
+></A
+><H3
+>Notes</H3
+><P
+>&#13;     Normaly, it isn't necessary to set the 
+     <TT
+CLASS="parameter"
+><I
+>$crlf</I
+></TT
+>-Parameter.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.settxtbody"
+></A
+><H2
+>Mail_mime::setTxtBody()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2399"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>setTxtBody</B
+></CODE
+> (string $data [, boolean $isfile = false])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.settxtbody.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Sets the plain text part of the email.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.settxtbody.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $data</I
+></TT
+> - The text to set
+        or, if <TT
+CLASS="parameter"
+><I
+>$isfile</I
+></TT
+> is <TT
+CLASS="parameter"
+><I
+>&#13;        true</I
+></TT
+> a valid filename.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $isfile</I
+></TT
+> - If true, the content of 
+        given file <TT
+CLASS="parameter"
+><I
+>$data</I
+></TT
+> is used as email text.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.settxtbody.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - 
+        <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+> on success or a
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.sethtmlbody"
+></A
+><H2
+>Mail_mime::setHTMLBody()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2435"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>setHTMLBody</B
+></CODE
+> (string $data [, boolean $isfile = false])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.sethtmlbody.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Sets the html part of the email.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.sethtmlbody.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $data</I
+></TT
+> - The text to set
+        or, if <TT
+CLASS="parameter"
+><I
+>$isfile</I
+></TT
+> is <TT
+CLASS="parameter"
+><I
+>&#13;        true</I
+></TT
+> a valid filename.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $isfile</I
+></TT
+> - If true, the content of 
+        given file <TT
+CLASS="parameter"
+><I
+>$data</I
+></TT
+> is used as email text.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.sethtmlbody.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - 
+        <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+> on success or a
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.addhtmlimage"
+></A
+><H2
+>Mail_mime::addHTMLImage()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2471"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>addHTMLImage</B
+></CODE
+> (string $data, string [$c_type = 'application/octet-stream'] [, string $name = '' [, boolean $isfile = true]])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addhtmlimage.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     If sending an HTML email with embedded images, use this function to add the
+     image.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addhtmlimage.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $data</I
+></TT
+> - The image file name or the image
+        data itself
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $c_type</I
+></TT
+> - The content type of the image
+        or file. Default is <TT
+CLASS="parameter"
+><I
+>application/octet-stream</I
+></TT
+>.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $name</I
+></TT
+> - The filename of the image. Only
+        used, if <TT
+CLASS="parameter"
+><I
+>$file</I
+></TT
+> contains the image data.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $isfile</I
+></TT
+> - Whether <TT
+CLASS="parameter"
+><I
+>$file</I
+></TT
+> 
+        is a filename or not. Default is <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+>.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addhtmlimage.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - 
+        <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+> on success or a
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.addattachment"
+></A
+><H2
+>Mail_mime::addAttachment()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2520"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>addAttachment</B
+></CODE
+> (string $data, string [$c_type = 'application/octet-stream'], string [$name = ''], boolean [$isfile = true], string [$encoding = 'base64'])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addattachment.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Adds an attachment to the email.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addattachment.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $data</I
+></TT
+> - The image file name or the image
+        data itself
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $c_type</I
+></TT
+> - The content type of the image
+        or file. Default is <TT
+CLASS="parameter"
+><I
+>application/octet-stream</I
+></TT
+>.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $name</I
+></TT
+> - The filename of the image. Only
+        used, if <TT
+CLASS="parameter"
+><I
+>$file</I
+></TT
+> contains the image data.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $isfile</I
+></TT
+> - Whether <TT
+CLASS="parameter"
+><I
+>$file</I
+></TT
+> 
+        is a filename or not. Default is <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+>.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $encoding</I
+></TT
+> - Type of transfer encoding to use 
+        for the file data. Defaults is <TT
+CLASS="parameter"
+><I
+>base64</I
+></TT
+>. For text based files 
+        (eg. scripts/html etc.) this could be given as quoted-printable. 
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.addattachment.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - 
+        <TT
+CLASS="parameter"
+><I
+>true</I
+></TT
+> on success or a
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.get"
+></A
+><H2
+>Mail_mime::&#38;get()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2576"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>&#38;get</B
+></CODE
+> (array [$param = null])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.get.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     This function should be called once you have added the 
+     text/html/images/attachments. It builds the email and returns it. 
+     It does not send it. To send what this function returns (in conjunction 
+     with the headers() function) you would need to use the 
+     <A
+HREF="core.mail.mail.html#core.mail.mail.send"
+><B
+CLASS="function"
+>Mail_*::send()</B
+></A
+>
+     -function
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.get.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>array $param</I
+></TT
+> - An associative array of parameters. 
+        These parameters affect the way the email is built.
+        <P
+></P
+><UL
+><LI
+><P
+>&#13;           <TT
+CLASS="parameter"
+><I
+>$param["text_encoding"]</I
+></TT
+> - Type of encoding to 
+           use for the plain text part of the email. Default is 7bit. 
+          </P
+></LI
+><LI
+><P
+>&#13;           <TT
+CLASS="parameter"
+><I
+>$param["html_encoding"]</I
+></TT
+> - Type of encoding for 
+           the HTML part of the email. Default is quoted-printable. 
+          </P
+></LI
+><LI
+><P
+>&#13;           <TT
+CLASS="parameter"
+><I
+>$param["7bit_wrap"]</I
+></TT
+> - Number of characters after
+           which text is wrapped. SMTP stipulates maximum line length of 1000 characters
+           including CRLF. Default is 998 (CRLF is appended to make up to 1000). 
+          </P
+></LI
+><LI
+><P
+>&#13;           <TT
+CLASS="parameter"
+><I
+>$param["text_charset"]</I
+></TT
+> - The character set
+           to use for the plain text part of the email. Default is iso-8859-1. 
+          </P
+></LI
+><LI
+><P
+>&#13;           <TT
+CLASS="parameter"
+><I
+>$param["html_charset"]</I
+></TT
+> - The character set
+           to use for the HTML part of the email. Default is iso-8859-1.            
+          </P
+></LI
+></UL
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.get.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string</I
+></TT
+> - The MIME content for the 
+        email body.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.headers"
+></A
+><H2
+>Mail_mime::&#38;headers()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2620"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>&#38;headers</B
+></CODE
+> ([array $headerEx = null])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.headers.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Returns an array with the headers needed to prepend to the email
+     (MIME-Version and Content-Type). Please note that the function
+    <B
+CLASS="function"
+>get()</B
+> has to be called before calling
+    <B
+CLASS="function"
+>headers()</B
+>.</P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.headers.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>array $headerEx</I
+></TT
+> - Additional headers, the
+        format of the argument is <TT
+CLASS="parameter"
+><I
+>$array['header-name']</I
+></TT
+> = 
+        <TT
+CLASS="parameter"
+><I
+>'header-value'</I
+></TT
+>
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.mime.headers.return"
+></A
+><H3
+>Return value</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>array</I
+></TT
+> - An associative array with the mime headers 
+        and the additional headers. The return value can directly passed to
+        the second parameter of 
+        <A
+HREF="core.mail.mail.html#core.mail.mail.send"
+><B
+CLASS="function"
+>Mail_*::send()</B
+></A
+>.
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.mime.example"
+></A
+><H2
+>Example</H2
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+include('Mail.php');
+include('Mail/mime.php');
+
+$text = 'Text version of email';
+$html = '&#60;html&#62;&#60;body&#62;HTML version of email&#60;/body&#62;&#60;/html&#62;';
+$file = '/home/richard/example.php';
+$crlf = "\r\n";
+$hdrs = array(
+              'From'    =&#62; 'you@yourdomain.com',
+              'Subject' =&#62; 'Test mime message'
+              );
+
+$mime = new Mail_mime($crlf);
+
+$mime-&#62;setTXTBody($text);
+$mime-&#62;setHTMLBody($html);
+$mime-&#62;addAttachment($file, 'text/plain');
+
+$body = $mime-&#62;get();
+$hdrs = $mime-&#62;headers($hdrs);
+
+$mail =&#38; Mail::factory('mail');
+$mail-&#62;send('postmaster@localhost', $hdrs, $body);
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.mail.mail.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.mail.mimepart.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mail</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Mail_mimePart</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

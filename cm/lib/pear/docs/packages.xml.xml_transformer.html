@@ -1,0 +1,692 @@
+<HTML
+><HEAD
+><TITLE
+>XML_Transformer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="XML"
+HREF="packages.xml.html"><LINK
+REL="PREVIOUS"
+TITLE="XML_sql2xml"
+HREF="packages.xml.xml_sql2xml.html"><LINK
+REL="NEXT"
+TITLE="XML_Tree"
+HREF="packages.xml.xml_tree.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="packages.xml.xml_sql2xml.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.xml.xml_tree.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="packages.XML.XML_Transformer"
+><B
+CLASS="classname"
+>XML_Transformer</B
+></A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6814"
+></A
+><B
+CLASS="classname"
+>XML_Transformer</B
+>&nbsp;--&nbsp;
+   XML Transformations in PHP.
+  </DIV
+><DIV
+CLASS="refsynopsisdiv"
+><A
+NAME="AEN6818"
+></A
+><H2
+>Synopsis</H2
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="synopsis"
+>require_once 'XML/Transformer.php';</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6820"
+></A
+><H2
+>Introduction</H2
+><P
+>&#13;   With the XML Transformer class one can easily bind PHP
+   functionality to XML tags, thus transforming the input XML tree
+   into an output XML tree without the need for XSLT. Single XML
+   elements can be overloaded with PHP functions, methods and static
+   method calls, XML namespaces can be registered to be handled by
+   PHP classes.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6823"
+></A
+><H2
+>XML_Transformer::XML_Transformer</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6825"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::XML_Transformer</B
+></CODE
+> (array parameters)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Constructor of the XML_Transformer class. It can be passed an 
+   associative array that may have <TT
+CLASS="parameter"
+><I
+>caseFolding</I
+></TT
+>, 
+   <TT
+CLASS="parameter"
+><I
+>overloadedElements</I
+></TT
+>, 
+   <TT
+CLASS="parameter"
+><I
+>overloadedNamespaces</I
+></TT
+> and 
+   <TT
+CLASS="parameter"
+><I
+>startup</I
+></TT
+> as its keys.
+  </P
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>caseFolding</I
+></TT
+> controls the case-folding 
+   behaviour of the used XML parser.
+  </P
+><P
+>&#13;   With <TT
+CLASS="parameter"
+><I
+>overloadedElements</I
+></TT
+> and 
+   <TT
+CLASS="parameter"
+><I
+>overloadedNamespaces</I
+></TT
+> sets of predefined, 
+   overloaded elements and namespaces can be passed to the Transformer 
+   object.
+  </P
+><P
+>&#13;   <TT
+CLASS="parameter"
+><I
+>startup</I
+></TT
+> controls whether (true) or not 
+   (false) the output buffering, and thus the transformation, should 
+   be started upon object creation.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6843"
+></A
+><H2
+>XML_Transformer::overloadElement</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6845"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::overloadElement</B
+></CODE
+> (string element, string startHandler, string endHandler)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Overloads an XML element and binds its opening and closing tags to a 
+   PHP callback. A PHP callback can be one of the following:
+  </P
+><P
+>&#13;   <P
+></P
+><UL
+><LI
+><P
+>A PHP Function.</P
+></LI
+><LI
+><P
+>A PHP Method on an object.</P
+></LI
+><LI
+><P
+>A static PHP Method.</P
+></LI
+></UL
+>
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6864"
+></A
+><H2
+>XML_Transformer::overloadNamespace</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6866"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::overloadNamespace</B
+></CODE
+> (string namespacePrefix, object object)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Overloads an XML Namespace and binds all its elements to a PHP 
+   object, that must provide <B
+CLASS="function"
+>startElement($element, 
+   $attributes)()</B
+> and <B
+CLASS="function"
+>endElement($element, 
+   $cdata)()</B
+> methods.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6877"
+></A
+><H2
+>XML_Transformer::isOverloadedElement</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6879"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>XML_Transformer::isOverloadedElement</B
+></CODE
+> (string element)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Returns true if the given element is overloaded, false otherwise.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6886"
+></A
+><H2
+>XML_Transformer::isOverloadedNamespace</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6888"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>XML_Transformer::isOverloadedNamespace</B
+></CODE
+> (string namespacePrefix)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Returns true if the given namespace is overloaded, false otherwise.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6895"
+></A
+><H2
+>XML_Transformer::unOverloadElement</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6897"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>XML_Transformer::unOverloadElement</B
+></CODE
+> (string element)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Reverts overloading of the given element.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6904"
+></A
+><H2
+>XML_Transformer::unOverloadNamespace</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6906"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>XML_Transformer::unOverloadNamespace</B
+></CODE
+> (string namespacePrefix)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Reverts overloading of the given namespace.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6913"
+></A
+><H2
+>XML_Transformer::start</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6915"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::start</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Starts the transformation, if it has not yet been started, for 
+   instance by the constructor.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6921"
+></A
+><H2
+>XML_Transformer::transform</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6923"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>XML_Transformer::transform</B
+></CODE
+> (string xml)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Transforms a given XML string.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6930"
+></A
+><H2
+>XML_Transformer::setCaseFolding</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6932"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::setCaseFolding</B
+></CODE
+> (boolean caseFolding, integer caseFoldingTo)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Sets the XML parser's case-folding option.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6941"
+></A
+><H2
+>XML_Transformer::setRecursiveOperation</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6943"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>XML_Transformer::setRecursiveOperation</B
+></CODE
+> (boolean recursiveOperation)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Enables or disables the recursive operation.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6950"
+></A
+><H2
+>XML_Transformer::attributesToString</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6952"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>XML_Transformer::attributesToString</B
+></CODE
+> (array attributes)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Returns string representation of attributes array.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN6959"
+></A
+><H2
+>XML_Transformer::canonicalName</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6961"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>string <B
+CLASS="function"
+>XML_Transformer::canonicalName</B
+></CODE
+> (string name)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;   Returns the canonical name of a given element.
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="packages.xml.xml_sql2xml.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.xml.xml_tree.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><B
+CLASS="classname"
+>XML_sql2xml</B
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="packages.xml.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><B
+CLASS="classname"
+>XML_Tree</B
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

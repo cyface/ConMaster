@@ -1,0 +1,641 @@
+<HTML
+><HEAD
+><TITLE
+>Console_Getopt</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR Console"
+HREF="core.console.html"><LINK
+REL="PREVIOUS"
+TITLE="PEAR Console"
+HREF="core.console.html"><LINK
+REL="NEXT"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.console.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.console.getopt"
+>Console_Getopt</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN862"
+></A
+>Console_Getopt&nbsp;--&nbsp;Command-line options parsing class</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.console.getopt.readphpargv"
+></A
+><H2
+>Console_Getopt::readPHPArgv</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN867"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>readPHPArgv</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     Safely read the $argv PHP array across different PHP configurations.
+     Will take care on register_globals and register_argc_argv ini directives
+    </P
+><P
+>&#13;     Returns
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - array or
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+> if not registered
+       </P
+></LI
+></UL
+>
+    </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN879"
+></A
+><P
+><B
+>Example 1. Using</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$con  = new Console_Getopt;
+$args = $con-&#62;readPHPArgv();
+array_shift($args);
+$options = $con-&#62;getopt( $args, $shortopt);</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.console.getopt.getopt"
+></A
+><H2
+>Console_Getopt::getopt</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN884"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>getopt</B
+></CODE
+> (string $args, string $shortoptions [, array
+       $longoptions])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;     parses the command-line options
+    </P
+><P
+>&#13;     Parameter
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$args</I
+></TT
+> - an array of command-line arguments
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$shortoptions</I
+></TT
+> - specifies the list of allowed
+        short options. See the <A
+HREF="core.console.getopt.html#core.console.getopt.getopt.options"
+>"Options" section</A
+>.
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$longoptions</I
+></TT
+> - specifies the list of allowed
+        long options. Default is <TT
+CLASS="parameter"
+><I
+>NULL</I
+></TT
+>. See the <A
+HREF="core.console.getopt.html#core.console.getopt.getopt.options"
+>"Options" section</A
+>.
+       </P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Returns
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - two-element array containing the list of
+        parsed options and the non-option arguments or
+        <A
+HREF="class.pear-error.html"
+><B
+CLASS="classname"
+>PEAR_Error</B
+></A
+>
+       </P
+></LI
+></UL
+>
+    </P
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.console.getopt.getopt.options"
+></A
+><H3
+>Options</H3
+><P
+>&#13;      <B
+CLASS="function"
+>Getopt()</B
+> support two types of options: <TT
+CLASS="parameter"
+><I
+>&#13;      short options</I
+></TT
+> and <TT
+CLASS="parameter"
+><I
+>long options</I
+></TT
+>
+      <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN922"
+></A
+><P
+><B
+>Example 2. Calling a script with short and long options</B
+></P
+><P
+>&#13;        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+># Using short options
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-q -l en -o</I
+></TT
+>
+# Using long options instead
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>--quite --lang=en --option</I
+></TT
+>
+# Mixing both
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-q --lang=en -o</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+        You have to define which options you want to support. The second
+        argument of <B
+CLASS="function"
+>getopt()</B
+> requires a string containing
+        all supported chars. For the example above this would be at least:
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$shortoptions = "qlo";</PRE
+></TD
+></TR
+></TABLE
+>
+        The order of the chars isn't important. Often you have to define options
+        with (optional) parameters. To express, that a option requires a
+        parameter, you have to add a colon. If the parameter is optional add
+        a double colon, ie:
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$shortoptions = "ql:o::";</PRE
+></TD
+></TR
+></TABLE
+>
+        this means the following script calls are permitted, ie.
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+><B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+></I
+></TT
+>
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-q</I
+></TT
+>
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-q -l en </I
+></TT
+>
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-o text </I
+></TT
+>
+<B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-o</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+        not permitted would be:
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+><B
+CLASS="command"
+>myphpscript</B
+> <TT
+CLASS="parameter"
+><I
+>-l</I
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+        The <TT
+CLASS="parameter"
+><I
+>-l</I
+></TT
+> option requires a
+        parameter, if the option is used.
+       </P
+><P
+>&#13;        The long options work equal, but you have to define them in
+        an array
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$longoptions = array("quite", "lang", "option");</PRE
+></TD
+></TR
+></TABLE
+>
+        For defining option parameters, use <TT
+CLASS="parameter"
+><I
+>'='</I
+></TT
+> and
+        <TT
+CLASS="parameter"
+><I
+>'=='</I
+></TT
+> like the colon in short options.
+        <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$longoptions = array("quite", "lang=", "option==");</PRE
+></TD
+></TR
+></TABLE
+>
+       </P
+></DIV
+></TD
+></TR
+></TABLE
+>
+     </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.console.getopt.getopt.return"
+></A
+><H3
+>The returned array</H3
+><P
+>&#13;      The return value is an array of two elements: the list of parsed
+      options and the list of non-option command-line arguments. Each entry in
+      the list of parsed options is a pair of elements - the first one
+      specifies the option, and the second one specifies the option argument,
+      if there was one, else the value is <TT
+CLASS="parameter"
+><I
+>NULL</I
+></TT
+>.
+     </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.console.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PEAR Console</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.console.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PEAR DB: a unified API for accessing SQL-databases</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

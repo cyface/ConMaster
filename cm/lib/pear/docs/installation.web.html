@@ -1,0 +1,326 @@
+<HTML
+><HEAD
+><TITLE
+>Web installer</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="PREVIOUS"
+TITLE="Getting the PEAR package manager"
+HREF="installation.getting.html"><LINK
+REL="NEXT"
+TITLE="CVS installer"
+HREF="installation.cvs.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="installation.getting.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="installation.cvs.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="installation.web"
+>Web installer</A
+></H1
+><P
+>&#13;    <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+><A
+NAME="installation.web.prerequesite"
+></A
+>Prerequesites</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;      The following description requires the latest version of the
+      <A
+HREF="installation.getting.html"
+>PEAR package manager</A
+>
+      to be installed.
+     </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+   </P
+><P
+>&#13;    The web installer is the easiest way to install PEAR packages on
+    your system: It connects to the PEAR package server via a simple
+    HTTP connection, loads the package on your system and installs
+    it in the desired location.
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+     We do not sell your IP adress, your hostname or something else
+     we can determine, while you are downloading a package from the
+     PEAR server, to any bad guy, who want's to make money with your
+     personal information.
+    </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN169"
+>Fully-automatic installation</A
+></H2
+><P
+>&#13;     Using the web installer is pretty straightforward and easy to
+     use. Simply run the following line on your shell:
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ pear install http://pear.php.net/get/&#60;package&#62;
+      </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     &#60;package&#62; has to be replaced with the name of the package
+     you want to install (e.g. HTTP_Upload). To get a list of the
+     available packages, you can point your browser to the <A
+HREF="      http://pear.php.net/packages.php"
+TARGET="_top"
+>PEAR package browser</A
+> or
+     you can run:
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ pear list-remote-packages
+      </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This command returns a list of all packages that are available in
+     PEAR.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN181"
+>Semi-automatic installation</A
+></H2
+><P
+>&#13;     If you have downloaded a package release from <A
+HREF="      http://pear.php.net/"
+TARGET="_top"
+>pear.php.net</A
+> as a gzipped tar
+     archive, you can also install it locally. To do this, run the
+     following line on your shell:
+    </P
+><P
+>&#13;     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ pear install &#60;file&#62;.tgz
+      </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     This command will automatically install the package and does not
+     require an online connection. <TT
+CLASS="filename"
+>&#60;file&#62;.tgz</TT
+>
+     has to be replaced with the name of the downloaded
+     file.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="installation.getting.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="installation.cvs.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Getting the PEAR package manager</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="installation.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>CVS installer</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

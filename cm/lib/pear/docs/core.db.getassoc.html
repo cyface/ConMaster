@@ -1,0 +1,395 @@
+<HTML
+><HEAD
+><TITLE
+>DB::getAssoc()</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="DB::getCol()"
+HREF="core.db.getcol.html"><LINK
+REL="NEXT"
+TITLE="DB::getAll()"
+HREF="core.db.getall.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.getcol.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.getall.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.getassoc"
+>DB::getAssoc()</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN1682"
+></A
+>DB::getAssoc()&nbsp;--&nbsp;
+     Fetch the result set as an
+     associative array using the first column as the key.
+    </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.db.getassoc.desc"
+></A
+><H2
+>Description</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN1687"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>&#38;getAssoc</B
+></CODE
+> (string $query [, boolean
+        $force_array [, array $params]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Fetch the entire result set of a query and return it as an
+    associative array using the first column as the key.
+
+    If the result set contains more than two columns, the value
+    will be an array of the values from column 2-n.  If the result
+    set contains only two columns, the returned value will be a
+    scalar with the value of the second column (unless forced to an
+    array with the $force_array parameter).  A DB error code is
+    returned on errors.  If the result set contains fewer than two
+    columns, a <TT
+CLASS="parameter"
+><I
+>DB_ERROR_TRUNCATED</I
+></TT
+> error is returned.
+   </P
+><P
+>&#13;    A using example:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1702"
+></A
+><P
+><B
+>Example 1. "mytable"</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>ID  TEXT     DATE
+----------------------
+1   'one'    944679408
+2   'two'    944679408
+3   'three'  944679408</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    Then the call getAssoc('SELECT id,text FROM mytable') returns:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1705"
+></A
+><P
+><B
+>Example 2. returned array - version 1</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>array(
+   '1' =&#62; 'one',
+   '2' =&#62; 'two',
+   '3' =&#62; 'three',
+     )</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+    ...while the call getAssoc('SELECT id,text,date FROM mytable') returns:
+    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN1708"
+></A
+><P
+><B
+>Example 3. returned array - version 2</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>array(
+   '1' =&#62; array('one', '944679408'),
+   '2' =&#62; array('two', '944679408'),
+   '3' =&#62; array('three', '944679408')
+     )</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$query</I
+></TT
+> - the SQL query
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$force_array</I
+></TT
+> - used only when the query returns
+       exactly two columns.  If true, the values of the returned array
+       will be one-element arrays instead of scalars.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$params</I
+></TT
+> - if supplied, prepare/execute will be
+        used with this array as execute parameters
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>array</I
+></TT
+> - associative array with results from the
+        query.
+      </P
+></LI
+></UL
+>
+   </P
+><DIV
+CLASS="note"
+><BLOCKQUOTE
+CLASS="note"
+><P
+><B
+>Note: </B
+>
+    Keep in mind that database functions in PHP usually return string
+    values for results regardless of the database's internal type.
+    </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.getcol.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.getall.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>DB::getCol()</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DB::getAll()</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

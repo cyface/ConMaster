@@ -1,0 +1,328 @@
+<HTML
+><HEAD
+><TITLE
+>&#13;    Contributing patches
+   </TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="FAQ - Frequently Asked Questions"
+HREF="faq.html"><LINK
+REL="PREVIOUS"
+TITLE="
+    How to become a PEAR contributor and/or how to get CVS access to
+    PEAR?
+   "
+HREF="faq.contributor.html"><LINK
+REL="NEXT"
+TITLE="
+    I want to contribute, in what areas could I do it?
+   "
+HREF="faq.contributing-where.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="faq.contributor.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. FAQ - Frequently Asked Questions</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="faq.contributing-where.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="faq.patches"
+>Contributing patches</A
+></H1
+><P
+>&#13;    The best possibility to contribute patches is to send them to
+    the <A
+HREF="pear-dev@lists.php.net"
+TARGET="_top"
+>PEAR developers list</A
+>.
+   </P
+><P
+>&#13;    Make sure your patch is based on a current CVS snapshot. Don't
+    send the complete file(s). Use diff or the diff command of CVS
+    and attach the output of diff to the mail.
+   </P
+><P
+>&#13;    Another possibility is to send the patches directly to the
+    author(s) of the class. But sometimes the author isn't the
+    maintainer anymore, on vacation or has no access to CVS at the
+    moment. So better use the mailinglist.
+   </P
+><P
+>&#13;    Recommend way for generating patches:
+   </P
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ cd /cvs/php.net/pear/Net_Ping
+        </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>       
+      </P
+></LI
+><LI
+><P
+>&#13;       Retrieve the latest version 
+       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ cvs update
+        </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       Make the modifications you want 
+       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ vi Ping.php
+        </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       Check if there have been no modifications while you was
+       modifing the file. If there were, re-adapt your patch to this
+       last release. 
+       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ cvs update
+        </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       Generate the patch against the latest version from CVS
+       <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="screen"
+><TT
+CLASS="userinput"
+><B
+>&#13;$ cvs diff -u Ping.php &#62; ping_diff.txt
+        </B
+></TT
+></PRE
+></TD
+></TR
+></TABLE
+>
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Note for Outlook Express users:
+   </P
+><P
+>&#13;    The mailing list software accepts only attachments of the content
+    type "text/plain". OE creates the content type of a attachment by
+    checking the file ending. So make sure that the diff output, if
+    stored in a file, the file has an ending, which is assigned to a
+    program like Notepad (plain-text editors). So better rename your
+    diff file to <TT
+CLASS="filename"
+>file-diff.txt</TT
+> before attaching
+    it.
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="faq.contributor.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="faq.contributing-where.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>How to become a PEAR contributor and/or how to get CVS access to
+    PEAR?</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="faq.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>I want to contribute, in what areas could I do it?</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

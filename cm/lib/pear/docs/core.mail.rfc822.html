@@ -1,0 +1,444 @@
+<HTML
+><HEAD
+><TITLE
+>Mail_RFC822</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR Mail: Mail handling functions"
+HREF="core.mail.html"><LINK
+REL="PREVIOUS"
+TITLE="Mail_mimeDecode"
+HREF="core.mail.mimedecode.html"><LINK
+REL="NEXT"
+TITLE="Networking functions"
+HREF="core.networking.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.mail.mimedecode.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.networking.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.mail.rfc822"
+>Mail_RFC822</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN2984"
+></A
+>Mail_RFC822&nbsp;--&nbsp;Provides RFC822 compliant email address parsing</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.rfc822.desc"
+></A
+><H2
+>Description</H2
+><P
+>&#13;    This class performs email address checking according to the RFC822 
+    specification.
+    Note, that the class only checks for a proper format of the indicated
+    email addresses. This means, it is not guaranted that the email adress
+    itself is valid or exists.
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.rfc822.mail_rfc822"
+></A
+><H2
+>Mail_RFC822::Mail_RFC822()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN2992"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>Mail_RFC822 <B
+CLASS="function"
+>Mail_RFC822</B
+></CODE
+> ([string $address = '', string [$defaultDomain = 'localhost'] [, boolean $nestGroups = false [, boolean $validate = false]]])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.rfc822.mail_rfc822.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Set up the object. The address must either be set here or when
+     calling <A
+HREF="core.mail.rfc822.html"
+><B
+CLASS="function"
+>parseAddressList
+     ()</B
+></A
+>. One or the other.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.rfc822.mail_rfc822.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $address</I
+></TT
+> - 
+        The address(es) to validate 
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $defaultDomain</I
+></TT
+> - 
+        The default domain to use in case of absence in the
+        given email address. Deault is <TT
+CLASS="parameter"
+><I
+>'localhost'
+        </I
+></TT
+>
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $nestGroups</I
+></TT
+> - 
+         Whether to return the structure with groups nested for easier viewing.         
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $validate</I
+></TT
+> - 
+        Whether to validate atoms. Turn this off if you need to run addresses 
+        through before encoding the personal names, for instance.        
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.rfc822.parseaddresslist"
+></A
+><H2
+>Mail_RFC822::parseaddresslist()</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3032"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>array <B
+CLASS="function"
+>parseAddressList</B
+></CODE
+> ([string $address = '', string [$defaultDomain = 'localhost'] [, boolean $nestGroups = false [, boolean $validate = false]]])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.rfc822.parseaddresslist.description"
+></A
+><H3
+>Description</H3
+><P
+>&#13;     Extract the given addresses into there parts.
+    </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="core.mail.rfc822.parseaddresslist.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;     <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $address</I
+></TT
+> - 
+        The address(es) to validate 
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>string $defaultDomain</I
+></TT
+> - 
+        The default domain to use in case of absence in the
+        given email address. Deault is <TT
+CLASS="parameter"
+><I
+>'localhost'
+        </I
+></TT
+>
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $nestGroups</I
+></TT
+> - 
+         Whether to return the structure with groups nested for easier viewing.         
+       </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean $validate</I
+></TT
+> - 
+        Whether to validate atoms. Turn this off if you need to run addresses 
+        through before encoding the personal names, for instance.        
+       </P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.mail.rfc822.example"
+></A
+><H2
+>Example</H2
+><P
+>&#13;    This example instanciates an object, calls the validation method 
+    <B
+CLASS="function"
+>parseAddressList()</B
+> and then prints the results:     
+   </P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+$address = 'My group: "Richard Heyes" &#60;richard@localhost&#62;;, ted@phpguru.org (A comment)';
+$rfc822  = new Mail_RFC822($address, 'phpguru.org', TRUE);
+
+$addresses = $rfc822-&#62;parseAddressList();
+print_r($addresses);
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;    This example produces the same results as above except that it 
+    calls the <B
+CLASS="function"
+>parseAddressList()</B
+> method statically:    
+   </P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>&#60;?php
+$address = 'My group: "Richard Heyes" &#60;richard@localhost&#62;;, ted@phpguru.org (A comment)';
+
+$addresses = Mail_RFC822::parseAddressList($address, 'phpguru.org', TRUE);
+print_r($addresses);
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.mail.mimedecode.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.networking.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Mail_mimeDecode</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.mail.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Networking functions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,1319 @@
+<HTML
+><HEAD
+><TITLE
+>Net_Socket</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Networking functions"
+HREF="core.networking.html"><LINK
+REL="PREVIOUS"
+TITLE="Networking functions"
+HREF="core.networking.html"><LINK
+REL="NEXT"
+TITLE="PEAR System"
+HREF="core.system.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.networking.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.system.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.networking.Net_Socket"
+><B
+CLASS="classname"
+>Net_Socket</B
+></A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN3082"
+></A
+><B
+CLASS="classname"
+>Net_Socket</B
+>&nbsp;--&nbsp;
+    Generalized Socket class
+   </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.desc"
+></A
+><H2
+>Description</H2
+><P
+>&#13;    <B
+CLASS="classname"
+>Socket</B
+> enables comfortable handling
+    Socket connections.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3090"
+></A
+><P
+><B
+>Example 1. Using Socket</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$socket = new Net_Socket() ;
+// open connection
+$socket-&#62;connect("http://www.example.com", 80, true, 30);
+// Send data including linebreak
+$socket-&#62;writeLine("String with data");
+// receive data until linebreak
+$result = $socket-&#62;readLine();
+// receive a number of data
+$result = $socket-&#62;read(512);
+// close connection
+$socket-&#62;disconnect();</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.connect"
+></A
+><H2
+>Net_Socket::connect</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3095"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::connect</B
+></CODE
+> (string $addr, integer $port, boolean [$persistent], integer [$timeout])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Connect to the specified port. If called when the socket is
+    already connected, it disconnects and connects again.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$addr</I
+></TT
+> - IP address or host name
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$port</I
+></TT
+> - TCP port number
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$persistent</I
+></TT
+> - whether the connection is
+       persistent (kept open between requests by the web server).
+       Default is <TT
+CLASS="parameter"
+><I
+>false</I
+></TT
+>, no persistent
+       connection
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$timeout</I
+></TT
+> - how long to wait for data
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - true on success or a PEAR_Error
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.disconnect"
+></A
+><H2
+>Net_Socket::disconnect</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3132"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::disconnect</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Disconnects from the peer, closes the socket.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - true on success or a PEAR_Error otherwise
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.isBlocking"
+></A
+><H2
+>Net_Socket::isBlocking</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3145"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>Net_Socket::isBlocking</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Find out if the socket is in
+    <A
+HREF="core.networking.net_socket.html#core.networking.Net_Socket.setBlocking"
+>blocking
+    mode</A
+>.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean</I
+></TT
+> - the current blocking mode
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.setBlocking"
+></A
+><H2
+>Net_Socket::setBlocking</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3159"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>Net_Socket::setBlocking</B
+></CODE
+> (boolean $mode)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Sets whether the socket connection should be blocking or
+    not. A read call to a non-blocking socket will return immediately
+    if there is no data available, whereas it will block until there
+    is data for blocking sockets.
+   </P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Warning</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;     If you use <A
+HREF="core.networking.net_socket.html#core.networking.Net_Socket.readall"
+>&#13;     <B
+CLASS="function"
+>readAll()</B
+></A
+> on a connection in blocking mode,
+     the function will be not terminated until the socket connection will
+     be closed.
+    </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$mode</I
+></TT
+> - true for blocking sockets, false
+        for nonblocking
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.setTimeout"
+></A
+><H2
+>Net_Socket::setTimeout</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3177"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::setTimeout</B
+></CODE
+> (integer $seconds, integer $microseconds)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Sets the timeout value on socket descriptor, expressed in the sum of seconds and microseconds
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$seconds</I
+></TT
+> - seconds part
+      </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$microseconds</I
+></TT
+> - microseconds part
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - true on success or a PEAR_Error
+        on failure
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.getStatus"
+></A
+><H2
+>Net_Socket::getStatus</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3201"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::getStatus</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Returns information about an existing socket resource.
+    Currently returns four entries in the result array:
+   </P
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>timed_out (bool)</I
+></TT
+> - The socket timed out waiting for data
+      </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>blocked (bool)</I
+></TT
+> - The socket was blocked
+      </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>eof (bool)</I
+></TT
+> - Indicates EOF event
+      </P
+></LI
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>unread_bytes (int)</I
+></TT
+> - Number of bytes left in the socket buffer
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - result array on success or a PEAR_Error
+        on failure
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.gets"
+></A
+><H2
+>Net_Socket::gets</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3228"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::gets</B
+></CODE
+> (integer $size)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Returns a string containing data from the socket connection
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$size</I
+></TT
+> - max number of chars to recieve
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - the data as string or a PEAR_Error
+        on failure
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.read"
+></A
+><H2
+>Net_Socket::read</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3247"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::read</B
+></CODE
+> (integer $size)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Read a specified amount of data. This is guaranteed to return,
+    and has the added benefit of getting everything in one fread()
+    chunk; if you know the size of the data you're getting
+    beforehand, this is definitely the way to go.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$size</I
+></TT
+> - max number of bytes to read from
+        the socket
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - the data as string or a PEAR_Error if not
+        connected
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.write"
+></A
+><H2
+>Net_Socket::write</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3266"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::write</B
+></CODE
+> (string $data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Write data to a socket connection
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$data</I
+></TT
+> - the data to write
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - PEAR_Error, if not connected or
+        the message of the write function
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.writeLine"
+></A
+><H2
+>Net_Socket::writeLine</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3285"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::writeLine</B
+></CODE
+> (string $data)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Write a line of data to a socket connection, followed by a trailing "\r\n".
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>$data</I
+></TT
+> - the data to write
+      </P
+></LI
+></UL
+>
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - fputs result, or an PEAR_Error
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.eof"
+></A
+><H2
+>Net_Socket::eof</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3304"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>boolean <B
+CLASS="function"
+>Net_Socket::eof</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    fire true if the connection is closed or input stream finished
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>boolean</I
+></TT
+> - true, if no connection exists anymore
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readByte"
+></A
+><H2
+>Net_Socket::readByte</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3317"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readByte</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Read a byte from the socket stream
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - data from the socket, or a
+        PEAR_Error if not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readWord"
+></A
+><H2
+>Net_Socket::readWord</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3330"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readWord</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Reads a word from the socket stream
+    Word means a binary word, not a word in a language
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - data from the socket, or a
+        PEAR_Error if not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readInt"
+></A
+><H2
+>Net_Socket::readInt</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3343"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readInt</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Reads a integer number from the socket stream.
+    The length of a integer is 4 bytes
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - data from the socket, or a
+        PEAR_Error if not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readIPAddress"
+></A
+><H2
+>Net_Socket::readIPAddress</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3356"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readIPAddress</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Reads a IP from the socket stream
+    The function expect a integer which will
+    converted to a IP address. This function
+    only works with IPv4 addresses.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - data from the socket, or a
+        PEAR_Error if not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readLine"
+></A
+><H2
+>Net_Socket::readLine</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3369"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readLine</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Read until either the end of the socket or a newline, whichever
+    comes first. Strips the trailing newline from the returned data.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - All available data up to a newline,
+        without that newline, or until the end of the socket as string.
+        else a PEAR_Error when not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="core.networking.Net_Socket.readall"
+></A
+><H2
+>Net_Socket::readAll</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN3382"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>mixed <B
+CLASS="function"
+>Net_Socket::readAll</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Read until the socket closes. THIS FUNCTION WILL NOT EXIT if the
+    socket is in blocking mode until the socket closes.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;        <TT
+CLASS="parameter"
+><I
+>mixed</I
+></TT
+> - All data until the socket closes
+        as string, or PEAR_Error if not connected.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.networking.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.system.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Networking functions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.networking.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PEAR System</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

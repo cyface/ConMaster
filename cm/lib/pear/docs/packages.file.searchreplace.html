@@ -1,0 +1,953 @@
+<HTML
+><HEAD
+><TITLE
+>File_SearchReplace</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Filesystem related"
+HREF="packages.file.html"><LINK
+REL="PREVIOUS"
+TITLE="File_Passwd"
+HREF="packages.file.passwd.html"><LINK
+REL="NEXT"
+TITLE="Archive_Tar"
+HREF="packages.file.archive-tar.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="packages.file.passwd.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.file.archive-tar.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="packages.file.searchreplace"
+><B
+CLASS="classname"
+>File_SearchReplace</B
+></A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN3975"
+></A
+><B
+CLASS="classname"
+>File_SearchReplace</B
+>&nbsp;--&nbsp;
+    provides functions for replacing text in files
+   </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.use"
+></A
+><H2
+>Using</H2
+><P
+>&#13;    With <B
+CLASS="classname"
+>SearchReplace</B
+>, you can replace
+    a text in as many as desired files by another.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3983"
+></A
+><P
+><B
+>Example 1. typical usage</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>$files = array( "test1.txt",
+                    "test2.txt",
+                    "test3.txt" ) ;
+    $ignoreline = array( "#", ":") ;
+
+    $snr = File_SearchReplace( "Yes", "No", $files, "/mail/", false,
+                               $ignoreline) ;
+    $snr -&#62; doSearch() ;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+><P
+>&#13;    The example replaces all occurences of <TT
+CLASS="parameter"
+><I
+>"Yes"</I
+></TT
+> with
+    <TT
+CLASS="parameter"
+><I
+>"No"</I
+></TT
+> in the given $files in the directory
+    <TT
+CLASS="parameter"
+><I
+>"/mail/"</I
+></TT
+>. If a line in a file starts with one of the
+    chars in <TT
+CLASS="parameter"
+><I
+>$ignoreline</I
+></TT
+>, possible matches will be
+    ignored.
+   </P
+><P
+>&#13;    You can do a new search without creating a new instance of the class.
+   </P
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN3992"
+></A
+><P
+><B
+>Example 2. Do a new search</B
+></P
+><TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>...
+    // string to search
+    $snr -&#62; setFind( "Er") ;
+    // string to find
+    $snr -&#62; setReplace( "Sie") ;
+    // look in this files
+    $snr -&#62; setFiles( $files) ;
+    // look in this directories
+    $snr -&#62; setDirectories( array( "/neue_briefe/")) ;
+    // look in the subdirectories too
+    $snr -&#62; setIncludeSubdir( true) ;
+    // ignore lines in the files starting with this chars
+    $snr -&#62; setIgnoreLines( array( "::", "#")) ;
+    // restart search'n'replace
+    $snr -&#62; doSearch() ;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.searchtype"
+></A
+><H2
+>Types of search functions</H2
+><P
+>&#13;    <B
+CLASS="classname"
+>File_SearchReplace</B
+> supports different
+    kinds of search functions. The type directly influence the format
+    of the required <TT
+CLASS="parameter"
+><I
+>$find</I
+></TT
+>-parameter
+    <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>&#13;            <TT
+CLASS="parameter"
+><I
+>normal</I
+></TT
+> - default, the
+            only type supporting the <TT
+CLASS="parameter"
+><I
+>$IgnoreLines
+            </I
+></TT
+>-parameter
+        </TD
+></TR
+><TR
+><TD
+>&#13;            <TT
+CLASS="parameter"
+><I
+>quick</I
+></TT
+>
+             - use <B
+CLASS="function"
+>str_replace()</B
+>
+        </TD
+></TR
+><TR
+><TD
+>&#13;            <TT
+CLASS="parameter"
+><I
+>preg</I
+></TT
+>
+             - use <B
+CLASS="function"
+>preg_replace()</B
+>
+        </TD
+></TR
+><TR
+><TD
+>&#13;            <TT
+CLASS="parameter"
+><I
+>ereg</I
+></TT
+>
+             - use <B
+CLASS="function"
+>ereg_replace()</B
+>
+        </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+    To set the type, call <A
+HREF="packages.file.searchreplace.html#packages.file.searchreplace.setsearchfunction"
+>&#13;    <B
+CLASS="function"
+>setSearchFunction()</B
+></A
+> before <A
+HREF="packages.file.searchreplace.html#packages.file.searchreplace.dosearch"
+>&#13;    <B
+CLASS="function"
+>doSearch()</B
+></A
+>.
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.searchreplace"
+></A
+><H2
+>File_SearchReplace::File_SearchReplace</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4019"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::File_SearchReplace</B
+></CODE
+> ([string $find,
+        string $replace,
+        string $files,
+        mixed $directories,
+        boolean $include_subdir,
+        array $ignore_lines]]])</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Constructor - sets the search and replace query
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$find</I
+></TT
+> - the string/regex to find
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$replace</I
+></TT
+> - the string/regex to
+       replace $find
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$files</I
+></TT
+> - the file(s) to perform
+       this operation on.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$directories</I
+></TT
+> - the directories
+       to perform this operation on.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$include_subdir</I
+></TT
+> - if performing on
+       directories, whether to traverse subdirectories.
+      </P
+></LI
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$ignore_lines</I
+></TT
+> - ignore lines beginning
+       with any of the strings in this array. This feature only
+       works with the "normal" search.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.occurences"
+></A
+><H2
+>File_SearchReplace::getNumOccurences</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4056"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>integer
+     <B
+CLASS="function"
+>File_SearchReplace::getNumOccurences</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor to return the number of occurences found.
+   </P
+><P
+>&#13;    Returns
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>integer</I
+></TT
+> - Number of occurences found
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.dosearch"
+></A
+><H2
+>File_SearchReplace::doSearch</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4069"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::doSearch</B
+></CODE
+> ()</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    This starts the search/replace off. Call this to do the search.
+    First do whatever files are specified, and/or if directories are
+    specified do those too.
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setfind"
+></A
+><H2
+>File_SearchReplace::setFind</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4077"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setFind</B
+></CODE
+> (string $find)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting find variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$find</I
+></TT
+> - the string/regex to find
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setreplace"
+></A
+><H2
+>File_SearchReplace::setReplace</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4091"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setReplace</B
+></CODE
+> (string $replace)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting replace variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$replace</I
+></TT
+> - the string/regex to replace the
+       find string/regex with.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setfiles"
+></A
+><H2
+>File_SearchReplace::setFiles</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4105"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setFiles</B
+></CODE
+> (array $files)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting files variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$files</I
+></TT
+> - the file(s) to perform this operation on.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setdirectories"
+></A
+><H2
+>File_SearchReplace::setDirectories</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4119"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setDirectories</B
+></CODE
+> (array $directories)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting directories variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$directories</I
+></TT
+> - the directories to perform this
+       operation on.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setincludesubdir"
+></A
+><H2
+>File_SearchReplace::setIncludeSubdir</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4133"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setIncludeSubdir</B
+></CODE
+> (integer $include_subdir)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting include_subdir variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$inlude_subdir</I
+></TT
+> - Whether to traverse
+       subdirectories or not.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setignorelines"
+></A
+><H2
+>File_SearchReplace::setIgnoreLines</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4147"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setIgnoreLines</B
+></CODE
+> (array $ignore_lines)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Accessor for setting ignore_lines variable.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$ignore_lines</I
+></TT
+> - Ignore lines beginning with any
+       of the strings in this array. This feature only works with the "normal"
+       search.
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.file.searchreplace.setsearchfunction"
+></A
+><H2
+>File_SearchReplace::setSearchFunction</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN4161"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void
+     <B
+CLASS="function"
+>File_SearchReplace::setSearchFunction</B
+></CODE
+> (array $search_function)</CODE
+></P
+><P
+></P
+></DIV
+><P
+>&#13;    Function to determine which search function is used.
+   </P
+><P
+>&#13;    Parameter
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       <TT
+CLASS="parameter"
+><I
+>$search_function</I
+></TT
+> -  The search function that
+       should be used. See <A
+HREF="packages.file.searchreplace.html#packages.file.searchreplace.searchtype"
+>"Types of search
+       functions"</A
+>
+      </P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="packages.file.passwd.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.file.archive-tar.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><B
+CLASS="classname"
+>File_Passwd</B
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="packages.file.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Archive_Tar</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

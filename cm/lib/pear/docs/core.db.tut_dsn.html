@@ -1,0 +1,407 @@
+<HTML
+><HEAD
+><TITLE
+>DSN</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="PREVIOUS"
+TITLE="PEAR DB: a unified API for accessing SQL-databases"
+HREF="core.db.html"><LINK
+REL="NEXT"
+TITLE="Connect"
+HREF="core.db.tut_connect.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="core.db.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="core.db.tut_connect.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="core.db.tut_dsn"
+>DSN</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN965"
+></A
+>DSN&nbsp;--&nbsp;The data source name</DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="AEN968"
+></A
+><H2
+>Description</H2
+><P
+>&#13;     To connect to a database through PEAR::DB, you have to create a
+     valid <SPAN
+CLASS="acronym"
+>DSN - data source name</SPAN
+>. This DSN
+     consists in the following parts:
+    </P
+><P
+>&#13;     <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>phptype</I
+></TT
+>:
+       Database backend used in PHP (i.e. mysql, odbc etc.)
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>dbsyntax</I
+></TT
+>:
+       Database used with regards to SQL syntax etc.
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>protocol</I
+></TT
+>:
+       Communication protocol to use ( i.e. tcp, unix etc.)
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>hostspec</I
+></TT
+>:
+       Host specification (hostname[:port])
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>database</I
+></TT
+>:
+       Database to use on the DBMS server
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>username</I
+></TT
+>:
+       User name for login
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>password</I
+></TT
+>:
+       Password for login
+      </TD
+></TR
+><TR
+><TD
+>&#13;       <TT
+CLASS="parameter"
+><I
+>proto_opts</I
+></TT
+>:
+       Maybe used with <TT
+CLASS="parameter"
+><I
+>protocol</I
+></TT
+>
+      </TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+    </P
+><P
+>&#13;     The format of the supplied DSN is in its fullest form:
+     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="url"
+>phptype(dbsyntax)://username:password@protocol+hostspec/database</PRE
+></TD
+></TR
+></TABLE
+>
+
+        Most variations are allowed:
+
+     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="url"
+>phptype://username:password@protocol+hostspec:110//usr/db_file.db
+phptype://username:password@hostspec/database_name
+phptype://username:password@hostspec
+phptype://username@hostspec
+phptype://hostspec/database
+phptype://hostspec
+phptype(dbsyntax)
+phptype</PRE
+></TD
+></TR
+></TABLE
+>
+
+     The currently supported database backends are:
+
+     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="configure"
+>mysql  -&#62; MySQL
+pgsql  -&#62; PostgreSQL
+ibase  -&#62; InterBase
+msql   -&#62; Mini SQL
+mssql  -&#62; Microsoft SQL Server
+oci8   -&#62; Oracle 7/8/8i
+odbc   -&#62; ODBC (Open Database Connectivity)
+sybase -&#62; SyBase
+ifx    -&#62; Informix
+fbsql  -&#62; FrontBase</PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     With an up-to-date version of <B
+CLASS="classname"
+>DB</B
+>, you can use a
+     second DSN format
+     <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="url"
+>phptype(syntax)://user:pass@protocol(proto_opts)/database
+
+example:
+Connect to database through a socket
+mysql://user@unix(/path/to/socket)/pear
+
+Connect to database on a non standard port
+pgsql://user:pass@word@tcp(localhost:5555)/pear</PRE
+></TD
+></TR
+></TABLE
+>
+    </P
+><P
+>&#13;     <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+><A
+NAME="core.db.features.warning"
+></A
+>Important!</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>&#13;        Please note, that some features may be not supported by all
+        database backends. Please refer to the PEAR DB extensions
+        status document located at:
+        <SPAN
+CLASS="QUOTE"
+>"&#60;pear base dir&#62;/DB/STATUS"</SPAN
+>
+        to get a detailed list about what features are supported by which
+        backend.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="core.db.tut_connect.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PEAR DB: a unified API for accessing SQL-databases</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="core.db.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Connect</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

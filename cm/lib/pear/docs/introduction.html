@@ -1,0 +1,432 @@
+<HTML
+><HEAD
+><TITLE
+>Introduction</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="About PEAR"
+HREF="about-pear.html"><LINK
+REL="PREVIOUS"
+TITLE="About PEAR"
+HREF="about-pear.html"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="installation.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="about-pear.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="installation.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="introduction"
+>Chapter 1. Introduction</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="introduction.html#about.pear"
+>What is PEAR?</A
+></DT
+></DL
+></DIV
+><FONT
+COLOR="RED"
+>The PEAR Manifest</FONT
+><P
+>&#13;   PEAR is dedicated to Malin Bakken, born 1999-11-21.
+  </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="about.pear"
+>What is PEAR?</A
+></H1
+><P
+>&#13;    PEAR is short for "PHP Extension and Application Repository" and
+    is pronounced just like the fruit.  The purpose of PEAR is to
+    provide:
+    <P
+></P
+><UL
+><LI
+><P
+>&#13;       A structured library of open-sourced code for PHP users
+      </P
+></LI
+><LI
+><P
+>&#13;       A system for code distribution and package maintenance
+      </P
+></LI
+><LI
+><P
+>&#13;       A standard style for code written in PHP,
+       <A
+HREF="standards.html"
+>specified here</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       The PHP Foundation Classes (PFC),
+       <A
+HREF="introduction.html#about-pfc"
+>see more below</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       The PHP Extension Code Library (PECL),
+       <A
+HREF="introduction.html#about-pecl"
+>see more below</A
+>
+      </P
+></LI
+><LI
+><P
+>&#13;       A web site, mailing lists and download mirrors to support the
+       PHP/PEAR community
+      </P
+></LI
+></UL
+>
+   </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-pear-stlib"
+>Structured Library of PHP Code</A
+></H2
+><P
+>&#13;     The code in PEAR is partitioned in "packages".  Each package
+     is a separate project with its own development team, version
+     number, release cycle, documentation and a defined relation to
+     other packages (including dependencies).  Packages are
+     distributed as gzipped tar files with a description file inside,
+     and installed on your local system using the PEAR installer.
+    </P
+><P
+>&#13;     There are two types of packages: source packages (containing
+     source files only), and binary packages (containing
+     platform-specific binary files, and possible source files).
+     Installing source packages with C code obviously requires a C
+     build environment.
+    </P
+><P
+>&#13;     PEAR defines a package tree, where each "node" in the tree is
+     represented by a part of the package name.  The nodes are
+     organized by simple descriptive topics, and each part is
+     separated by an underscore.  Examples of package names are
+     "MP3_Id", "Archive_Tar" and "HTTP_Post".
+    </P
+><P
+>&#13;     Packages may relate to eachother through explicit dependencies,
+     but there is no automatic relation between for example a package
+     and its "parent" in the package tree (for example, "HTTP_Post" is
+     by default independent of "HTTP").
+    </P
+><P
+>&#13;     A few top-level nodes in the package tree called
+     "sub-repositories" have special functions, currently these are
+     <A
+HREF="introduction.html#about-pecl"
+>PECL</A
+>, <A
+HREF="introduction.html#about-gtk"
+>Gtk</A
+> and <A
+HREF="introduction.html#about-app"
+>App</A
+>.  For each of these, different
+     rules apply, see more in the description of each sub-repository
+     below.
+    </P
+><P
+>&#13;     A style guide, the <A
+HREF="standards.html"
+>PEAR Coding
+     Standards</A
+> (short PCS), exists to ease collaboration
+     between PEAR developers, to help quality and portability, and to
+     help PEAR contributors to provide consistent-looking-and-feeling
+     APIs.  For packages in the <A
+HREF="introduction.html#about-pfc"
+>PFC</A
+>,
+     this standard applies strictly, for non-PFC packages it applies
+     more relaxed.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-pear-distpkg"
+>Code Distribution and Package Maintenance</A
+></H2
+><P
+>&#13;     All PEAR packages are registered in and uploaded to a central
+     database available at pear.php.net.  Open-sourced
+     third-party packages may also be registered and uploaded.
+     Closed-source packages may be installed by the PEAR installer,
+     but the PEAR database is for open-source code only.
+    </P
+><P
+>&#13;     Pear.php.net will provide both a human-friendly (HTML) and
+     machine-friendly (currently XML-RPC) interface to the PEAR
+     database.  Package downloads are done with plain HTTP.
+     Other functions the pear.php.net site will provide are:
+     <P
+></P
+><UL
+><LI
+><P
+>user account management (integrated with the CVS server)</P
+></LI
+><LI
+><P
+>package management</P
+></LI
+><LI
+><P
+>release management</P
+></LI
+></UL
+>
+    </P
+><P
+>&#13;     Packages are distributed as a gzipped tar file with an XML description
+     file inside.  The description file contains some information
+     about the package, a list of files and their roles, and dependencies.
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-pfc"
+>The PHP Foundation Classes</A
+></H2
+><P
+>&#13;     The PHP Foundation Classes is a subset of PEAR that focuses on
+     quality, generality, interoperability and compatibility.  If
+     PHP is going to continue bundling PEAR packages beyond the
+     installer, it will bundle the PFC.
+    </P
+><P
+>&#13;     Focus on quality means that no packages or releases or less than "stable"
+     quality are accepted in the PFC.
+    </P
+><P
+>&#13;     Generality means that packages should not be more than reasonably
+     specific to any type of environment (such as an output format
+     like HTML, an operating system, a web server or SAPI backend
+     etc).
+    </P
+><P
+>&#13;     Interoperable packages work well with other packages, have
+     stable, standardized APIs, prefer other well-established (and
+     also interoperable) components and also work well in different
+     environments (PHP version, SAPI backend, operating system etc.)
+    </P
+><P
+>&#13;     Compatibility is not just about supporting the same syntax and
+     semantics as earlier versions, it is also about planning ahead
+     when writing the code.  Designing code so it would be easy, or at
+     least possible, to add features that are likely to appear later,
+     gives code that is also "forward-compatible".
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-pecl"
+>The PHP Extension Code Library (PECL)</A
+></H2
+><FONT
+COLOR="RED"
+>PECL</FONT
+><P
+>&#13;     PECL (pronounced "pickle") is a sub-repository of PEAR for C
+     extensions ala those distributed with PHP 4, in fact, having
+     somewhere to move extensions to from PHP was one of the
+     motivations when creating PECL.  Extensions in PECL follow PHP's
+     coding standards rather than PEAR's, but they are distributed and
+     installed as PEAR packages.
+    </P
+><P
+>&#13;     The process of moving an extension from PHP to PECL is referred
+     to as "pickling".
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-gtk"
+>Gtk Packages</A
+></H2
+><FONT
+COLOR="RED"
+>Gtk</FONT
+><P
+>&#13;     TBD
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="about-app"
+>Application Packages</A
+></H2
+><FONT
+COLOR="RED"
+>App</FONT
+><P
+>&#13;     TBD
+     
+    </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="about-pear.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="installation.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>About PEAR</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="about-pear.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

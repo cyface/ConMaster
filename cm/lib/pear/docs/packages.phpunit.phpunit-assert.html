@@ -1,0 +1,566 @@
+<HTML
+><HEAD
+><TITLE
+>PHPUnit_Assert</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.73
+"><LINK
+REL="HOME"
+TITLE="PEAR Manual"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PHPUnit"
+HREF="packages.phpunit.html"><LINK
+REL="PREVIOUS"
+TITLE="PHPUnit_TestCase"
+HREF="packages.phpunit.phpunit-testcase.html"><LINK
+REL="NEXT"
+TITLE="PHPUnit_TestResult"
+HREF="packages.phpunit.phpunit-testresult.html"><META
+HTTP-EQUIV="Content-type"
+CONTENT="text/html; charset=ISO-8859-1"></HEAD
+><BODY
+CLASS="refentry"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PEAR Manual</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="packages.phpunit.phpunit-testcase.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="packages.phpunit.phpunit-testresult.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="packages.phpunit.phpunit-assert"
+>PHPUnit_Assert</A
+></H1
+><DIV
+CLASS="refnamediv"
+><A
+NAME="AEN6432"
+></A
+>PHPUnit_Assert&nbsp;--&nbsp;
+   Provides the <B
+CLASS="function"
+>assert*()</B
+>-functions
+  </DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-assert.using"
+></A
+><H2
+>Using</H2
+><P
+>&#13;   You should never get in contact with this class.
+   <B
+CLASS="classname"
+>PHPUnit_Assert</B
+> is inherited
+   by <A
+HREF="packages.phpunit.phpunit-testcase.html"
+>&#13;   <B
+CLASS="classname"
+>PHPUnit_TestCase</B
+></A
+>
+   and you can call the <B
+CLASS="function"
+>assert*()</B
+>-functions
+   in your test class through <TT
+CLASS="parameter"
+><I
+>$this</I
+></TT
+>
+  </P
+><P
+>&#13;   If you go through the <B
+CLASS="function"
+>assert*()</B
+> documentation
+   you will note, that sometimes an assertation can expressed with
+   more then one assert-function, ie:
+   <TABLE
+WIDTH="100%"
+CELLSPACING="0"
+CELLPADDING="0"
+BORDER="0"
+BGCOLOR="#EEEEEE"
+><TR
+><TD
+><PRE
+CLASS="php"
+>...
+$expected = "abc";
+$result = myFunction(...); // returns "abc"
+// [1]
+$this-&#62;assertEquals($expected,$result);
+
+// or [2]
+$this-&#62;assertTrue($expected == $result);</PRE
+></TD
+></TR
+></TABLE
+>
+   Both versions are correct, but the first is strictly
+   recommended. You want to test a function returning
+   the expected string and not if the <TT
+CLASS="literal"
+>'=='</TT
+> operator
+   works correctly. And the first version more self-descriptive.
+  </P
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-assert.assertequals"
+></A
+><H2
+>PHPUnit_Assert::assertEquals</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6450"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>assertEquals</B
+></CODE
+> (mixed $expected, mixed $result [, string $message = '' [, mixed $delta = 0]])</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertequals.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$expected</I
+></TT
+> - the expected value</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$result</I
+></TT
+> - the expected value</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$message</I
+></TT
+> - this string is stored in the
+      test suite result set, if the assertion fails</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$delta</I
+></TT
+> - if the given values
+      are numbers, you can define a delta value.</P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertEquals.fail"
+></A
+><H3
+>Fails</H3
+><P
+>&#13;    Fails if the expected and the result value are not equal.
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertEquals.note"
+></A
+><H3
+>Note</H3
+><P
+>&#13;    With the delta value you can compare two values which are only
+    nearly equal, ie.: 5 is equal 5.04 depending on the situation.
+    This is a tribute to Java background of the test framework, which
+    is also used in scientific enviroments. For a physicist a difference
+    of 10% between the expected and result value must not be a difference, 
+    such values are 'equal' for them. ;-)
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnotnull"
+></A
+><H2
+>PHPUnit_Assert::assertNotNull</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6488"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>assertNotNull</B
+></CODE
+> (object $expected, string $message)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnotnull.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$expected</I
+></TT
+> - an expected object</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$message</I
+></TT
+> - this string is stored in the
+      test suite result set, if the assertion fails</P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnotnull.fail"
+></A
+><H3
+>Fail</H3
+><P
+>&#13;    Fails if the object is not null.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnull"
+></A
+><H2
+>PHPUnit_Assert::assertNull</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6511"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>assertNull</B
+></CODE
+> (object $expected, string $message)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnull.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$expected</I
+></TT
+> - an expected object</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$message</I
+></TT
+> - this string is stored in the
+      test suite result set, if the assertion fails</P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertnull.fail"
+></A
+><H3
+>Fail</H3
+><P
+>&#13;    Fails if the object is null.
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="refsect1"
+><A
+NAME="packages.phpunit.phpunit-assert.asserttrue"
+></A
+><H2
+>PHPUnit_Assert::assertTrue</H2
+><DIV
+CLASS="funcsynopsis"
+><A
+NAME="AEN6534"
+></A
+><P
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void <B
+CLASS="function"
+>assertTrue</B
+></CODE
+> (boolean $condition, string $message)</CODE
+></P
+><P
+></P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.assertcondition.parameter"
+></A
+><H3
+>Parameter</H3
+><P
+>&#13;    <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$condition</I
+></TT
+> - a operation or 
+       variable returning boolean</P
+></LI
+><LI
+><P
+><TT
+CLASS="parameter"
+><I
+>$message</I
+></TT
+> - this string is stored in the
+      test suite result set, if the assertion fails</P
+></LI
+></UL
+>
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.asserttrue.fail"
+></A
+><H3
+>Fail</H3
+><P
+>&#13;    Fails if the condition returns false.
+   </P
+></DIV
+><DIV
+CLASS="refsect2"
+><A
+NAME="packages.phpunit.phpunit-assert.asserttrue.note"
+></A
+><H3
+>Note</H3
+><P
+>&#13;    <B
+CLASS="function"
+>AssertTrue()</B
+> is a more general assert function.
+    You should first check, if there is not a better assertion function,
+    This can avoid problems implementating a test case..
+   </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="packages.phpunit.phpunit-testcase.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="packages.phpunit.phpunit-testresult.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHPUnit_TestCase</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="packages.phpunit.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PHPUnit_TestResult</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
