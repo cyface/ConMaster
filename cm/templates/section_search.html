@@ -55,11 +55,11 @@
       </td>
     </tr>
   </table>
-  <p align="center">
+  <div align="center">
     <input type="hidden" name="table" value="section">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
-  </p>
+  </div>
   </form>
 <hr noshade>
 <span class="FormTitle">Search Results - {action_message}</span>
@@ -78,8 +78,7 @@
     <td class="TableData">{_event_id[event_name]}</td>
     <td class="TableData">{date} {start_time}-{end_time}</td>
     <td class="TableData">{num_registered}/{max_registered}</td>
-    <td class="TableData"> 
-      <input type="checkbox" name="event_full" value="CHECKED" {event_full} >
+    <form><td class="TableData"><input type="checkbox" name="event_full" value="CHECKED" {event_full} ></td></form>
     <td class="TableData">{location} 
   </tr>
   <!-- END BLOCK : result_row -->
