@@ -3,12 +3,12 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.0 of the PHP license,       |
 // | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
+// | available through the world-wide-web at the following url:           |
+// | http://www.php.net/license/3_0.txt.                                  |
 // | If you did not receive a copy of the PHP license and are unable to   |
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
@@ -16,7 +16,7 @@
 // | Authors: Tomas V.V.Cox <cox@idecnet.com>                             |
 // +----------------------------------------------------------------------+
 //
-// $Id: System.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: System.php,v 1.5 2003/09/16 19:28:26 cyface Exp $
 //
 
 require_once 'PEAR.php';
@@ -43,7 +43,7 @@ $GLOBALS['_System_temp_files'] = array();
 *
 * @package  System
 * @author   Tomas V.V.Cox <cox@idecnet.com>
-* @version  $Revision: 1.4 $
+* @version  $Revision: 1.5 $
 * @access   public
 * @see      http://pear.php.net/manual/
 */
@@ -61,7 +61,7 @@ class System
     function _parseArgs($argv, $short_options, $long_options = null)
     {
         if (!is_array($argv) && $argv !== null) {
-            $argv = preg_split('/\s+/', $argv);
+            $argv = preg_split('/\s+/', ': '.$argv);
         }
         return Console_Getopt::getopt($argv, $short_options);
     }
@@ -203,7 +203,8 @@ class System
     }
 
     /**
-    * Make directories
+    * Make directories. Note that we use call_user_func('mkdir') to avoid
+    * a problem with ZE2 calling System::mkDir instead of the native PHP func.
     *
     * @param    string  $args    the name of the director(y|ies) to create
     * @return   bool    True for success
@@ -232,14 +233,14 @@ class System
                     $dir = dirname($dir);
                 }
                 while ($newdir = array_shift($dirstack)) {
-                    if (!mkdir($newdir, $mode)) {
+                    if (!call_user_func('mkdir', $newdir, $mode)) {
                         $ret = false;
                     }
                 }
             }
         } else {
             foreach($opts[1] as $dir) {
-                if (!@is_dir($dir) && !mkdir($dir, $mode)) {
+                if (!@is_dir($dir) && !call_user_func('mkdir', $dir, $mode)) {
                     $ret = false;
                 }
             }
@@ -354,7 +355,7 @@ class System
         $tmp = tempnam($tmpdir, $prefix);
         if (isset($tmp_is_dir)) {
             unlink($tmp); // be careful possible race condition here
-            if (!mkdir($tmp, 0700)) {
+            if (!call_user_func('mkdir', $tmp, 0700)) {
                 return System::raiseError("Unable to create temporary directory $tmpdir");
             }
         }
@@ -384,53 +385,65 @@ class System
     /**
     * Get the path of the temporal directory set in the system
     * by looking in its environments variables.
+    * Note: php.ini-recommended removes the "E" from the variables_order setting,
+    * making unavaible the $_ENV array, that s why we do tests with _ENV
     *
     * @return string The temporal directory on the system
     */
     function tmpdir()
     {
-        if (OS_WINDOWS){
-            if (isset($_ENV['TEMP'])) {
-                return $_ENV['TEMP'];
+        if (OS_WINDOWS) {
+            if ($var = isset($_ENV['TEMP']) ? $_ENV['TEMP'] : getenv('TEMP')) {
+                return $var;
             }
-            if (isset($_ENV['TMP'])) {
-                return $_ENV['TMP'];
+            if ($var = isset($_ENV['TMP']) ? $_ENV['TMP'] : getenv('TMP')) {
+                return $var;
             }
-            if (isset($_ENV['windir'])) {
-                return $_ENV['windir'] . '\temp';
+            if ($var = isset($_ENV['windir']) ? $_ENV['windir'] : getenv('windir')) {
+                return $var;
             }
-            return $_ENV['SystemRoot'] . '\temp';
+            return getenv('SystemRoot') . '\temp';
         }
-        if (isset($_ENV['TMPDIR'])) {
-            return $_ENV['TMPDIR'];
+        if ($var = isset($_ENV['TMPDIR']) ? $_ENV['TMPDIR'] : getenv('TMPDIR')) {
+            return $var;
         }
         return '/tmp';
     }
 
     /**
-    * The "type" command (show the full path of a command)
+    * The "which" command (show the full path of a command)
     *
     * @param string $program The command to search for
     * @return mixed A string with the full path or false if not found
-    * @author Stig Bakken <ssb@fast.no>
+    * @author Stig Bakken <ssb@php.net>
     */
-    function type($program)
+    function which($program, $fallback = false)
     {
+    	// is_executable() is not available on windows
+    	if (OS_WINDOWS) {
+            $pear_is_executable = 'is_file';
+        } else {
+            $pear_is_executable = 'is_executable';
+        }
+
         // full path given
         if (basename($program) != $program) {
-            return (@is_executable($program)) ? $program : false;
+            return (@$pear_is_executable($program)) ? $program : $fallback;
         }
+
         // XXX FIXME honor safe mode
         $path_delim = OS_WINDOWS ? ';' : ':';
-        $exe_suffix = OS_WINDOWS ? '.exe' : '';
+        $exe_suffixes = OS_WINDOWS ? array('.exe','.bat','.cmd','.com') : array('');
         $path_elements = explode($path_delim, getenv('PATH'));
-        foreach ($path_elements as $dir) {
-            $file = $dir . DIRECTORY_SEPARATOR . $program . $exe_suffix;
-            if (@is_file($file) && @is_executable($file)) {
-                return $file;
+        foreach ($exe_suffixes as $suff) {
+            foreach ($path_elements as $dir) {
+                $file = $dir . DIRECTORY_SEPARATOR . $program . $suff;
+                if (@is_file($file) && @$pear_is_executable($file)) {
+                    return $file;
+                }
             }
         }
-        return false;
+        return $fallback;
     }
 }
 ?>
