@@ -56,13 +56,13 @@ class DataObjects_Person extends DB_DataObject {
 
 	function delete() {
 		//Delete the person_section records attached to this person
-		$personSectionObject = DB_DataObject::factory('section');
+		$personSectionObject = DB_DataObject::factory('person_section');
 		$personSectionObject->person_id = $this->person_id;
 		$personSectionObject->find();
 		//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>';
 
 		while ($personSectionObject->fetch()) {
-			$deleteObject = new $personSectionClass;
+			$deleteObject = DB_DataObject::factory('person_section');
 			$deleteObject->id = $personSectionObject->id;
 			$deleteObject->section_id = $personSectionObject->section_id;
 			$deleteObject->person_id = $this->id;
