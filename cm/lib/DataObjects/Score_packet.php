@@ -18,6 +18,7 @@ class DataObjects_Score_packet extends DB_DataObject {
 	var $event_id;                        // int(11)  not_null
 	var $section_id;                      // int(11)  not_null
     var $scenario_score;                  // int(4)
+    var $prorated_scenario_score;         // int(4)
     var $group_score;                     // int(4)
     var $number_of_players;               // int(4)
     var $rpga_event_type;                 // string(15)
