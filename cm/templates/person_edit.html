@@ -16,20 +16,32 @@ function fmtShortTime (inTimeStr) {
 
 function updateTicketList(id,checked) {
 	if (checked) {
-		if (actions_form.ticketList.value == '') {
-			actions_form.ticketList.value = id;
+		if (document.actions_form.ticketList.value == '') {
+			document.actions_form.ticketList.value = id;
 		} else {
-			actions_form.ticketList.value += ',' + id;
+			document.actions_form.ticketList.value += ',' + id;
 		}
 	} else {
-		actions_form.ticketList.value = actions_form.ticketList.value.replace(',' + id,'');
+		document.actions_form.actions_form.value = document.actions_form.ticketList.value.replace(',' + id,'');
 	}
+}
+
+function regTypeLookup(inType) {
+	var reg_type = new Array()
+	{form_constants[reg_type_array]}
+	var old_cost = parseInt(reg_type[document.person_edit.old_reg_type.value])
+	var old_value = parseInt(document.person_edit.total_fee.value)
+	var new_cost = parseInt(reg_type[inType])
+	var new_value = (old_value - old_cost) + new_cost
+	document.person_edit.total_fee_display.value = new_value;
+	document.person_edit.total_fee.value = new_value;
+	document.person_edit.old_reg_type.value = inType;
 }
 //-->
 </script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{first_name} {last_name} Person Record'" class="BodyClass">
+<body class="BodyClass" onLoad="self.document.title = '{first_name} {last_name} Person Record'">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
     <td class="FormTitle">{first_name} {middle_name} {last_name}</td>
@@ -38,8 +50,7 @@ function updateTicketList(id,checked) {
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}
-</span>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
 <hr>
 <form name="person_edit" method="post" action="form.php">
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
@@ -92,18 +103,13 @@ function updateTicketList(id,checked) {
     <tr> 
       <td class="FieldName">Reg Type</td>
       <td> 
-        <select name="reg_type" class="FieldData">
-          <option selected>{reg_type}</option>
-          <option>Pre-Reg</option>
-          <option>VIP</option>
-          <option>Weekend</option>
-          <option>THU Only</option>
-          <option>FRI Only</option>
-          <option>SAT Only</option>
-          <option>SUN Only</option>
+        <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[selectedIndex].text)">
+		<option value="{reg_type}">{reg_type}</option>
+		{form_constants[reg_type_options]}
         </select>
-        <b class="FieldError">{reg_type_error}</b> 
-      </td>
+        <b class="FieldError">
+        <input type="hidden" name=old_reg_type value="{reg_type}">
+        {reg_type_error}</b> </td>
       <td class="FieldName">&nbsp;</td>
       <td>&nbsp;</td>
       <td class="FieldName">Volunteer</td>
@@ -123,8 +129,10 @@ function updateTicketList(id,checked) {
         <b class="FieldError">{rpga_number_error}</b> 
       </td>
       <td class="FieldName">Total Fee</td>
-      <td class="FieldData">${total_fee} <b class="FieldError">{total_fee_error}</b> 
-      </td>
+      <td class="FieldData">$
+        <input type="text" name="total_fee_display" value="{total_fee}" maxlength="18" size="18" class="FieldData" onFocus="blur()">
+        <input type="hidden" name="total_fee" value="{total_fee}">
+        <b class="FieldError">{total_fee_error}</b> </td>
       <td class="FieldName">Judge</td>
       <td> 
         <input type="checkbox" name="judge" value="CHECKED" {judge} class="FieldData">
@@ -136,56 +144,50 @@ function updateTicketList(id,checked) {
   <hr>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td>
-        <div align="center">
+      <td align="center">
           <input type="button" name="delete" value="Delete" onClick="deleteCheck('person','{id}');return document.MM_returnValue">
-        </div>
       </td>
-      <td>
-        <div align="center">
+      <td align="center">
           <input type="button" name="cancel" value="Cancel" onClick="window.close()">
-        </div>
       </td>
-      <td>
-        <div align="center">
+      <td align="center">
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="badge_number" value="{badge_number}">
           <input type="hidden" name="table" value="person">
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
+          <input type="hidden" name="convention_id" value="1">
+          <input type="hidden" name="load_constants[1]" value="reg_type">
           <input type="submit" name="save" value="Save">
-        </div>
       </td>
     </tr>
   </table>
-  </form>
+</form>
 <!-- START BLOCK : included_header -->
 <hr>
-<form name="actions_form"><tr>
+<form name="actions_form" method="post" action="form.php">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td> 
-          <div align="center"> 
-            <input type="button" value="Print Badge" onClick="popWinSmall('form.php?table=person&action=edit&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
-            <input type="button" value="Print Badge & All Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
-            <input type="hidden" name="ticketList">
-            <input type="button" name="selected_tix" value="Print Selected Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified desc&id={id}&template=tickets.html&logo_name={_convention_id[logo_file]}&included_where=id IN(' + ticketList.value + ')')">
-          </div>
+        <td class="FieldName" align="right">Print: </td>
+        <td align="left">
+            <input type="button" value="Badge" onClick="popWinSmall('form.php?table=person&action=edit&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
+            <input type="button" value="Badge & All Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=badge_and_tickets.html&logo_name={_convention_id[logo_file]}')">
+            <input type="hidden" name="ticketList" value="">
+            <input type="button" name="selected_tix" value="Selected Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=tickets.html&logo_name={_convention_id[logo_file]}&included_where=id%20IN(' + form.ticketList.value + ')')">
         </td>
-        <td>&nbsp; </td>
-        <td> 
-          <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=person&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=person&form_constants[form_label]={first_name} {last_name}','note_edit');return false">
+        <td>
+          <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=person&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=person&form_constants[form_label]={first_name}%20{last_name}','note_edit');return false">
         </td>
       </tr>
-    </table>
+	</table>
 </form>
 <hr>
-<span class="FormTitle">Events</span> <span class="FormTitle">{action_message}</span> 
-<span class="FieldError">{form_error} </span> 
+<span class="FormTitle">Events {action_message}</span> <span class="FieldError">{form_error} </span> 
 <table width="100%" border="1">
   <tr> 
-    <td class="TableTitle" width="5%" colspan=3>Action</td>
+	<td class="TableTitle" align="left">Print Select</td>
+    <td class="TableTitle" width="5%" colspan=2 align="center">Action</td>
     <td class="TableTitle" width="5%">Event Num</td>
     <td class="TableTitle"> Event Name</td>
     <td class="TableTitle" width="10%"> Time</td>
@@ -195,7 +197,8 @@ function updateTicketList(id,checked) {
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="form.php">
-      <td class="TableDataBold" colspan=3> 
+      <td class="TableDataBold">&nbsp; </td>
+      <td class="TableDataBold" align="right" colspan=2>
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"> 
@@ -207,6 +210,7 @@ function updateTicketList(id,checked) {
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="hidden" name="load_constants[1]2" value="reg_type">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
       </td>
       <td class="TableData">&nbsp;</td>
@@ -218,11 +222,11 @@ function updateTicketList(id,checked) {
   </tr>
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
-  <tr>
-    <form name="person_section_delete" method="post" action="form.php">
-    <td class="TableData" width="5%">
-      <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},this.checked)">
-    </td>
+  <tr> 
+    <form name="person_section_delete_{id}" method="post" action="form.php">
+      <td class="TableData" width="5%"> 
+        <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},form.ticket_print.checked)">
+      </td>
       <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
@@ -230,10 +234,11 @@ function updateTicketList(id,checked) {
         <input type="hidden" name="parent_id" value="{person_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="hidden" name="load_constants[1]4" value="reg_type">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
-    <form name="person_section_save" method="post" action="form.php" target="popup">
+    <form name="person_section_save_{id}" method="post" action="form.php" target="popup">
       <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
@@ -243,6 +248,7 @@ function updateTicketList(id,checked) {
         <input type="hidden" name="included_order_by" value="last_modified desc">
         <input type="hidden" name="old_price" value="{old_price}">
         <input type="hidden" name="person_id" value="{person_id}">
+        <input type="hidden" name="load_constants[1]3" value="reg_type">
         <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
