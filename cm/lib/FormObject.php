@@ -96,7 +96,9 @@ class FormObject {
 		}
 		objectValueFill($this->dataObject,$this->template);
 		if ($this->incDataObject) {
-			$this->incDataObject->staticGet($this->table . '_id',$this->dataObject->id); //Try and load it with the current data
+			$parent_id_col = $this->table . '_id';
+			$this->incDataObject->$parent_id_col = $this->dataObject->id;
+			$this->incDataObject->find(); //Try and load it with the current data
 			while($this->incDataObject->fetch()){ //Pull the results through the object and put them on the form
 				$this->incDataObject->getLinks();
 				$this->template->newBlock($this->included_table . '_row'); //create a new result_row block
@@ -113,9 +115,22 @@ class FormObject {
 	function save() {
 		$this->dataObject->setFrom($this->data); //Copy the form data into the object.
 		if ($this->dataObject->id) {
-		    $this->dataObject->update();
+		    $result = $this->dataObject->update();
+			if(PEAR::isError($result)){ 
+				$this->template->assign('form_error',$result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+			}
 		} else {
-			$this->dataObject->id = $this->dataObject->insert();
+			$result = $this->dataObject->insert();
+			if(PEAR::isError($result)){ 
+				$this->template->assign('form_error',$result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->dataObject->id = $result;
+				$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+			}
 		}
 		$this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
 		$this->edit();
@@ -128,16 +143,30 @@ class FormObject {
 	*/
 	function saveIncluded() {
 		$this->incDataObject->setFrom($this->data); //Copy the form data into the object.
-		if ($this->data['included_id']) {
+		if ($this->data['included_id']) { //Only update the DB if an id was supplied
 			$this->incDataObject->id = $this->data['included_id'];
-		    $this->incDataObject->update(); //Only update the DB if an id was supplied
-			$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+			$result = $this->incDataObject->update();
+		    if(PEAR::isError($result)){ 
+				$this->template->assign('form_error',$result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+			}
 		} else {
-			$this->incDataObject->id = $this->incDataObject->insert();
-			$this->template->assign('action_message', '<font color="#66CC00">Added</font>');
+			$result = $this->incDataObject->id = $this->incDataObject->insert();
+			if(PEAR::isError($result)){ 
+				$this->template->assign('form_error',$result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->template->assign('action_message', '<font color="#66CC00">Added</font>');
+			}
 		}
 		$this->dataObject->get($this->data['parent_id']);
 		$incClassName = get_class($this->incDataObject);
+		$this->incDataObject = new $incClassName;
+		if ($this->data['included_order_by']) {
+			$this->incDataObject->orderBy($this->data['included_order_by']);
+		}
 		$this->edit();
 		return true;
 	} //End function updateIncluded
@@ -154,9 +183,16 @@ class FormObject {
 			return false;
 		}
 		$this->dataObject->id = $this->data['id'];
-		$this->dataObject->delete(); //Try to delete the record in the DB using the object
-		$this->template = new TemplatePower('./templates/' . 'deleted.html'); //make a new TemplatePower objec
-		$this->template->prepare();//let TemplatePower do its thing, parsing etc.
+		$result = $this->dataObject->delete(); //Try to delete the record in the DB using the object
+		if(PEAR::isError($result)){ 
+			$this->template->assign('form_error',$result->getMessage());
+			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			$this->edit();
+		} else {
+			$this->template = new TemplatePower('./templates/' . 'deleted.html'); //make a new TemplatePower objec
+			$this->template->prepare();//let TemplatePower do its thing, parsing etc.
+		}
+		
 		return true;
 	} //End function delete
 	
@@ -174,9 +210,15 @@ class FormObject {
 			$this->edit();
 			return false;
 		}
-		$this->incDataObject->id = $this->data['included_id'];
-		$this->incDataObject->delete(); //Try to delete the record in the DB using the object
-		$this->template->assign('action_message', '<font color="#FF0000">Row Deleted</font>');
+		$this->incDataObject->get($this->data['included_id']);
+		//echo '<PRE> IncObject Before Delete:<br>'; print_r($this->incDataObject); echo '</PRE>';
+		$result = $this->incDataObject->delete(); //Try to delete the record in the DB using the object
+		if(PEAR::isError($result)){ 
+			$this->template->assign('form_error',$result->getMessage());
+			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+		} else {
+			$this->template->assign('action_message', '<font color="#FF0000">Row Deleted</font>');
+		}
 		$this->dataObject->get($this->data['parent_id']);
 		$incClassName = get_class($this->incDataObject);
 		$this->incDataObject = new $incClassName; //reinit the object to get around DataObject bug
@@ -203,11 +245,17 @@ class FormObject {
 					$this->dataObject->whereAdd($whereLine);
 				}
 			}
-			$this->dataObject->find();
+			$result = $this->dataObject->find();
+			if(PEAR::isError($result)){ 
+				$this->template->assign('form_error',$result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->template->assign('action_message', $this->dataObject->N . ' Found');
+			}
 				
 			while($this->dataObject->fetch()){ //Pull the results through the object and put them on the form
 				$this->dataObject->getLinks();
-				//echo '<PRE> Object{'; print_r($this->dataObject); echo '</PRE>';
+				//echo '<PRE> Object: <br>'; print_r($this->dataObject); echo '</PRE>';
 				$this->template->newBlock('result_row'); //create a new result_row block
 				objectValueFill($this->dataObject,$this->template);
 			}
@@ -251,7 +299,13 @@ class FormObject {
 			}
 		}
 		
-		$this->dataObject->find(); //Run the query with the stuff we just set
+		$result = $this->dataObject->find(); //Run the query with the stuff we just set
+		if(PEAR::isError($result)){ 
+			$this->template->assign('form_error',$result->getMessage());
+			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+		} else {
+			$this->template->assign('action_message', $this->dataObject->N . ' Found');
+		}
 
 		$this->template = new TemplatePower( './templates/report_two_col.html' );//make a new TemplatePower object
 		$this->template->prepare();//let TemplatePower do its thing, parsing etc.
