@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.18 2002/08/14 20:51:55 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.19 2002/08/15 04:15:35 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -175,6 +175,7 @@ class FormObject {
         //echo '<pre>'; print_r ($this->dataObject); echo '</pre>';
 		objectValueFill($this->dataObject, $this->template);
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
+	
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
             objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
@@ -209,25 +210,23 @@ class FormObject {
         $this->dataObject->setFrom($this->data); //Copy the form data into the object.
         if ($this->dataObject->id) {
             $result = $this->dataObject->update();
-            if (PEAR::isError($result)) {
-                $this->template->assign('form_error', $result->getMessage());
-                $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+            if (PEAR::isError($this->dataObject->_lastError)) {
+                echo 'Database Error: ' . $this->dataObject->_lastError->getMessage();
+                return false;
             } else {
-                $this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+                $this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
             }
         } else {
             $result = $this->dataObject->insert();
-            if (PEAR::isError($result)) {
-                $this->template->assign('form_error', $result->getMessage());
-                $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+            if (PEAR::isError($this->dataObject->_lastError)) {
+                echo 'Database Error: ' . $this->dataObject->_lastError->getMessage();
+                return false;
             } else {
                 $this->dataObject->id = $result;
-                $this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+                $this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
             }
         }
-        $this->template->assign('action_message', '<font color="#66CC00">Saved</font>');
-        $this->edit();
-        return true;
+        return $this->edit();
     }  //End function save
 	/**
      * saveIncluded copies the $this->data variables with matching names to this object's includedObject, and updates the included rec the DB
@@ -267,8 +266,8 @@ class FormObject {
         if ($this->data['included_order_by']) {
             $this->incDataObject->orderBy($this->data['included_order_by']);
         }
-        $this->edit();
-        return true;
+        
+        return $this->edit();
     }  //End function updateIncluded
 
 	/**
@@ -330,8 +329,8 @@ class FormObject {
         if ($this->data['included_order_by']) {
             $this->incDataObject->orderBy($this->data['included_order_by']);
         }
-        $this->edit();
-        return true;
+        
+        return $this->edit();
     }  //End function deleteIncluded
 	/**
      * search uses the $this->data(search[]) variables with matching names to this object, and returns matching rows from the DB
