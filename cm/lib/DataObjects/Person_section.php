@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for person_section
-* CVS Info: $Id: Person_section.php,v 1.9 2002/08/15 19:57:50 cyface Exp $
+* CVS Info: $Id: Person_section.php,v 1.10 2002/08/16 23:45:54 cyface Exp $
 */
 
 
@@ -104,7 +104,7 @@ class DataObjects_Person_section extends DB_DataObject {
 		//Error if that complete event number wasn't found
 		if ($sectionObject->N == 0) {//Didn't find a match
 		require_once('PEAR.php');
-		return new PEAR_Error('That Complete Event Number Does Not Exist.');
+		return PEAR::raiseError('That Complete Event Number Does Not Exist.',1);
 		}
 
 		//If we got this far, we found a matching section
@@ -112,7 +112,7 @@ class DataObjects_Person_section extends DB_DataObject {
 		//Check to make sure that the event is not full
 		if ($sectionObject->event_full == 'CHECKED' or $sectionObject->event_full == 'True') {
 		require_once('PEAR.php');
-		return new PEAR_Error('Event Full');
+		return PEAR::raiseError('Event Full',1);
 		}
 
 		//Update the section's event fullness indicators
