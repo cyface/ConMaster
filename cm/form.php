@@ -4,8 +4,6 @@ require_once('conmaster.php');
 require_once('FormObject.php');
 require_once('ErrorCheck.php');
 
-if (!$authorizer->getAuth()) {exit();}
-
 $formHandler = new FormObject($_GET,$_POST); //make a new FormObject handler object
 
 errorCheck($formHandler); //If $formHandler is an error, display and exit
