@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.25 2003/09/15 20:58:39 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.26 2003/09/25 16:21:34 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -122,7 +122,6 @@ class FormObject {
 
 		//If constants weren't disabled, build the form_constants array
 		$this->loadConstants();
-
 
 	}  //End constructor FormObject
 	/**

@@ -1,9 +1,10 @@
 <?php
 
 require_once('conmaster.php');
-include_once('PEAR.php');
-include_once('FormObject.php');
-include_once('ErrorCheck.php');
+require_once('FormObject.php');
+require_once('ErrorCheck.php');
+
+if (!$authorizer->getAuth()) {exit();}
 
 $formHandler = new FormObject($_GET,$_POST); //make a new FormObject handler object
 

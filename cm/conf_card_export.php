@@ -14,7 +14,7 @@ if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE")) {
 
 require_once('ReportObject.php'); //Object to perform the export
 
-$exportObject = new ReportObject($_GET);
+$exportObject = new ReportObject($_GET,$_POST);
 
 $resultArray = $exportObject->getRawResults();
 
@@ -31,7 +31,7 @@ $headerRow .= 'reg_type' . ',';
 $headerRow .= 'total_fee' . ',';
 $headerRow .= 'amount_paid' . ',';
 $headerRow .= 'amount_owed' . ',';
-$headerRow .= 'event_block' . "\r\n";
+$headerRow .= 'event_block' . "\n";
 echo $headerRow;
 
 //Main data
@@ -39,15 +39,13 @@ $last_person_id = false;
 $output = '';
 $eventBlock = '';
 foreach ($resultArray as $rowId=>$row) {
-	if (($last_person_id == $row['person_id']) OR ($last_person_id == false)) { //Still on same person, aggregate events
-		$eventBlock .= $row['complete_event_number'] . ":\t";
-		$eventBlock .= $row['event_name'] . "\t";
-		$eventBlock .= $row['date'] . " ";
-		$eventBlock .= $row['start_time'] . "-";
-		$eventBlock .= $row['end_time'] . "\t";
-		$eventBlock .= '$' . $row['price'];
-		$eventBlock .= "\r";
-	} else {
+	if ($last_person_id != $row['person_id']) { //New person, write out the person's data
+		if ($last_person_id != false) {  	//If not the first person, flush out the data
+			$output .= "\"" . $eventBlock . "\"\n";
+			echo $output;
+			}
+		$output = '';
+		$eventBlock = '';
 		$output .= "\"" . $row['first_name'] . "\",";
 		$output .= "\"" . $row['last_name'] . "\",";
 		$output .= "\"" . $row['street'] . "\",";
@@ -60,27 +58,18 @@ foreach ($resultArray as $rowId=>$row) {
 		$output .= "\"" . $row['total_fee'] . "\",";
 		$output .= "\"" . $row['amount_paid'] . "\",";
 		$output .= "\"" . $row['amount_owed'] . "\",";
-		$output .= "\"" . $eventBlock . "\"\r\n";
-		echo $output;
-		$output = '';
-		$eventBlock = '';
-	}
-	$last_person_id = $row['person_id'];
+		$last_person_id = $row['person_id'];
+	} 
+	$eventBlock .= $row['complete_event_number'] . ":\t";
+	$eventBlock .= $row['event_name'] . "\t";
+	$eventBlock .= $row['date'] . " ";
+	$eventBlock .= $row['start_time'] . "-";
+	$eventBlock .= $row['end_time'] . "\t";
+	$eventBlock .= '$' . $row['price'];
+	$eventBlock .= "\n";
 }
-//Output final person
-$output .= "\"" . $row['first_name'] . "\",";
-$output .= "\"" . $row['last_name'] . "\",";
-$output .= "\"" . $row['street'] . "\",";
-$output .= "\"" . $row['city'] . "\",";
-$output .= "\"" . $row['state'] . "\",";
-$output .= "\"" . $row['zip'] . "\",";
-$output .= "\"" . $row['country'] . "\",";
-$output .= "\"" . $row['badge_number'] . "\",";
-$output .= "\"" . $row['reg_type'] . "\",";
-$output .= "\"" . $row['total_fee'] . "\",";
-$output .= "\"" . $row['amount_paid'] . "\",";
-$output .= "\"" . $row['amount_owed'] . "\",";
-$output .= "\"" . $eventBlock . "\"\r\n";
+//Flush the last person out
+$output .= "\"" . $eventBlock . "\"\n";
 echo $output;
 
 ?>

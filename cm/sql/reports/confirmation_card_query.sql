@@ -31,6 +31,7 @@ AND ps.event_id = ev.id
 AND per.badge_number IS NOT NULL
 AND per.reg_type != 'Score Packet'
 ORDER BY
+	per.badge_number,
 	ps.person_id,
 	sec.complete_event_number
-;
+
