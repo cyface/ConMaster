@@ -1,1 +1,0 @@
-php_value include_path ".:./lib:./lib/pear:./lib/pear/DB:/usr/local/lib/php:/usr/share/pear"

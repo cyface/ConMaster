@@ -1,5 +1,7 @@
 <?php
 
+require_once('conmaster.php');
+
 header("Content-type: application/force-download");
 
 $myfile = $_GET['filename'];

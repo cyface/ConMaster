@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.23 2002/10/16 18:25:51 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.24 2002/10/17 21:35:21 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -30,7 +30,8 @@
  **/
 
 require_once('PEAR.php'); //Main PEAR stuff
-require_once('DataObject.php'); //Database Access Object
+require_once('DB.php'); //Main PEAR stuff
+require_once('DB/DataObject.php'); //Database Access Object from PEAR
 require_once('./lib/ErrorCheck.php'); //Error Checking Code
 require_once('./lib/class.TemplatePower.inc.php'); //Main TemplatePower Stuff
 require_once('./lib/TemplateHelpers.inc.php'); //Custom class that adds convienience methods for dealing with Templates

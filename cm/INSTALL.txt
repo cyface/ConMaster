@@ -1,38 +1,40 @@
-To set up an appropriate server enviornment, you need: 
+ConMaster5 Installation Instructions
 
-1) Apache (http://apache.org) 
-2) MySQL (3.22+) (http://mysql.com) 
-3) PHP 4.1.2+ (http://www.php.net) 
-4) phpMyAdmin (http://www.sourceforge.net/projects/phpMyAdmin) 
+These instructions were written for Windows 2000, using phpdev5beta3, and ConMaster5 v.90.  If you use slightly different versions, the exact text of various pages may be different.
 
-If you are planning on doing development, I also recommend PHPEdit (http://www.phpedit.com) make sure to download the latest (not the stable) version, or you will need to practice your French. 
+1. Download conmaster5-v.90.zip from http://sourceforge.net/projects/conmaster
+2. Download phpdev5beta3 from http://firepages.com.au
+3. Run the phpdev installer.
+4. Accept the default c:\phpdev install location.
+5. Click 'install'. The installer will run for a bit.
+6. Click 'install phpdev5 now'.
+7. Click on 'phpdev'.
+8. Click 'Start phpdev'.  Your web browser will start, and show you a welcome page, hosted on your PC.
+9. Click on the 'Test MySQL / phpMyAdmin via ...phpMyAdmin ' link. 
+10. You should see a web page that says 'Welcome to phpMyAdmin 2.3.0 rc3'.
+11. Close any DOS windows that are open.
+11. Move the conmaster-v.90.zip file into c:\phpdev\www .
+12. Unzip conmaster-v.90.zip.  You should now have a 'cm' folder in c:\phpdev\www .
+13. Return to the phpMyAdmin web page.
+14. In the 'Create new database' box, type 'cyface' (no quotes), and then click 'Create'.
+15. Click on the 'SQL' tab link of the new web page that comes up.
+16. Click 'browse', and browse to c:\phpdev\www\cm\sql\create_cyface_user.sql .
+17. Click 'Go'.  The cyface database user will be created.
+18. Click on the 'SQL' tab link of the new web page that comes up.
+19. Click 'browse', and browse to c:\phpdev\www\cm\sql\complete_empty_install.sql .
+20. Click on the 'SQL' tab link of the new web page that comes up.
+21. Click 'browse', and browse to c:\phpdev\www\cm\sql\default_constant.sql .
+22. Open a new web browser and browse to http://localhost/cm .
 
-These tools are available for windoze, Mac OS X, and of course, Linux. Red Hat Linux 7.3 has appropriate versions of everything but phpMyAdmin pre-installed. 
+That completes the basic ConMaster5 install.
 
-Follow the basic instructions with each package to install them. I was able to install everything on my windoze2k box in about 30 minutes the first time I did it, and 15 the next. 
+Recommended followup tasks:
 
-You will need to create a database in your MySQL (I usually call it cyface), and a user that has full control over that database. You can use phpMyAdmin to do this. (You will first need to configure phpMyAdmin (config.inc.php in the phpMyAdmin directory) to run as the root user so that you can log in and create a new db). 
-
-Once you have done that, edit the top line of the cyface.ini file in the cm/lib/DataObjects directory to point at the new database & user. 
-
-Rename the appropriate htaccess- files to .htaccess, and browse to <yourhost>cm/index.html
-
-Apache installation tips
-
-Windoze
-If you change the document root (it starts as something like C:\program files\apache group\apache\htdocs) make sure you update the second place in the httpd.conf that says "change this to whatever you set the document root to", or your .htaccess files will not work.
-Also, make sure you set your .htaccess files to Allow All, so that the cm .htaccess can set the PHP include_path.
-
-
-
-PHP installation tips
-
-Windoze
-Make sure you follow the directions for installing PHP as a SAPI module under apache.
-
-
-
-MySQL installation tips
-
-Windoze
-To install MySQL as a service (which is what you want to do) run the winmysqladmin.exe app in the bin directory after you install MySql.  It will prompt you to create a password for the root user.  Supply one, and you should be started.  A systray app (that looks like a traffic light) will run to let you start and stop the database.
+1. Change your MySQL root password:
+	A. Use phpMyAdmin's 'Users' link.
+	B. Update the passsword in c:\phpdev\phpmyadmin\config.inc.php after you change it.
+2. Change the password for the cyface user:
+	A. Use phpMyAdmin's 'Users' link to change the password.
+	B. Update cm/config/conmaster.ini with the new password ( mysql://cyface:password@localhost/cyface )
+3. Update the constants table to your needs
+	A. Use phpMyAdmin's browse function on the constant table in the cyface database.
