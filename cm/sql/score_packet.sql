@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 14, 2002 at 07:19 PM
+# Generation Time: Jul 17, 2002 at 10:32 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -16,15 +16,15 @@
 
 DROP TABLE IF EXISTS score_packet;
 CREATE TABLE score_packet (
-  id int(11) unsigned NOT NULL auto_increment,
-  person_id int(11) unsigned NOT NULL default '0',
-  event_id int(11) unsigned NOT NULL default '0',
-  section_id int(11) unsigned NOT NULL default '0',
-  scenario_score tinyint(4) unsigned default NULL,
-  group_score tinyint(4) unsigned default NULL,
-  number_of_players tinyint(4) unsigned default NULL,
-  rpga_event_type char(2) default NULL,
-  convention_id int(11) unsigned NOT NULL default '1',
+  id int(10) unsigned NOT NULL auto_increment,
+  person_id int(10) unsigned NOT NULL default '0',
+  event_id int(10) unsigned NOT NULL default '0',
+  section_id int(10) unsigned NOT NULL default '0',
+  scenario_score int(10) unsigned NOT NULL default '0',
+  group_score int(10) unsigned NOT NULL default '0',
+  number_of_players int(10) unsigned NOT NULL default '6',
+  rpga_event_type varchar(10) default NULL,
+  convention_id int(10) unsigned NOT NULL default '1',
   last_modified timestamp(14) NOT NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
@@ -33,7 +33,7 @@ CREATE TABLE score_packet (
 # Dumping data for table `score_packet`
 #
 
-INSERT INTO score_packet VALUES (2, 20063, 107, 133, 73, 19, 5, 'BE', 0, 20020714160455);
+INSERT INTO score_packet VALUES (2, 20063, 107, 133, 73, 19, 5, 'BE', 1, 20020717103210);
 INSERT INTO score_packet VALUES (3, 995, 108, 138, 81, 23, 6, 'BE', 1, 20020714160455);
 INSERT INTO score_packet VALUES (4, 501, 108, 138, 70, 27, 5, 'BE', 1, 20020714160455);
 INSERT INTO score_packet VALUES (5, 71, 113, 155, 80, 24, 5, 'BE', 1, 20020714160455);
@@ -112,5 +112,5 @@ INSERT INTO score_packet VALUES (111, 2017, 121, 177, 82, 26, 6, 'BE', 1, 200207
 INSERT INTO score_packet VALUES (112, 2049, 113, 152, 68, 30, 5, 'BE', 1, 20020714160455);
 INSERT INTO score_packet VALUES (113, 1163, 111, 146, 88, 29, 6, 'GM', 1, 20020714160455);
 INSERT INTO score_packet VALUES (114, 397, 113, 152, 52, 23, 4, 'BE', 1, 20020714160455);
-INSERT INTO score_packet VALUES (115, 828, 109, 141, 97, 22, 6, 'BE', 0, 20020714160455);
+INSERT INTO score_packet VALUES (115, 828, 109, 141, 97, 22, 6, 'BE', 1, 20020717103234);
 

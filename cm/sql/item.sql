@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 14, 2002 at 07:11 PM
+# Generation Time: Jul 17, 2002 at 10:25 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -16,7 +16,7 @@
 
 DROP TABLE IF EXISTS item;
 CREATE TABLE item (
-  id int(11) unsigned NOT NULL auto_increment,
+  id int(10) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   owner varchar(255) NOT NULL default '',
   access varchar(255) NOT NULL default '',

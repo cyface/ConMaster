@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 14, 2002 at 07:24 PM
+# Generation Time: Jul 17, 2002 at 10:34 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -16,12 +16,12 @@
 
 DROP TABLE IF EXISTS slot;
 CREATE TABLE slot (
-  id int(11) NOT NULL auto_increment,
-  slot_number int(5) NOT NULL default '0',
+  id int(10) unsigned NOT NULL auto_increment,
+  slot_number int(10) unsigned NOT NULL default '0',
   date date NOT NULL default '0000-00-00',
   start_time time NOT NULL default '00:00:00',
   end_time time NOT NULL default '00:00:00',
-  convention_id int(11) unsigned NOT NULL default '1',
+  convention_id int(10) unsigned NOT NULL default '1',
   PRIMARY KEY  (id),
   UNIQUE KEY slot_number (slot_number,convention_id)
 ) TYPE=MyISAM COMMENT='Possible times sections can run';

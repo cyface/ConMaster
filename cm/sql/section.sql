@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 14, 2002 at 07:23 PM
+# Generation Time: Jul 17, 2002 at 10:34 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -16,24 +16,24 @@
 
 DROP TABLE IF EXISTS section;
 CREATE TABLE section (
-  id int(11) unsigned NOT NULL auto_increment,
-  event_id int(11) unsigned NOT NULL default '0',
-  event_number smallint(6) unsigned NOT NULL default '0',
-  section_number tinyint(4) unsigned NOT NULL default '0',
+  id int(10) unsigned NOT NULL auto_increment,
+  event_id int(10) unsigned NOT NULL default '0',
+  event_number int(10) unsigned NOT NULL default '0',
+  section_number int(10) unsigned NOT NULL default '0',
   complete_event_number varchar(15) NOT NULL default '',
   date date NOT NULL default '0000-00-00',
   start_time time NOT NULL default '00:00:00',
   end_time time NOT NULL default '00:00:00',
   location varchar(255) default NULL,
-  num_registered tinyint(4) unsigned NOT NULL default '0',
-  max_registered tinyint(4) unsigned NOT NULL default '6',
-  registrations_open tinyint(4) unsigned NOT NULL default '6',
+  num_registered int(10) unsigned NOT NULL default '0',
+  max_registered int(10) unsigned NOT NULL default '6',
+  registrations_open int(10) unsigned NOT NULL default '6',
   event_full varchar(7) default NULL,
   results_entered varchar(7) default NULL,
   event_ran varchar(7) default NULL,
-  advance_to_section tinyint(4) unsigned default NULL,
-  round int(2) unsigned NOT NULL default '1',
-  convention_id int(11) unsigned NOT NULL default '1',
+  advance_to_section int(10) unsigned default NULL,
+  round int(10) unsigned NOT NULL default '1',
+  convention_id int(10) unsigned NOT NULL default '1',
   last_modified timestamp(14) NOT NULL,
   PRIMARY KEY  (id),
   KEY complete_event_number (complete_event_number)

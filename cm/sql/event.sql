@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 14, 2002 at 08:31 PM
+# Generation Time: Jul 17, 2002 at 10:25 AM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -16,27 +16,27 @@
 
 DROP TABLE IF EXISTS event;
 CREATE TABLE event (
-  id int(11) unsigned NOT NULL auto_increment,
-  event_number smallint(6) default NULL,
+  id int(10) unsigned NOT NULL auto_increment,
+  event_number int(10) unsigned NOT NULL default '0',
   event_name text,
   game_system varchar(255) default NULL,
   scenario_name varchar(255) default NULL,
   author_name varchar(255) default NULL,
   rpga varchar(7) default NULL,
   rpga_event_type varchar(10) default NULL,
-  round_count smallint(6) default NULL,
+  round_count int(10) unsigned NOT NULL default '1',
   description text,
   price decimal(10,0) default NULL,
   level varchar(50) default NULL,
   type varchar(50) default NULL,
-  contact_person_id int(11) unsigned default NULL,
+  contact_person_id int(10) unsigned default NULL,
   rpga_only varchar(7) default NULL,
   sponsor varchar(50) default NULL,
   rpga_event_code varchar(30) default NULL,
-  convention_id int(11) unsigned NOT NULL default '1',
+  convention_id int(10) unsigned NOT NULL default '1',
   last_modified timestamp(14) NOT NULL,
   PRIMARY KEY  (id),
-  FULLTEXT KEY event_name (event_name)
+  UNIQUE KEY event_number (event_number,convention_id)
 ) TYPE=MyISAM COMMENT='Events';
 
 #
