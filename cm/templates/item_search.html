@@ -38,7 +38,7 @@
     </tr>
   </table>
   <p align="center">
-    <input type="hidden" name="table_name" value="item">
+    <input type="hidden" name="table" value="item">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
@@ -54,7 +54,7 @@
   </tr>
   <!-- START BLOCK : result_row -->
   <tr>
-    <td><a href="form_handler.php?table_name=item&action=edit&id={id}" target="popup" onclick="popwin()">{name}</a></td>
+    <td><a href="form_handler.php?table=item&action=edit&id={id}" target="popup" onclick="popwin()">{name}</a></td>
     <td>{type}</td>
     <td>{category}
     <td>{description}
@@ -62,7 +62,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=item&action=new" target="popup" onclick="popwin()">Create a New Item</a></span>
+<span class="FieldName"><a href="form_handler.php?table=item&action=new" target="popup" onclick="popwin()">Create a New Item</a></span>
 <hr noshade>
 </body>
 </html>

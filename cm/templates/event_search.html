@@ -51,7 +51,7 @@
     </tr>
   </table>
   <p align="center">
-    <input type="hidden" name="table_name" value="event">
+    <input type="hidden" name="table" value="event">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
@@ -69,7 +69,7 @@
   <!-- START BLOCK : result_row -->
   <tr>
     <td>{event_number}</td>
-    <td><a href="form_handler.php?table_name=event&action=edit&id={id}" target="popup" onClick="popwin()">{game_system}</a></td>
+    <td><a href="form_handler.php?table=event&included_table=section&action=edit&id={id}" target="popup" onClick="popwin()">{game_system}</a></td>
     <td>{scenario_name}</td>
     <td>{type}</td>
     <td>{level}
@@ -77,7 +77,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=event&action=new" target="popup" onclick="popwin()">Create a New Event</a></span>
+<span class="FieldName"><a href="form_handler.php?table=event&action=new" target="popup" onclick="popwin()">Create a New Event</a></span>
 <hr noshade>
 </body>
 </html>

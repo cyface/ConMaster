@@ -114,7 +114,7 @@
     <tr> 
       <td> 
         <div align="center"> 
-          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table_name=person&action=delete&id={id}');return document.MM_returnValue">
+          <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table=person&action=delete&id={id}');return document.MM_returnValue">
         </div>
       </td>
       <td> 
@@ -127,7 +127,8 @@
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="badge_number" value="{badge_number}">
-          <input type="hidden" name="table_name" value="person">
+          <input type="hidden" name="table" value="person">
+          <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
           </span> 
           <input type="submit" name="save" value="Save">
@@ -154,8 +155,8 @@
       <td class="TableDataBold"><span class="FieldName"> 
         <input type="hidden" name="parent_id" value="{id}">
         <input type="hidden" name="person_id" value="{id}">
-        <input type="hidden" name="table_name" value="person">
-        <input type="hidden" name="included_table_name" value="person_section">
+        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="action" value="save_included">
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="text" name="section_id" size="6" maxlength="10" class="FieldData">
@@ -172,14 +173,14 @@
     <td class="TableDataBold">
         <span class="FieldName">
         <input type="hidden" name="id" value="{id}">
-        <input type="hidden" name="table_name" value="person_section">
+        <input type="hidden" name="table" value="person_section">
         <input type="hidden" name="action" value="delete">
         </span> 
         <input type="submit" name="delete" value="Delete" onClick="popwin()">      
     </td>
-      <td class="TableDataBold">{related_section[complete_event_number]}</td>
-    <td class="TableData"><a href="form_handler.php?table_name=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{related_event[event_name]}</a></td>
-    <td class="TableData">{related_section[start_time]}-{related_section[end_time]}</td>
+      <td class="TableDataBold">{_section_id[complete_event_number]}</td>
+      <td class="TableData"><a href="form_handler.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_event_id[event_name]}</a></td>
+      <td class="TableData">{_section_id[start_time]}-{_section_id[end_time]}</td>
     <td class="TableData">${price}</td>
     <td class="TableData">
       <input type="checkbox" name="judge2" value="CHECKED" {judge}>

@@ -12,7 +12,7 @@
     <td>&nbsp;</td>
   </tr>
 </table>
-<p><span class="FormTitle">Person Search Form</span> </p>
+<span class="FormTitle">Person Search Form</span>
 <hr noshade>
 <form name="person_search_form" method="post" action="form_handler.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
@@ -40,7 +40,7 @@
     </tr>
   </table>
   <p align="center">
-    <input type="hidden" name="table_name" value="person">
+    <input type="hidden" name="table" value="person">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
@@ -59,7 +59,7 @@
   <!-- START BLOCK : result_row -->
   <tr> 
     <td class="TableDataBold">{badge_number}</td>
-    <td class="TableData"><a href="form_handler.php?table_name=person&action=edit&load_children=true&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name}, 
+    <td class="TableData"><a href="form_handler.php?table=person&action=edit&included_table=person_section&id={id}" target="popup" class="TableData" onclick="popwin()">{last_name}, 
       {first_name}</a></td>
     <td class="TableData">{street}</td>
     <td class="TableData">{city} 
@@ -68,7 +68,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=person&action=new" target="popup" onclick="popwin()">Create a New Person</a></span> 
+<span class="FieldName"><a href="form_handler.php?table=person&action=new" target="popup" onclick="popwin()">Create a New Person</a></span> 
 <hr noshade>
 </body>
 </html>

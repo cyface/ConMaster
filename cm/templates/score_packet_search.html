@@ -29,7 +29,7 @@
     </tr>
   </table>
   <p align="center" class="FieldData">
-    <input type="hidden" name="table_name" value="score_packet">
+    <input type="hidden" name="table" value="score_packet">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
   </p>
@@ -47,14 +47,14 @@
   <!-- START BLOCK : result_row -->
   <tr>
     <td class="TableDataBold">{id}</td>
-    <td class="TableData"><a href="form_handler.php?table_name=score_packet&action=edit&id={id}" target="popup" class="TableData" onclick="popwin()">{complete_event_number}</a></td>
+    <td class="TableData"><a href="form_handler.php?table=score_packet&action=edit&id={id}" target="popup" class="TableData" onclick="popwin()">{complete_event_number}</a></td>
     <td class="TableData">{number_of_players}</td>
     <td class="TableData">{judge_id}
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="form_handler.php?table_name=score_packet&action=new" target="popup" onclick="popwin()">Create a New Score Packet</a></span>
+<span class="FieldName"><a href="form_handler.php?table=score_packet&action=new" target="popup" onclick="popwin()">Create a New Score Packet</a></span>
 <hr noshade>
 </body>
 </html>
