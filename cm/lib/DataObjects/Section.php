@@ -1,6 +1,7 @@
 <?
 /*
 * Table Definition for section
+* CVS Info: $Id: Section.php,v 1.4 2002/07/17 23:26:48 cyface Exp $
 */
 
 

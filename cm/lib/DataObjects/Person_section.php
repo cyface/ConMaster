@@ -1,6 +1,7 @@
 <?
 /*
 * Table Definition for person_section
+* CVS Info: $Id: Person_section.php,v 1.4 2002/07/17 23:26:48 cyface Exp $
 */
 
 
@@ -129,7 +130,6 @@ class DataObjects_Person_section extends DB_DataObject {
 			$personObject->update();
 			
 			return DB_DataObject::insert(); //Call the parent method
-			return true;
 		} //End "if $this->reg_type != 'Score Packet'"
 		
 		if ($this->reg_type == 'Score Packet') {
