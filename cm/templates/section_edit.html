@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>Section Edit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<table width="75%" border="0" cellspacing="2" cellpadding="2">
+  <tr> 
+    <td class="FormTitle">{id}</td>
+    <td class="FormTitle">
+      <div align="right">{complete_event_number}</div>
+    </td>
+  </tr>
+</table>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error} 
+</span>
+<hr>
+<form name="event_edit" method="post" action="form_handler.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2">
+    <tr> 
+      <td class="FieldName" width="4%">Event ID</td>
+      <td> 
+        <input type="text" name="event_id" value="{event_id}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{event_id_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Event Number</td>
+      <td> 
+        <input type="text" name="event_number" value="{event_number}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{event_number_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">Section Number</td>
+      <td> 
+        <input type="text" name="section_number" value="{section_number}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{section_number_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Complete Event Number</td>
+      <td> 
+        <input type="text" name="complete_event_number" value="{complete_event_number}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{complete_event_number_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">Slot Date</td>
+      <td> 
+        <input type="text" name="slot_date" value="{slot_date}" maxlength="15" size="10" class="FieldData" onBlur="YY_checkform('event_edit','slot_date','^\([0-9][0-9]\)\/\([0-9][0-9]\)\/\([0-9]{4}\)$#1#2#3','3','The data must be in the format dd/mm/yyyy');return document.MM_returnValue">
+        <span class="FieldError"><font color="#FF0000"><b>{slot_date_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Start Time</td>
+      <td> 
+        <input type="text" name="start_time" value="{start_time}" maxlength="15" size="10" class="FieldData" onBlur="YY_checkform('event_edit','start_time','^\(0[0-9]|1[0-9]|2[0-3]\)\:\([0-5][0-9]\)$','4','The time must be in 24-hour hh:mm format.');return document.MM_returnValue">
+        <span class="FieldError"><font color="#FF0000"><b>{start_time_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">End Time</td>
+      <td> 
+        <input type="text" name="end_time" value="{end_time}" maxlength="15" size="10" class="FieldData" onBlur="YY_checkform('event_edit','end_time','^\(0[0-9]|1[0-9]|2[0-3]\)\:\([0-5][0-9]\)$','4','The time must be in 24 hour hh:mm format.');return document.MM_returnValue">
+        <span class="FieldError"><font color="#FF0000"><b>{end_time_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Location</td>
+      <td> 
+        <input type="text" name="num_registered" value="{location}" maxlength="15" size="15" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{location_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">Num Registered</td>
+      <td> 
+        <input type="text" name="num_registered" value="{num_registered}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{num_registered_error}</b></font></span> 
+      </td>
+      <td class="FieldName">Max Registered</td>
+      <td> <font color="#FF0000"><b class="FieldError"> 
+        <input type="text" name="max_registered" value="{max_registered}" maxlength="40" size="10" class="FieldData">
+        {max_registered_error}</b></font> </td>
+    </tr>
+    <tr> 
+      <td class="FieldName">Event Full</td>
+      <td> 
+        <input type="checkbox" name="event_full" value="CHECKED" {event_full}>
+        <font color="#FF0000"><b class="FieldError">{event_full_error}</b></font> 
+      </td>
+      <td class="FieldName">Results Entered</td>
+      <td> 
+        <input type="checkbox" name="results_entered" value="CHECKED" {results_entered}>
+        <font color="#FF0000"><b class="FieldError">{results_entered_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName">Event Ran</td>
+      <td> 
+        <input type="checkbox" name="event_ran" value="CHECKED" {event_ran}>
+        <font color="#FF0000"><b class="FieldError">{event_ran_error}</b></font> 
+      </td>
+      <td class="FieldName" width="4%">Notes</td>
+      <td> 
+        <input type="text" name="notes" value="{notes}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{notes_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">Slots Left</td>
+      <td> 
+        <input type="text" name="slots_left" value="{slots_left}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{slots_left_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Numeric Section</td>
+      <td> 
+        <input type="text" name="numeric_section" value="{numeric_section}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{numeric_section_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">Advance To Section</td>
+      <td> 
+        <input type="text" name="advance_to_section" value="{advance_to_section}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{advance_to_section_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%">Round</td>
+      <td> 
+        <input type="text" name="round" value="{round}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{round_error}</b></font></span> 
+      </td>
+    </tr>
+  </table>
+  <input type="hidden" name="id" value="{id}">
+  <input type="hidden" name="last_modified" value="{last_modified}">
+  <input type="hidden" name="table_name" value="section">
+  <input type="hidden" name="action" value="save">
+  <p class="FieldName"> 
+    <input type="submit" name="save" value="Save">
+    <input type="button" name="cancel" value="Cancel" onClick="window.close()">
+    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table_name=section&action=delete&id={id}');return document.MM_returnValue">
+  </p>
+</form>
+</body>
+</html>

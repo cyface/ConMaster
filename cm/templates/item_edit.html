@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Item Edit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{name} Item Record'" class="BodyClass">
+<p><span class="FormTitle">{name} </span></p>
+<p><span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
+</p>
+<hr>
+<form name="new_item" method="post" action="form_handler.php">
+  <table width="100%" border="0" cellspacing="2" cellpadding="2">
+    <tr> 
+      <td class="FieldName">Name</td>
+      <td> 
+        <input type="text" name="name" value="{name}" maxlength="40" size="30" class="FieldData">
+        <b><font color="#FF0000" class="FieldError">{name_error}</font></b> </td>
+      <td class="FieldName">Owner</td>
+      <td> 
+        <input type="text" name="owner" value="{owner}" maxlength="40" size="20" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{owner_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName">Access</td>
+      <td> 
+        <select name="access" size="3" class="FieldData">
+          <option selected>{access}</option>
+          <option>GM</option>
+          <option>Player</option>
+          <option>Other</option>
+        </select>
+        <span class="FieldError"><font color="#FF0000"><b>{access_error}</b></font></span> 
+      </td>
+      <td class="FieldName">Category</td>
+      <td> 
+        <input type="text" name="category" value="{category}" maxlength="40" size="20" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{category_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName">Type</td>
+      <td> 
+        <input type="text" name="type" value="{type}" maxlength="40" size="35">
+        <font color="#FF0000"><b class="FieldError">{type_error}</b></font> </td>
+      <td class="FieldName">Subcategory</td>
+      <td> 
+        <input type="text" name="subcategory" value="{subcategory}" maxlength="20" size="20" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{subcategory_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="4"><span class="FieldName">Description</span> <b><font color="#FF0000"><span class="FieldError">{description_error}</span></font></b> 
+        <br>
+        <textarea name="description" cols="75" rows="5" class="FieldData">{description}</textarea>
+      </td>
+    </tr>
+  </table>
+  <p class="FieldName"> 
+    <input type="hidden" name="id" value="{id}">
+    <input type="hidden" name="last_modified" value="{last_modified}">
+    <input type="hidden" name="table_name" value="item">
+    <input type="hidden" name="action" value="save">
+    <input type="submit" name="save" value="Save" onClick="MM_validateForm('name','','R','description','','R');return document.MM_returnValue">
+    <input type="button" name="cancel" value="Cancel" onClick="window.close()">
+    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table_name=item&amp;action=delete&amp;id={id}');return document.MM_returnValue">
+  </p>
+</form>
+<p>&nbsp; </p>
+</body>
+</html>

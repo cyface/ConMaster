@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Person Section List Edit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<span class="FormTitle"> Person Section List Edit Form</span> 
+<hr noshade>
+<form name="person_id_form" method="get" action="person_section_edit_list.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
+    <tr> 
+      <td><span class="FieldName">Person ID</span> </td>
+      <td> 
+        <input type="text" name="person_id" value="{person_id}" class="FieldData">
+      </td>
+    </tr>
+  </table>
+  <p align="center">
+    <input type="hidden" name="table_name" value="person_section">
+    <input type="hidden" name="action" value="search">
+    <input type="submit" name="Search" value="Search">
+  </p>
+  </form>
+<hr noshade>
+<span class="FieldName">
+<p>Events</p>
+</span> 
+<table width="100%" border="1">
+  <tr> 
+    <td class="TableTitle">Action</td>
+    <td class="TableTitle">Event Num</td>
+    <td class="TableTitle"> Event Name</td>
+    <td class="TableTitle"> Time</td>
+    <td class="TableTitle"> Price</td>
+    <td class="TableTitle">Judge</td>
+  </tr>
+  <tr>
+	<form name="add_person_section" method="post" action="person_section_add">
+      <td class="TableDataBold">
+        <input type="submit" name="add" value="Add">
+      </td>
+    <td class="TableDataBold"> 
+         <input type="text" name="complete_event_number" size="10" maxlength="10">
+    </td>
+    <td class="TableData">&nbsp;</td>
+    <td class="TableData">&nbsp;</td>
+    <td class="TableData">&nbsp;
+    <td class="TableData">&nbsp;
+	</form>
+  </tr>
+  <!-- START BLOCK : event_row -->
+  <tr> 
+    <td class="TableDataBold"><a href="person_section_edit.php?id={id}%2Baction=delete">Delete</a></td>
+    <td class="TableDataBold">{complete_event_number}</td>
+    <td class="TableData"><a href="event_edit.php?id={event_id}" target="_blank" class="TableData">{event_name}</a></td>
+    <td class="TableData">{slot_date} {start_time}-{end_time}</td>
+    <td class="TableData">{price} 
+    <td class="TableData"> 
+      <input type="checkbox" name="judge" {judge}>
+  </tr>
+  <!-- END BLOCK : event_row -->
+</table>
+</body>
+</html>

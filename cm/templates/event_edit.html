@@ -1,0 +1,175 @@
+<html>
+<head>
+<title>Event Edit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+<script language="JavaScript">
+<!--
+function MM_goToURL() { //v3.0
+  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
+  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
+}
+//-->
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000"  onLoad="self.document.title = '{event_number} Event Record'" class="BodyClass">
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr> 
+    <td class="FormTitle">{event_name}</td>
+    <td class="FormTitle">
+      <div align="right"></div>
+    </td>
+  </tr>
+</table>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
+<hr>
+<form name="event_edit" method="post" action="form_handler.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2">
+    <tr> 
+      <td class="FieldName" width="4%">Event Number</td>
+      <td> 
+        <input type="text" name="event_number" value="{event_number}" maxlength="15" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{game_system_error}</b></font></span> 
+      </td>
+      <td class="FieldName">Event Type</td>
+      <td colspan="3"> 
+        <select name="type" class="FieldData">
+          <option selected>{type}</option>
+          <option>Role-Playing</option>
+          <option>Boardgame</option>
+          <option>Miniatures</option>
+          <option>Card Game</option>
+          <option>LARP</option>
+          <option>Puffing Billy</option>
+		  <option>Merchandise</option>
+		  <option>Demonstration</option>
+		  <option>Seminar</option>
+		  <option>Special Event</option>
+		  <option>Other</option>
+        </select>
+        <font color="#FF0000"><b class="FieldError">{type_error}</b></font> </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" height="50">Game System</td>
+      <td width="33%" height="50"> 
+        <input type="text" name="game_system" value="{game_system}" maxlength="40" size="25" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{game_system_error}</b></font></span> 
+      </td>
+      <td class="FieldName" width="4%" height="50">Scenario Name</td>
+      <td class="FieldName" colspan="3" height="50"> 
+        <input type="text" name="scenario_name" value="{scenario_name}" maxlength="100" size="35" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{scenario_name_error}</b></font></span> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">RPGA</td>
+      <td> 
+        <input type="checkbox" name="rpga" value="CHECKED" {rpga}>
+        <font color="#FF0000"><b class="FieldError">{rpga_error}</b></font> </td>
+      <td class="FieldName">Level</td>
+      <td colspan="3"> 
+        <select name="level" class="FieldData">
+          <option selected>{level}</option>
+          <option>Beginner - Rules Taught</option>
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+		  <option></option>
+        </select>
+        <font color="#FF0000"><b class="FieldError">{level_error}</b></font> </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">RPGA Type</td>
+      <td> <span class="FieldError"><font color="#FF0000"><b> 
+        <select name="rpga_event_type" class="FieldData">
+          <option selected>{rpga_event_type}</option>
+          <option>BE</option>
+          <option>FE</option>
+          <option>MA</option>
+          <option>GM</option>
+          <option>PA</option>
+          <option>TE</option>
+		  <option></option>
+        </select>
+        {rpga_event_type_error}</b></font></span> </td>
+      <td class="FieldName">Author</td>
+      <td colspan="3"> 
+        <input type="text" name="author_name" value="{author_name}" maxlength="40" size="35" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{author_name_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">RPGA Code</td>
+      <td> 
+        <input type="text" name="rpga_event_code" value="{rpga_event_code}" maxlength="15" size="15" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{phone_error}</b></font> </td>
+      <td class="FieldName">Sponsor</td>
+      <td colspan="3"> 
+        <input type="text" name="sponsor" value="{sponsor}" maxlength="40" size="35" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{sponsor_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td class="FieldName" width="4%">RPGA Only</td>
+      <td> 
+        <input type="checkbox" name="rpga_only" value="CHECKED" {rpga_only} class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{rpga_only_error}</b></font> 
+      </td>
+      <td class="FieldName">Price</td>
+      <td> 
+        <input type="text" name="price" value="{price}" maxlength="5" size="5" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{price_error}</b></font> </td>
+      <td class="FieldName">Rounds</td>
+      <td width="33%"> 
+        <input type="text" name="round_count" value="{round_count}" maxlength="5" size="5" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{round_count_error}</b></font> 
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="6"> 
+        <p><span class="FieldName">Description</span> <span class="FieldError">{description_error}<br>
+          </span> 
+          <textarea name="description" cols="75" class="FieldData" rows="10">{description}</textarea>
+        </p>
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="6"><span class="FieldName"> 
+        <p>Sections</p>
+        </span> 
+        <table width="100%" border="1">
+          <tr> 
+            <td class="TableTitle">Section Num</td>
+            <td class="TableTitle"> Event Name</td>
+            <td class="TableTitle"> Time</td>
+            <td class="TableTitle"> Price</td>
+            <td class="TableTitle">Judge</td>
+          </tr>
+          <!-- START BLOCK : event_row -->
+          <tr> 
+            <td class="TableDataBold">{complete_event_number}</td>
+            <td class="TableData"><a href="item_edit.php?id={id}" target="_blank" class="TableData">{event_name}</a></td>
+            <td class="TableData">{time}</td>
+            <td class="TableData">{price} 
+            <td class="TableData">{judge} 
+          </tr>
+          <!-- END BLOCK : event_row -->
+        </table>
+      </td>
+    </tr>
+  </table>
+  <input type="hidden" name="id" value="{id}">
+  <input type="hidden" name="last_modified" value="{last_modified}">
+  <input type="hidden" name="table_name" value="event">
+  <input type="hidden" name="event_name" value="{event_name}">
+  <input type="hidden" name="action" value="save">
+  <p class="FieldName"> 
+    <input type="submit" name="save" value="Save">
+    <input type="button" name="cancel" value="Cancel" onClick="window.close()">
+    <input type="button" name="delete" value="Delete" onClick="MM_goToURL('parent','form_handler.php?table_name=event&action=delete&id={id}');return document.MM_returnValue">
+  </p>
+</form>
+</body>
+</html>

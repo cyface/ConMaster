@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Event Search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<span class="FormTitle"> Event Search Form</span> 
+<hr noshade>
+<form name="search_form" method="post" action="form_handler.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
+    <tr> 
+      <td><span class="FieldName">Event Name</span></td>
+      <td> 
+        <input type="text" name="search[event_name]" value="{event_name}" class="FieldData">
+      </td>
+      <td><span class="FieldName">Type</span></td>
+      <td> 
+        <select name="search[type]" class="FieldData">
+          <option selected></option>
+          <option>Role-Playing</option>
+          <option>Boardgame</option>
+          <option>Miniatures</option>
+          <option>Card Game</option>
+          <option>LARP</option>
+          <option>Puffing Billy</option>
+		  <option>Merchandise</option>
+		  <option>Demonstration</option>
+		  <option>Seminar</option>
+		  <option>Special Event</option>
+		  <option>Other</option>
+        </select>
+      </td>
+    </tr>
+    <tr> 
+      <td><span class="FieldName">Description</span></td>
+      <td> 
+        <input type="text" name="search[description]" value="{description}" class="FieldData">
+      </td>
+      <td><span class="FieldName">Event Number</span></td>
+      <td>
+        <input type="text" name="search[event_number]" value="{event_number}" class="FieldData">
+      </td>
+    </tr>
+  </table>
+  <p align="center"> 
+    <input type="hidden" name="table_name" value="event">
+    <input type="hidden" name="action" value="search">
+    <input type="submit" name="Search" value="Search">
+  </p>
+  </form>
+<hr noshade>
+<span class="FormTitle">Search Results</span> 
+<table width="100%" border="1">
+  <tr> 
+    <td class="TableTitle"> Number</td>
+    <td class="TableTitle">Game System</td>
+    <td class="TableTitle">Scenario Name</td>
+    <td class="TableTitle"> Type</td>
+    <td class="TableTitle"> Level</td>
+  </tr>
+  <!-- START BLOCK : result_row -->
+  <tr> 
+    <td>{event_number}</td>
+    <td><a href="form_handler.php?table_name=event&action=edit&id={id}" target="popup" onClick="popwin()">{game_system}</a></td>
+    <td>{scenario_name}</td>
+    <td>{type}</td>
+    <td>{level} 
+  </tr>
+  <!-- END BLOCK : result_row -->
+</table>
+<hr noshade>
+<span class="FieldName"><a href="form_handler.php?table_name=event&action=new" target="popup" onclick="popwin()">Create a New Event</a></span> 
+<hr noshade>
+</body>
+</html>

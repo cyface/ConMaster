@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Person Section Search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<span class="FormTitle"> Person Section Search Form</span> 
+<hr noshade>
+<form name="search_form" method="post" action="form_handler.php">
+  <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
+    <tr> 
+      <td><span class="FieldName">Person ID</span></td>
+      <td> 
+        <input type="text" name="search[person_id]" value="{person_id}" class="FieldData">
+        <input type="hidden" name="search_operators[person_id]" value="equals">
+      </td>
+      <td><span class="FieldName">Section ID</span></td>
+      <td> 
+        <input type="text" name="search[section_id]" value="{section_id}" class="FieldData">
+        <input type="hidden" name="search_operators[section_id]" value="equals">
+      </td>
+    </tr>
+    <tr> 
+      <td><span class="FieldName">Packet ID</span></td>
+      <td> 
+        <input type="text" name="search[packet_id]" value="{packet_id}" class="FieldData">
+        <input type="hidden" name="search_operators[packet_id]" value="equals">
+      </td>
+      <td><span class="FieldName">Complete Event Number</span></td>
+      <td> 
+        <input type="text" name="search[complete_event_number]" value="{complete_event_number}" class="FieldData">
+      </td>
+    </tr>
+  </table>
+  <p align="center"> 
+    <input type="hidden" name="table_name" value="person_section">
+    <input type="hidden" name="action" value="search">
+    <input type="submit" name="Search" value="Search">
+  </p>
+  </form>
+<hr noshade>
+<span class="FormTitle">Search Results</span> 
+<table width="100%" border="1">
+  <tr> 
+    <td class="TableTitle"> Person ID</td>
+    <td class="TableTitle"> Section ID</td>
+    <td class="TableTitle"> Packet ID</td>
+    <td class="TableTitle"> Reg Type</td>
+  </tr>
+  <!-- START BLOCK : result_row -->
+  <tr> 
+    <td class="TableDataBold"><a href="form_handler.php?table_name=person&action=edit&id={person_id}" target="_blank">{person_id}</a></td>
+    <td class="TableData"><a href="form_handler.php?table_name=event&action=edit&id={section_id}" target="_blank">{section_id}</a></td>
+    <td class="TableData"><a href="form_handler.php?table_name=score_packet&action=edit&id={packet_id}" target="_blank">{packet_id}</a></td>
+    <td class="TableData">{reg_type} 
+  </tr>
+  <!-- END BLOCK : result_row -->
+</table>
+<hr noshade>
+<span class="FieldName"><a href="form_handler.php?table_name=person_section&action=new" target="_blank">Create 
+a New Person Section</a></span> 
+<hr noshade>
+</body>
+</html>
