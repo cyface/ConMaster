@@ -1,15 +1,19 @@
 function popwin(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
-	window.open(url,windowName,'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
+	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=640,height=480');
 }
 
 function popwinsmall(url,windowName) {
 	if(!url) url="please_wait.html";
 	if(!windowName) windowName="popup";
-	window.open(url,windowName,'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,width=320,height=240');
+	window.open(url,windowName,'toolbar=no,status=no,resizable=yes,scrollbars=yes,location=no,menubar=no,directories=no,copyhistory=no,width=320,height=240');
 }
-	
+
+function MM_popupMsg(msg) { //v1.0
+  alert(msg);
+}
+
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
   for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
