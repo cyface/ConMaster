@@ -1,5 +1,5 @@
 function popwin() {
-	window.open('please_wait.html','popup','toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,width=640,height=480')
+	window.open('please_wait.html','popup','toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,width=640,height=480');
 }
 	
 function MM_goToURL() { //v3.0

@@ -19,34 +19,34 @@
     <tr>
       <td><span class="FieldName">Event Name</span></td>
       <td>
-        <input type="text" name="search[event_name]" value="{event_name}" class="FieldData">
+        <input type="text" name="search[event_name]" value="{search[event_name]}" class="FieldData">
       </td>
       <td><span class="FieldName">Type</span></td>
       <td>
         <select name="search[type]" class="FieldData">
-          <option selected></option>
+          <option>{search[type]}</option>
           <option>Role-Playing</option>
           <option>Boardgame</option>
           <option>Miniatures</option>
           <option>Card Game</option>
           <option>LARP</option>
           <option>Puffing Billy</option>
-		  <option>Merchandise</option>
-		  <option>Demonstration</option>
-		  <option>Seminar</option>
-		  <option>Special Event</option>
-		  <option>Other</option>
+          <option>Merchandise</option>
+          <option>Demonstration</option>
+          <option>Seminar</option>
+          <option>Special Event</option>
+          <option>Other</option>
         </select>
       </td>
     </tr>
     <tr>
       <td><span class="FieldName">Description</span></td>
       <td>
-        <input type="text" name="search[description]" value="{description}" class="FieldData">
+        <input type="text" name="search[description]" value="{search[description]}" class="FieldData">
       </td>
       <td><span class="FieldName">Event Number</span></td>
       <td>
-        <input type="text" name="search[event_number]" value="{event_number}" class="FieldData">
+        <input type="text" name="search[event_number]" value="{search[event_number]}" class="FieldData">
       </td>
     </tr>
   </table>
@@ -57,22 +57,20 @@
   </p>
   </form>
 <hr noshade>
-<span class="FormTitle">Search Results</span>
+<span class="FormTitle">Search Results</span> <span class="FormTitle"> - {action_message}</span> 
 <table width="100%" border="1">
-  <tr>
+  <tr> 
     <td class="TableTitle"> Number</td>
-    <td class="TableTitle">Game System</td>
-    <td class="TableTitle">Scenario Name</td>
+    <td class="TableTitle">Event Name</td>
     <td class="TableTitle"> Type</td>
     <td class="TableTitle"> Level</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr>
+  <tr> 
     <td>{event_number}</td>
-    <td><a href="form.php?table=event&included_table=section&action=edit&id={id}" target="popup" onClick="popwin()">{game_system}</a></td>
-    <td>{scenario_name}</td>
+    <td><a href="form.php?table=event&included_table=section&action=edit&included_order_by=section_number&id={id}" target="popup" onClick="popwin()">{event_name}</a></td>
     <td>{type}</td>
-    <td>{level}
+    <td>{level} 
   </tr>
   <!-- END BLOCK : result_row -->
 </table>

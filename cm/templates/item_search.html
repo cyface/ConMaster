@@ -19,21 +19,21 @@
     <tr>
       <td><span class="FieldName">Item Name</span> </td>
       <td>
-        <input type="text" name="search[name]" value="{name}" class="FieldData">
+        <input type="text" name="search[name]" value="{search[name]}" class="FieldData">
       </td>
       <td><span class="FieldName">Type</span></td>
       <td>
-        <input type="text" name="search[type]" value="{type}" class="FieldData">
+        <input type="text" name="search[type]" value="{search[type]}" class="FieldData">
       </td>
     </tr>
     <tr>
       <td><span class="FieldName">Description</span></td>
       <td>
-        <input type="text" name="search[description]" value="{description}" class="FieldData">
+        <input type="text" name="search[description]" value="{search[description]}" class="FieldData">
       </td>
       <td><span class="FieldName">Category</span></td>
       <td>
-        <input type="text" name="search[category]" value="{category}" class="FieldData">
+        <input type="text" name="search[category]" value="{search[category]}" class="FieldData">
       </td>
     </tr>
   </table>
@@ -44,7 +44,7 @@
   </p>
   </form>
 <hr noshade>
-<span class="FormTitle">Search Results</span>
+<span class="FormTitle">Search Results</span> <span class="FormTitle"> - {action_message}</span> 
 <table width="100%" border="1">
   <tr>
     <td class="TableTitle"> Name</td>

@@ -153,49 +153,53 @@ function fmtShortTime (inTimeStr) {
 <span class="FormTitle">Events</span> <span class="FormTitle">{action_message}</span> 
 <span class="FieldError">{form_error} </span>
 <table width="100%" border="1">
-  <tr>
+  <tr> 
     <td class="TableTitle" width="5%" colspan=2>Action</td>
     <td class="TableTitle" width="5%">Event Num</td>
     <td class="TableTitle"> Event Name</td>
     <td class="TableTitle" width="10%"> Time</td>
-    <td class="TableTitle"> Price</td>
+    <td class="TableTitle">Reg</td>
+    <td class="TableTitle" width="75"> Price</td>
     <td class="TableTitle">Judge</td>
   </tr>
-  <tr> <form name="person_section_add" method="post" action="form.php">
-    <td class="TableDataBold" colspan=2>
+  <tr> 
+    <form name="person_section_add" method="post" action="form.php">
+      <td class="TableDataBold" colspan=2> 
         <input type="submit" name="add" value="Add">
-    </td>
+      </td>
       <td class="TableDataBold"><span class="FieldName"> 
         <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="person_id" value="{id}">
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="text" name="complete_event_number" size="6" maxlength="10" class="FieldData">
+        <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
         </span> </td>
-    <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
       <td class="TableData" width="10%">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
+      <td class="TableData" width="75">&nbsp;</td>
       <td class="TableData">&nbsp; </td>
-	</form>
+    </form>
   </tr>
   <!-- START BLOCK : person_section_row -->
-  <tr>	
-    <form name="person_section_delete" method="post" action="form.php" target="popup">
-	  <td class="TableData" width="5%"> 
+  <tr> 
+    <form name="person_section_delete" method="post" action="form.php">
+      <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
         <input type="hidden" name="parent_id" value="{person_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="submit" name="delete" value="Delete" onClick="popwin()">
-	  </td>
-	</form>
-	<form name="person_section_save" method="post" action="form.php" target="popup">
-	  <td class="TableData" width="5%"> 
+        <input type="submit" name="delete" value="Delete">
+      </td>
+    </form>
+    <form name="person_section_save" method="post" action="form.php" target="popup">
+      <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
@@ -203,20 +207,23 @@ function fmtShortTime (inTimeStr) {
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
         <input type="hidden" name="old_price" value="{old_price}">
-        <span class="FieldName">
         <input type="hidden" name="person_id" value="{person_id}">
-        </span> 
         <input type="submit" name="update" value="Update" onClick="popwin()">
       </td>
-      <td class="TableDataBold">{complete_event_number}</td>
+      <td class="TableDataBold">{_section_id[complete_event_number]}</td>
       <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{_event_id[event_name]}</a></td>
-      <td class="TableData" width="10%">
-<script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>-<script language="JavaScript">document.write(fmtShortTime("{_section_id[end_time]}"));</script>
+      <td class="TableData" width="10%"> 
+        <script language="JavaScript">document.write(fmtShortTime("{_section_id[start_time]}"));</script>
+        - 
+        <script language="JavaScript">document.write(fmtShortTime("{_section_id[end_time]}"));</script>
       </td>
-      <td class="TableData">$<input type="text" name="price" size="6" maxlength="10" class="FieldData" value="{price}"></td>
-      <td class="TableData">
+      <td class="TableData">{_section_id[num_registered]}/{_section_id[max_registered]}</td>
+      <td class="TableData" width="75">$ 
+        <input type="text" name="price" size="5" maxlength="10" class="FieldData" value="{price}">
+      </td>
+      <td class="TableData"> 
         <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">
-	  </td>
+      </td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_row -->

@@ -19,13 +19,11 @@
     <tr>
       <td width="10%" class="FieldName">Packet ID</td>
       <td width="38%">
-        <input type="text" name="search[id]" value="{id}" class="FieldData">
+        <input type="text" name="search[id]" value="{search[id]}" class="FieldData">
         <input type="hidden" name="search_operators[id]" value="equals">
       </td>
-      <td width="10%" class="FieldName">Complete Event Number</td>
-      <td width="38%">
-        <input type="text" name="search[complete_event_number]" value="{complete_event_number}" class="FieldData">
-      </td>
+      <td width="10%" class="FieldName">&nbsp;</td>
+      <td width="38%">&nbsp; </td>
     </tr>
   </table>
   <p align="center" class="FieldData">
@@ -35,21 +33,22 @@
   </p>
   </form>
 <hr noshade>
-<span class="FieldName">
-<p>Score Packets</p>
-</span><table width="100%" border="1">
-  <tr>
+<span class="FormTitle">Score Packets - {action_message}</span> 
+<table width="100%" border="1">
+  <tr> 
     <td class="TableTitle">Packet ID</td>
     <td class="TableTitle"> Complete Event Number</td>
+    <td class="TableTitle">Event Name</td>
+    <td class="TableTitle"> Judge Name</td>
     <td class="TableTitle"> Players</td>
-    <td class="TableTitle"> Judge Id</td>
   </tr>
   <!-- START BLOCK : result_row -->
-  <tr>
-    <td class="TableDataBold">{id}</td>
-    <td class="TableData"><a href="form.php?table=score_packet&action=edit&id={id}" target="popup" class="TableData" onclick="popwin()">{complete_event_number}</a></td>
+  <tr> 
+    <td class="TableDataBold"><a href="form.php?table=score_packet&included_table=person_section&included_order_by=packet_position&action=edit&id={id}" target="popup" class="TableData" onclick="popwin()">{id}</a></td>
+    <td class="TableData">{_section_id[complete_event_number]}</td>
+    <td class="TableData">{_event_id[event_name]}</td>
+    <td class="TableData">{_person_id[first_name]} {_person_id[last_name]} 
     <td class="TableData">{number_of_players}</td>
-    <td class="TableData">{judge_id}
   </tr>
   <!-- END BLOCK : result_row -->
 </table>

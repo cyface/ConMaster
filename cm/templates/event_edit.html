@@ -59,7 +59,7 @@ function MM_goToURL() { //v3.0
       <td class="FieldName" width="4%">Event Number</td>
       <td>
         <input type="text" name="event_number" value="{event_number}" maxlength="15" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{game_system_error}</b></font></span>
+        <span class="FieldError"><font color="#FF0000"><b>{event_number_error}</b></font></span> 
       </td>
       <td class="FieldName">Event Type</td>
       <td colspan="3">
@@ -178,14 +178,15 @@ function MM_goToURL() { //v3.0
         </div>
       </td>
       <td>
-        <div align="center"><span class="FieldName">
+        <div align="center"><span class="FieldName"> 
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="event_name" value="{event_name}">
           <input type="hidden" name="table" value="event">
           <input type="hidden" name="included_table" value="section">
           <input type="hidden" name="action" value="save">
-          </span>
+          <input type="hidden" name="included_order_by" value="section_number">
+          </span> 
           <input type="submit" name="save" value="Save">
         </div>
       </td>
@@ -196,62 +197,80 @@ function MM_goToURL() { //v3.0
 </form>
 <span class="FormTitle">Sections</span>
 <table width="100%" border="1">
-  <tr>
-    <td class="TableTitle">Action</td>
+  <tr> 
+    <td class="TableTitle" colspan="2">Action</td>
     <td class="TableTitle">Section Number</td>
-    <td class="TableTitle"> Max Registered</td>
-    <td class="TableTitle">Day</td>
+    <td class="TableTitle">Max Registered</td>
+    <td class="TableTitle">Date</td>
     <td class="TableTitle">Start Time</td>
-    <td class="TableTitle"> End Time</td>
+    <td class="TableTitle">End Time</td>
     <td class="TableTitle"> Round</td>
   </tr>
-  <tr>
+  <tr> 
     <form name="section_add" method="post" action="form.php">
-      <td class="TableDataBold">
+      <td class="TableDataBold" colspan="2"> 
         <input type="submit" name="add" value="Add">
       </td>
-      <td class="TableDataBold"><span class="FieldName">
+      <td class="TableDataBold"><span class="FieldName"> 
         <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="event_id" value="{id}">
+        <input type="hidden" name="event_number" value="{event_number}">
         <input type="hidden" name="table" value="event">
         <input type="hidden" name="included_table" value="section">
-        <input type="hidden" name="action" value="save_included">
+        <input type="hidden" name="included_order_by" value="section_number">
+        <input type="hidden" name="action" value="saveIncluded">
         <input type="text" name="section_number" size="6" maxlength="10" class="FieldData">
         </span> </td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="max_registered" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="slot_date" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="start_time" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="end_time" size="6" maxlength="10" class="FieldData">
-        </span></td>
-      <td class="TableData"><span class="FieldName">
-        <input type="text" name="round" size="6" maxlength="10" class="FieldData">
-        </span></td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData"><span class="FieldName"> </span></td>
     </form>
   </tr>
   <!-- START BLOCK : section_row -->
-  <tr>
-    <form name="person_section_delete" method="post" action="form.php" target="popup">
-      <td class="TableDataBold"> <span class="FieldName">
-        <input type="hidden" name="id" value="{id}">
-        <input type="hidden" name="table" value="section">
-        <input type="hidden" name="action" value="delete">
-        </span>
-        <input type="submit" name="delete" value="Delete" onClick="popwin()">
-        <input type="button" name="update" value="Update" onClick="popwin()">
+  <tr> 
+    <form name="section_delete" method="post" action="form.php">
+      <td class="TableDataBold"> 
+        <input type="hidden" name="table" value="event">
+        <input type="hidden" name="included_id" value="{id}">
+        <input type="hidden" name="action" value="deleteIncluded">
+        <input type="hidden" name="parent_id" value="{event_id}">
+        <input type="hidden" name="included_table" value="section">
+        <input type="hidden" name="included_order_by" value="section_number">
+        <input type="submit" name="delete" value="Delete">
       </td>
-      <td class="TableDataBold">{section_number}</td>
-      <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popwin()" class="TableData">{max_registered}</a></td>
-      <td class="TableData">{slot_date}</td>
-      <td class="TableData">{start_time}</td>
-      <td class="TableData">{end_time}</td>
-      <td class="TableData">{round}</td>
+    </form>
+    <form name="section_save" method="post" action="form.php">
+      <td class="TableDataBold"> 
+        <input type="hidden" name="table" value="event">
+        <input type="hidden" name="included_id" value="{id}">
+        <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="parent_id" value="{event_id}">
+        <input type="hidden" name="included_table" value="section">
+        <input type="hidden" name="included_order_by" value="section_number">
+        <input type="hidden" name="event_id" value="{event_id}">
+        <input type="submit" name="update" value="Update">
+      </td>
+      <td class="TableDataBold"><span class="FieldName"> 
+        <input type="text" name="section_number" size="6" maxlength="10" class="FieldData" value="{section_number}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="max_registered" size="6" maxlength="10" class="FieldData" value="{max_registered}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="date" size="10" maxlength="10" class="FieldData" value="{date}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="start_time" size="8" maxlength="8" class="FieldData" value="{start_time}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="end_time" size="8" maxlength="8" class="FieldData" value="{end_time}">
+        </span></td>
+      <td class="TableData"> 
+        <input type="text" name="round" size="2" maxlength="2" class="FieldData" value="{round}">
+      </td>
     </form>
   </tr>
   <!-- END BLOCK : section_row -->
