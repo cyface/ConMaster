@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for section
-* CVS Info: $Id: Section.php,v 1.5 2002/10/16 18:25:52 cyface Exp $
+* CVS Info: $Id: Section.php,v 1.6 2002/12/17 16:43:44 cyface Exp $
 */
 
 
@@ -98,5 +98,25 @@ class DataObjects_Section extends DB_DataObject {
 
 		return DB_DataObject::insert(); //Call the parent method
 	} //End function includedInsert
+	
+	function delete() {
+		//Delete the person_section records attached to this section
+		$personSectionClass = DB_DataObject::staticAutoloadTable('person_section');
+		$personSectionObject = new $personSectionClass;
+		$personSectionObject->section_id = $this->section_id;
+		$personSectionObject->find();
+		//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>'; //Testing Only
+
+		while ($personSectionObject->fetch()) {
+			//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>'; //Testing Only
+			$deleteObject = new $personSectionClass;
+			$deleteObject->id = $personSectionObject->id;
+			$deleteObject->person_id = $personSectionObject->person_id;
+			$deleteObject->section_id = $this->id;
+			$deleteObject->delete();
+		}
+
+		return DB_DataObject::delete(); //Call the parent method
+	}
 }
 ?>

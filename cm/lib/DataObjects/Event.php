@@ -12,7 +12,7 @@ class DataObjects_Event extends DB_DataObject {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
-    var $__table='event';                           // table name
+    var $__table='event';                 // table name
     var $id;                              // int(11)  not_null primary_key unsigned auto_increment
     var $event_number;                    // string(10)
     var $event_name;                      // blob(65535)  multiple_key blob
@@ -59,6 +59,25 @@ class DataObjects_Event extends DB_DataObject {
 		$this->event_name = $rpgaStr . $this->game_system . $typeStr . ':' . $scenarioStr;
 
 		return DB_DataObject::update(); //Call the parent method
+	}
+	
+	function delete() {
+		//Delete the section records attached to this event
+		$sectionClass = DB_DataObject::staticAutoloadTable('section');
+		$sectionObject = new $sectionClass;
+		$sectionObject->event_id = $this->id;
+		$sectionObject->find();
+		echo '<PRE> Found Section Objects'; print_r($sectionObject); echo '<PRE>'; //Testing Only
+
+		while ($sectionObject->fetch()) {
+			//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>'; //Testing Only
+			$deleteObject = new $sectionClass;
+			$deleteObject->id = $sectionObject->id;
+			$deleteObject->event_id = $sectionObject->event_id;
+			$deleteObject->delete();
+		}
+
+		return DB_DataObject::delete(); //Call the parent method
 	}
 }
 ?>
