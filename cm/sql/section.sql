@@ -1,10 +1,10 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.0-rc2
+# version 2.3.0-rc4
 # http://phpwizard.net/phpMyAdmin/
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 17, 2002 at 10:34 AM
+# Generation Time: Jul 30, 2002 at 03:07 PM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -21,9 +21,9 @@ CREATE TABLE section (
   event_number int(10) unsigned NOT NULL default '0',
   section_number int(10) unsigned NOT NULL default '0',
   complete_event_number varchar(15) NOT NULL default '',
-  date date NOT NULL default '0000-00-00',
-  start_time time NOT NULL default '00:00:00',
-  end_time time NOT NULL default '00:00:00',
+  date date default NULL,
+  start_time time default NULL,
+  end_time time default NULL,
   location varchar(255) default NULL,
   num_registered int(10) unsigned NOT NULL default '0',
   max_registered int(10) unsigned NOT NULL default '6',
@@ -43,18 +43,18 @@ CREATE TABLE section (
 # Dumping data for table `section`
 #
 
-INSERT INTO section VALUES (2, 2, 1, 0, '1.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 0, 6, 6, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (3, 3, 2, 0, '2.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 0, 6, 6, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (4, 4, 3, 0, '3.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 3, 6, 3, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (5, 5, 4, 0, '4.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 14, 99, 85, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (6, 6, 5, 0, '5.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 2, 6, 4, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (7, 7, 6, 0, '6.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 4, 6, 2, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (8, 8, 7, 0, '7.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 2, 6, 4, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (9, 9, 8, 0, '8.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 5, 6, 1, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
+INSERT INTO section VALUES (2, 2, 1, 0, '1.0', NULL, NULL, NULL, NULL, 0, 6, 6, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (3, 3, 2, 0, '2.0', NULL, NULL, NULL, NULL, 0, 6, 6, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (4, 4, 3, 0, '3.0', '0000-00-00', '00:00:00', '00:00:00', NULL, 3, 6, 3, 'N', NULL, NULL, NULL, 1, 1, 20020730150630);
+INSERT INTO section VALUES (5, 5, 4, 0, '4.0', NULL, NULL, NULL, NULL, 14, 99, 85, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (6, 6, 5, 0, '5.0', NULL, NULL, NULL, NULL, 2, 6, 4, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (7, 7, 6, 0, '6.0', NULL, NULL, NULL, NULL, 4, 6, 2, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (8, 8, 7, 0, '7.0', NULL, NULL, NULL, NULL, 2, 6, 4, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
+INSERT INTO section VALUES (9, 9, 8, 0, '8.0', NULL, NULL, NULL, NULL, 5, 6, 1, 'N', NULL, NULL, NULL, 1, 1, 20020730150331);
 INSERT INTO section VALUES (10, 10, 9, 0, '9.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 1, 6, 5, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (11, 11, 10, 0, '10.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 8, 6, 0, 'CHECKED', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (12, 12, 11, 0, '11.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 25, 99, 74, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
-INSERT INTO section VALUES (13, 13, 12, 0, '12.0', '1999-05-28', '08:00:00', '12:00:00', NULL, 5, 6, 1, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
+INSERT INTO section VALUES (11, 11, 10, 0, '10.0', NULL, NULL, NULL, NULL, 8, 6, 0, 'CHECKED', NULL, NULL, NULL, 1, 1, 20020730150436);
+INSERT INTO section VALUES (12, 12, 11, 0, '11.0', NULL, NULL, NULL, NULL, 25, 99, 74, 'N', NULL, NULL, NULL, 1, 1, 20020730150436);
+INSERT INTO section VALUES (13, 13, 12, 0, '12.0', NULL, NULL, NULL, NULL, 5, 6, 1, 'N', NULL, NULL, NULL, 1, 1, 20020730150436);
 INSERT INTO section VALUES (14, 14, 100, 1, '100.1', '1999-05-28', '24:00:00', '24:00:00', 'City Lights 2/3', 55, 99, 44, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
 INSERT INTO section VALUES (15, 17, 110, 4, '110.4', '1999-05-29', '14:30:00', '16:30:00', 'City Lights 2/3', 0, 99, 99, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
 INSERT INTO section VALUES (16, 18, 111, 4, '111.4', '1999-05-29', '12:30:00', '21:00:00', 'City Lights 2/3', 2, 99, 97, 'N', NULL, NULL, NULL, 1, 1, 20020714192330);
