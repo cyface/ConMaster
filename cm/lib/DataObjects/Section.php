@@ -45,21 +45,6 @@ class DataObjects_Section extends DB_DataObject {
     ###END_AUTOCODE
 	
 	function insert() {
-		//Based on the supplied slot number, look up the default slot information
-		//Find the slot row that matches the slot that was input
-		$slotObject = DB_DataObject::staticGet('DataObjects_Slot','slot_number',$this->section_number);
-		
-		//Error if that slot wasn't found
-		if (!$slotObject) {
-			require_once('PEAR.php');
-			return new PEAR_Error('That Slot Does Not Exist.  Edit Your Convention To Add This Slot.');
-		}
-		
-		//Copy the default information from the slot record to this object
-		$this->date = $slotObject->date;
-		$this->start_time = $slotObject->start_time;
-		$this->end_time = $slotObject->end_time;
-		
 		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
 		
 		return DB_DataObject::insert(); //Call the parent method
@@ -79,5 +64,30 @@ class DataObjects_Section extends DB_DataObject {
 		return DB_DataObject::update(); //Call the parent method
 	}
 	
+	/*
+	* includedInsert - You are either registering them, or adding them to a packet.
+	*          As a result, there are a lot of things that have to happen.  That stuff happens here.
+	* 
+	* @param string inValue - search value
+	*/
+	function includedInsert($inValue) {
+		//Based on the supplied slot number, look up the default slot information
+		//Find the slot row that matches the slot that was input
+		$slotObject = DB_DataObject::staticGet('DataObjects_Slot','slot_number',$inValue);
+		
+		//Error if that slot wasn't found
+		if (!$slotObject) {
+			require_once('PEAR.php');
+			return new PEAR_Error('That Slot Does Not Exist.  Edit Your Convention To Add This Slot.');
+		}
+		
+		//Copy the default information from the slot record to this object
+		$this->section_number = $slotObject->slot_number;
+		$this->date = $slotObject->date;
+		$this->start_time = $slotObject->start_time;
+		$this->end_time = $slotObject->end_time;
+		
+		return DB_DataObject::insert(); //Call the parent method
+	} //End function includedInsert
 }
 ?>
