@@ -1,9 +1,9 @@
 <?php
-//
+/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 // +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
+// | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2001 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.02 of the PHP license,      |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -13,21 +13,14 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Rui Hirokawa <louis@cityfujisawa.ne.jp>                     |
-// |          Stig Bakken <ssb@fast.no>                                   |
+// | Authors: Rui Hirokawa <rui_hirokawa@ybb.ne.jp>                       |
+// |          Stig Bakken <ssb@php.net>                                   |
 // +----------------------------------------------------------------------+
 //
-// $Id: pgsql.php,v 1.5 2002/07/18 21:39:39 cyface Exp $
+// $Id: pgsql.php,v 1.6 2003/09/16 19:20:26 cyface Exp $
 //
 // Database independent query interface definition for PHP's PostgreSQL
 // extension.
-//
-
-//
-// XXX legend:
-//
-// XXX ERRORMSG: The error message from the pgsql function should
-//               be registered here.
 //
 
 require_once 'DB/common.php';
@@ -84,28 +77,26 @@ class DB_pgsql extends DB_common
             return $this->raiseError(DB_ERROR_EXTENSION_NOT_FOUND);
 
         $this->dsn = $dsninfo;
-        $host = $dsninfo['hostspec'];
-        $protocol = (isset($dsninfo['protocol'])) ? $dsninfo['protocol'] : '';
+        $protocol = (isset($dsninfo['protocol'])) ? $dsninfo['protocol'] : 'tcp';
         $connstr = '';
-        if (($host !== false) && ($protocol != 'unix')){
-            if (($pos = strpos($host, ':')) !== false) {
-                $dbhost = substr($host, 0, $pos);
-                $port = substr($host, $pos + 1);
-            } else {
-                $dbhost = $host;
-                $port = '5432';
+
+        if ($protocol == 'tcp') {
+            if (!empty($dsninfo['hostspec'])) {
+                $connstr = 'host=' . $dsninfo['hostspec'];
             }
-            $connstr = 'host=' . $dbhost . ' port=' . $port;
+            if (!empty($dsninfo['port'])) {
+                $connstr .= ' port=' . $dsninfo['port'];
+            }
         }
 
         if (isset($dsninfo['database'])) {
-            $connstr .= ' dbname=' . $dsninfo['database'];
+            $connstr .= ' dbname=\'' . addslashes($dsninfo['database']) . '\'';
         }
-        if (isset($dsninfo['username'])) {
-            $connstr .= ' user=' . $dsninfo['username'];
+        if (!empty($dsninfo['username'])) {
+            $connstr .= ' user=\'' . addslashes($dsninfo['username']) . '\'';
         }
-        if (isset($dsninfo['password'])) {
-            $connstr .= ' password=' . $dsninfo['password'];
+        if (!empty($dsninfo['password'])) {
+            $connstr .= ' password=\'' . addslashes($dsninfo['password']) . '\'';
         }
         if (!empty($dsninfo['options'])) {
             $connstr .= ' options=' . $dsninfo['options'];
@@ -138,7 +129,7 @@ class DB_pgsql extends DB_common
      */
     function disconnect()
     {
-        $ret = @pg_close($this->connection); // XXX ERRORMSG
+        $ret = @pg_close($this->connection);
         $this->connection = null;
         return $ret;
     }
@@ -179,8 +170,11 @@ class DB_pgsql extends DB_common
         if ($ismanip) {
             $this->affected = @pg_cmdtuples($result);
             return DB_OK;
-        } elseif (preg_match('/^\s*(SELECT)\s/i', $query) &&
-                  !preg_match('/^\s*(SELECT\s+INTO)\s/i', $query)) {
+        } elseif ( (preg_match('/^\s*\(?\s*SELECT\s+/si', $query) &&
+                    !preg_match('/^\s*\(?\s*SELECT\s+INTO\s/si', $query))
+                   || preg_match('/^\s*EXPLAIN/si',$query )
+                 )
+        {
             /* PostgreSQL commands:
                ABORT, ALTER, BEGIN, CLOSE, CLUSTER, COMMIT, COPY,
                CREATE, DECLARE, DELETE, DROP TABLE, EXPLAIN, FETCH,
@@ -240,7 +234,8 @@ class DB_pgsql extends DB_common
         if (empty($error_regexps)) {
             $error_regexps = array(
                 '/(Table does not exist\.|Relation [\"\'].*[\"\'] does not exist|sequence does not exist|class ".+" not found)$/' => DB_ERROR_NOSUCHTABLE,
-                '/Relation [\"\'].*[\"\'] already exists|Cannot insert a duplicate key into a unique index/'      => DB_ERROR_ALREADY_EXISTS,
+                '/table [\"\'].*[\"\'] does not exist/' => DB_ERROR_NOSUCHTABLE,
+                '/Relation [\"\'].*[\"\'] already exists|Cannot insert a duplicate key into (a )?unique index.*/'      => DB_ERROR_ALREADY_EXISTS,
                 '/divide by zero$/'                     => DB_ERROR_DIVZERO,
                 '/pg_atoi: error in .*: can\'t parse /' => DB_ERROR_INVALID_NUMBER,
                 '/ttribute [\"\'].*[\"\'] not found$|Relation [\"\'].*[\"\'] does not have attribute [\"\'].*[\"\']/' => DB_ERROR_NOSUCHFIELD,
@@ -258,26 +253,6 @@ class DB_pgsql extends DB_common
     }
 
     // }}}
-    /**
-     * Fetch and return a row of data (it uses fetchInto for that)
-     * @param $result PostgreSQL result identifier
-     * @param   $fetchmode  format of fetched row array
-     * @param   $rownum     the absolute row number to fetch
-     *
-     * @return  array   a row of data, or false on error
-     */
-    function fetchRow($result, $fetchmode = DB_FETCHMODE_DEFAULT, $rownum=null)
-    {
-        if ($fetchmode == DB_FETCHMODE_DEFAULT) {
-            $fetchmode = $this->fetchmode;
-        }
-        $res = $this->fetchInto ($result, $arr, $fetchmode, $rownum);
-        if ($res !== DB_OK) {
-            return $res;
-        }
-        return $arr;
-    }
-
     // {{{ fetchInto()
 
     /**
@@ -354,6 +329,8 @@ class DB_pgsql extends DB_common
             case 'integer':
             case 'double' :
                 return $str;
+            case 'boolean':
+                return $str ? 'TRUE' : 'FALSE';
             case 'string':
             default:
                 $str = str_replace("'", "''", $str);
@@ -495,21 +472,23 @@ class DB_pgsql extends DB_common
      */
     function nextId($seq_name, $ondemand = true)
     {
-        $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
-        $repeat = 0;
+        $seqname = $this->getSequenceName($seq_name);
+        $repeat = false;
         do {
             $this->pushErrorHandling(PEAR_ERROR_RETURN);
-            $result = $this->query("SELECT NEXTVAL('${sqn}_seq')");
+            $result = $this->query("SELECT NEXTVAL('${seqname}')");
             $this->popErrorHandling();
             if ($ondemand && DB::isError($result) &&
                 $result->getCode() == DB_ERROR_NOSUCHTABLE) {
-                $repeat = 1;
+                $repeat = true;
+                $this->pushErrorHandling(PEAR_ERROR_RETURN);
                 $result = $this->createSequence($seq_name);
+                $this->popErrorHandling();
                 if (DB::isError($result)) {
                     return $this->raiseError($result);
                 }
             } else {
-                $repeat = 0;
+                $repeat = false;
             }
         } while ($repeat);
         if (DB::isError($result)) {
@@ -532,10 +511,8 @@ class DB_pgsql extends DB_common
      */
     function createSequence($seq_name)
     {
-        $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
-        $this->pushErrorHandling(PEAR_ERROR_RETURN);
-        $result = $this->query("CREATE SEQUENCE ${sqn}_seq");
-        $this->popErrorHandling();
+        $seqname = $this->getSequenceName($seq_name);
+        $result = $this->query("CREATE SEQUENCE ${seqname}");
         return $result;
     }
 
@@ -551,8 +528,8 @@ class DB_pgsql extends DB_common
      */
     function dropSequence($seq_name)
     {
-        $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
-        return $this->query("DROP SEQUENCE ${sqn}_seq");
+        $seqname = $this->getSequenceName($seq_name);
+        return $this->query("DROP SEQUENCE ${seqname}");
     }
 
     // }}}
@@ -560,7 +537,7 @@ class DB_pgsql extends DB_common
 
     function modifyLimitQuery($query, $from, $count)
     {
-        $query = $query . " LIMIT $count, $from";
+        $query = $query . " LIMIT $count OFFSET $from";
         return $query;
     }
 
@@ -595,38 +572,39 @@ class DB_pgsql extends DB_common
     {
         $field_name = @pg_fieldname($resource, $num_field);
 
-        $result = pg_exec($this->connection, "SELECT f.attnotnull, f.atthasdef
+        $result = @pg_exec($this->connection, "SELECT f.attnotnull, f.atthasdef
                                 FROM pg_attribute f, pg_class tab, pg_type typ
                                 WHERE tab.relname = typ.typname
                                 AND typ.typrelid = f.attrelid
                                 AND f.attname = '$field_name'
                                 AND tab.relname = '$table_name'");
-        $row = pg_fetch_row($result, 0);
-        $flags  = ($row[0] == 't') ? 'not_null ' : '';
+        if (@pg_numrows($result) > 0) {
+            $row = @pg_fetch_row($result, 0);
+            $flags  = ($row[0] == 't') ? 'not_null ' : '';
 
-        if ($row[1] == 't') {
-            $result = pg_exec($this->connection, "SELECT a.adsrc
-                                FROM pg_attribute f, pg_class tab, pg_type typ, pg_attrdef a
-                                WHERE tab.relname = typ.typname AND typ.typrelid = f.attrelid
-                                AND f.attrelid = a.adrelid AND f.attname = '$field_name'
-                                AND tab.relname = '$table_name'");
-            $row = pg_fetch_row($result, 0);
-            $num = str_replace('\'', '', $row[0]);
+            if ($row[1] == 't') {
+                $result = @pg_exec($this->connection, "SELECT a.adsrc
+                                    FROM pg_attribute f, pg_class tab, pg_type typ, pg_attrdef a
+                                    WHERE tab.relname = typ.typname AND typ.typrelid = f.attrelid
+                                    AND f.attrelid = a.adrelid AND f.attname = '$field_name'
+                                    AND tab.relname = '$table_name' AND f.attnum = a.adnum");
+                $row = @pg_fetch_row($result, 0);
+                $num = str_replace('\'', '', $row[0]);
 
-            $flags .= "default_$num ";
+                $flags .= "default_$num ";
+            }
         }
-
-        $result = pg_exec($this->connection, "SELECT i.indisunique, i.indisprimary, i.indkey
+        $result = @pg_exec($this->connection, "SELECT i.indisunique, i.indisprimary, i.indkey
                                 FROM pg_attribute f, pg_class tab, pg_type typ, pg_index i
                                 WHERE tab.relname = typ.typname
                                 AND typ.typrelid = f.attrelid
                                 AND f.attrelid = i.indrelid
                                 AND f.attname = '$field_name'
                                 AND tab.relname = '$table_name'");
-        $count = pg_numrows($result);
+        $count = @pg_numrows($result);
 
         for ($i = 0; $i < $count ; $i++) {
-            $row = pg_fetch_row($result, $i);
+            $row = @pg_fetch_row($result, $i);
             $keys = explode(" ", $row[2]);
 
             if (in_array($num_field + 1, $keys)) {
@@ -701,7 +679,7 @@ class DB_pgsql extends DB_common
         // table without a resultset
 
         if (is_string($result)) {
-            $id = pg_exec($this->connection,"SELECT * FROM $result");
+            $id = @pg_exec($this->connection,"SELECT * FROM $result LIMIT 0");
             if (empty($id)) {
                 return $this->pgsqlRaiseError();
             }
@@ -744,7 +722,7 @@ class DB_pgsql extends DB_common
         }
 
         // free the result only if we were called on a table
-        if (is_resource($id)) {
+        if (is_string($result) && is_resource($id)) {
             @pg_freeresult($id);
         }
         return $res;

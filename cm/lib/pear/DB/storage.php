@@ -1,9 +1,9 @@
 <?php
-//
+/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 // +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
+// | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2001 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.02 of the PHP license,      |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -13,11 +13,10 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Stig Bakken <stig@php.net>                                  |
-// |                                                                      |
+// | Author: Stig Bakken <stig@php.net>                                   |
 // +----------------------------------------------------------------------+
 //
-// $Id: storage.php,v 1.5 2002/07/18 21:39:39 cyface Exp $
+// $Id: storage.php,v 1.6 2003/09/16 19:20:26 cyface Exp $
 //
 // DB_storage: a class that lets you return SQL data as objects that
 // can be manipulated and that updates the database accordingly.
@@ -36,6 +35,8 @@ require_once "DB.php";
  */
 class DB_storage extends PEAR
 {
+    // {{{ properties
+
     /** the name of the table (or view, if the backend database supports
         updates in views) we hold data from */
     var $_table = null;
@@ -66,6 +67,9 @@ class DB_storage extends PEAR
         valid, false if not */
     var $_validator = null;
 
+    // }}}
+    // {{{ constructor
+
     /**
      * Constructor
      *
@@ -91,6 +95,9 @@ class DB_storage extends PEAR
         $this->_readonly = false;
         $this->_validator = $validator;
     }
+
+    // }}}
+    // {{{ _makeWhere()
 
     /**
      * Utility method to build a "WHERE" clause to locate ourselves in
@@ -138,6 +145,9 @@ class DB_storage extends PEAR
         return $whereclause;
     }
 
+    // }}}
+    // {{{ setup()
+
     /**
      * Method used to initialize a DB_storage object from the
      * configured table.
@@ -170,6 +180,9 @@ class DB_storage extends PEAR
         return DB_OK;
     }
 
+    // }}}
+    // {{{ insert()
+
     /**
      * Create a new (empty) row in the configured table for this
      * object.
@@ -198,13 +211,16 @@ class DB_storage extends PEAR
         $this->setup($newpk);
     }
 
+    // }}}
+    // {{{ toString()
+
     /**
      * Output a simple description of this DB_storage object.
      * @return string object description
      */
     function toString()
     {
-        $info = get_class(&$this);
+        $info = get_class($this);
         $info .= " (table=";
         $info .= $this->_table;
         $info .= ", keycolumn=";
@@ -243,6 +259,9 @@ class DB_storage extends PEAR
         return $info;
     }
 
+    // }}}
+    // {{{ dump()
+
     /**
      * Dump the contents of this object to "standard output".
      */
@@ -256,6 +275,9 @@ class DB_storage extends PEAR
         }
     }
 
+    // }}}
+    // {{{ &create()
+
     /**
      * Static method used to create new DB storage objects.
      * @param $data assoc. array where the keys are the names
@@ -264,7 +286,7 @@ class DB_storage extends PEAR
      */
     function &create($table, &$data)
     {
-        $classname = get_class(&$this);
+        $classname = get_class($this);
         $obj = new $classname($table);
         reset($data);
         while (list($name, $value) = each($data)) {
@@ -273,6 +295,9 @@ class DB_storage extends PEAR
         }
         return $obj;
     }
+
+    // }}}
+    // {{{ loadFromQuery()
 
     /**
      * Loads data into this object from the given query.  If this
@@ -323,6 +348,9 @@ class DB_storage extends PEAR
     }
 */
 
+    // }}}
+    // {{{ set()
+
     /**
      * Modify an attriute value.
      */
@@ -341,9 +369,9 @@ class DB_storage extends PEAR
                 $valid = @call_user_func($this->_validator,
                                          $this->_table,
                                          $property,
-                                         &$newvalue,
-                                         &$this->$property,
-                                         &$this);
+                                         $newvalue,
+                                         $this->$property,
+                                         $this);
             }
             if ($valid) {
                 $this->$property = $newvalue;
@@ -359,6 +387,9 @@ class DB_storage extends PEAR
                                  null, "unknown field: $property",
                                  null, true);
     }
+
+    // }}}
+    // {{{ &get()
 
     /**
      * Fetch an attribute value.
@@ -377,6 +408,9 @@ class DB_storage extends PEAR
         return null;
     }
 
+    // }}}
+    // {{{ _DB_storage()
+
     /**
      * Destructor, calls DB_storage::store() if there are changes
      * that are to be kept.
@@ -390,6 +424,9 @@ class DB_storage extends PEAR
         $this->_changes = array();
         $this->_table = null;
     }
+
+    // }}}
+    // {{{ store()
 
     /**
      * Stores changes to this object in the database.
@@ -407,7 +444,7 @@ class DB_storage extends PEAR
                 implode(', ', $vars) . ' WHERE ' .
                 $this->_makeWhere();
             $stmt = $this->_dbh->prepare($query);
-            $res = $this->_dbh->execute($stmt, &$params);
+            $res = $this->_dbh->execute($stmt, $params);
             if (DB::isError($res)) {
                 return $res;
             }
@@ -415,6 +452,9 @@ class DB_storage extends PEAR
         }
         return DB_OK;
     }
+
+    // }}}
+    // {{{ remove()
 
     /**
      * Remove the row represented by this object from the database.
@@ -440,6 +480,8 @@ class DB_storage extends PEAR
         $this->_changes = array();
         return DB_OK;
     }
+
+    // }}}
 }
 
 ?>

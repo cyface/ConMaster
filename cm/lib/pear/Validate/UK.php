@@ -1,5 +1,5 @@
-#!/usr/bin/php -q
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
@@ -13,34 +13,27 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Author:  Alan Knowles <alan@akbkhome.com>
+// | Authors: Pierre-Alain Joye <paj@pearfr.org>                          |
 // +----------------------------------------------------------------------+
 //
-// $Id: createTables.php,v 1.3 2003/09/16 19:20:26 cyface Exp $
+// $Id: UK.php,v 1.1 2003/09/16 19:23:38 cyface Exp $
+//
+// Specific validation methods for data used in UK
 //
 
-require_once 'DB/DataObject/Generator.php';
+require_once('Validate.php');
 
-if (!ini_get('register_argc_argv')) {
-    PEAR::raiseError("\nERROR: You must turn register_argc_argv On in you php.ini file for this to work\neg.\n\nregister_argc_argv = On\n\n", null, PEAR_ERROR_DIE);
-    exit;
+class Validate_UK
+{
+    /**
+     * Validate a UK postcode
+     *
+     * @param   string  $postcode       UK postcode to validate
+     * @return  bool    true if postcode is ok, false otherwise
+     */
+    function postcode($postcode)
+    {
+        return (ereg('^[A-Z]{1, 2}[0-9]{1, 2}[A-Z]{0, 1} [0-9][A-Z]{2}$', $postcode));
+    }
 }
-
-if (!@$_SERVER['argv'][1]) {
-    PEAR::raiseError("\nERROR: createTable.php usage:\n\nC:\php\pear\DB\DataObjects\createTable.php example.ini\n\n", null, PEAR_ERROR_DIE);
-    exit;
-}
-
-$config = parse_ini_file($_SERVER['argv'][1], true);
-
-$options = &PEAR::getStaticProperty('DB_DataObject','options');
-$options = $config['DB_DataObject'];
-
-if (!$options) {
-    PEAR::raiseError("\nERROR: could not read ini file\n\n", null, PEAR_ERROR_DIE);
-    exit;
-}
-//DB_DataObject::debugLevel(5);
-$generator = new DB_DataObject_Generator;
-$generator->start();
 ?>

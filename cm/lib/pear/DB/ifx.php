@@ -1,9 +1,9 @@
 <?php
-//
+/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 // +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
+// | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2001 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.02 of the PHP license,      |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -13,10 +13,10 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors:    Tomas V.V.Cox <cox@idecnet.com>                           |
+// | Author: Tomas V.V.Cox <cox@idecnet.com>                              |
 // +----------------------------------------------------------------------+
 //
-// $Id: ifx.php,v 1.5 2002/07/18 21:39:39 cyface Exp $
+// $Id: ifx.php,v 1.6 2003/09/16 19:20:26 cyface Exp $
 //
 // Database independent query interface definition for PHP's Informix
 // extension.
@@ -27,16 +27,24 @@
 // http://www.informix.com/answers/english/ierrors.htm
 //
 // TODO:
-//  -set needed env Informix vars on connect
+//  - set needed env Informix vars on connect
+//  - implement native prepare/execute
 
 require_once 'DB/common.php';
 
 class DB_ifx extends DB_common
 {
+    // {{{ properties
+
     var $connection;
     var $affected = 0;
     var $dsn = array();
+    var $transaction_opcount = 0;
+    var $autocommit = true;
     var $fetchmode = DB_FETCHMODE_ORDERED; /* Default fetch mode */
+
+    // }}}
+    // {{{ constructor
 
     function DB_ifx()
     {
@@ -45,7 +53,7 @@ class DB_ifx extends DB_common
         $this->features = array(
             'prepare' => false,
             'pconnect' => true,
-            'transactions' => false,
+            'transactions' => true,
             'limit' => 'emulate'
         );
         $this->errorcode_map = array(
@@ -62,6 +70,8 @@ class DB_ifx extends DB_common
        );
     }
 
+    // }}}
+    // {{{ connect()
     /**
      * Connect to a database and log in as the specified user.
      *
@@ -73,9 +83,9 @@ class DB_ifx extends DB_common
      */
     function connect(&$dsninfo, $persistent = false)
     {
-        if (!DB::assertExtension('informix'))
+        if (!DB::assertExtension('informix') && !DB::assertExtension('Informix')) {
             return $this->raiseError(DB_ERROR_EXTENSION_NOT_FOUND);
-
+        }
         $this->dsn = $dsninfo;
         $dbhost = $dsninfo['hostspec'] ? '@' . $dsninfo['hostspec'] : '';
         $dbname = $dsninfo['database'] ? $dsninfo['database'] . $dbhost : '';
@@ -91,6 +101,8 @@ class DB_ifx extends DB_common
         return DB_OK;
     }
 
+    // }}}
+    // {{{ disconnect()
     /**
      * Log out and disconnect from the database.
      *
@@ -103,6 +115,8 @@ class DB_ifx extends DB_common
         return $ret;
     }
 
+    // }}}
+    // {{{ simpleQuery()
     /**
      * Send a query to Informix and return the results as a
      * Informix resource identifier.
@@ -115,26 +129,43 @@ class DB_ifx extends DB_common
      */
     function simpleQuery($query)
     {
+        $ismanip = DB::isManip($query);
         $this->last_query = $query;
         if (preg_match('/(SELECT)/i', $query)) {    //TESTME: Use !DB::isManip()?
             // the scroll is needed for fetching absolute row numbers
             // in a select query result
             $result = @ifx_query($query, $this->connection, IFX_SCROLL);
         } else {
+            if (!$this->autocommit && $ismanip) {
+                if ($this->transaction_opcount == 0) {
+                    $result = @ifx_query('BEGIN WORK', $this->connection);
+                    if (!$result) {
+                        return $this->ifxraiseError();
+                    }
+                }
+                $this->transaction_opcount++;
+            }
             $result = @ifx_query($query, $this->connection);
         }
         if (!$result) {
             return $this->ifxraiseError();
         }
         $this->affected = ifx_affected_rows ($result);
-        // Determine which queries that should return data, and which
+        // Determine which queries should return data, and which
         // should return an error code only.
         if (preg_match('/(SELECT)/i', $query)) {
             return $result;
         }
+        // XXX Testme: free results inside a transaction
+        // may cause to stop it and commit the work?
+
+        // Result has to be freed even with a insert or update
+        ifx_free_result($result);
+
         return DB_OK;
     }
 
+    // }}}
     // {{{ nextResult()
 
     /**
@@ -152,7 +183,7 @@ class DB_ifx extends DB_common
     }
 
     // }}}
-
+    // {{{ affectedRows()
     /**
      * Gets the number of rows affected by the last query.
      * if the last query was a select, returns an _estimate_ value.
@@ -164,26 +195,8 @@ class DB_ifx extends DB_common
         return $this->affected;
     }
 
-    /**
-     * Fetch and return a row of data (it uses fetchInto for that)
-     * @param   $result             Informix result identifier
-     * @param   $fetchmode     format of fetched row array
-     * @param   $rownum        the absolute row number to fetch
-     *
-     * @return  array   a row of data, or false on error
-     */
-    function fetchRow($result, $fetchmode = DB_FETCHMODE_DEFAULT, $rownum=null)
-    {
-        if ($fetchmode == DB_FETCHMODE_DEFAULT) {
-            $fetchmode = $this->fetchmode;
-        }
-        $res = $this->fetchInto ($result, $arr, $fetchmode, $rownum);
-        if ($res !== DB_OK) {
-            return $res;
-        }
-        return $arr;
-    }
-
+    // }}}
+    // {{{ fetchInto()
     /**
      * Fetch a row and return as array.
      *
@@ -215,11 +228,16 @@ class DB_ifx extends DB_common
         return DB_OK;
     }
 
+    // }}}
+    // {{{ numRows()
+
     function numRows($result)
     {
         return $this->raiseError(DB_ERROR_NOT_CAPABLE);
     }
 
+    // }}}
+    // {{{ numCols()
     /**
      * Get the number of columns in a result set.
      *
@@ -235,6 +253,8 @@ class DB_ifx extends DB_common
         return $cols;
     }
 
+    // }}}
+    // {{{ freeResult()
     /**
      * Free the internal resources associated with $result.
      *
@@ -244,11 +264,72 @@ class DB_ifx extends DB_common
      */
     function freeResult($result)
     {
-        if (!@ifx_free_result($result)) {
-            return $this->ifxraiseError();
+        if (is_resource($result)) {
+            if (!@ifx_free_result($result)) {
+                return $this->ifxraiseError();
+            }
+            return true;
         }
+        if (!isset($this->prepare_tokens[(int)$result])) {
+            return false;
+        }
+        unset($this->prepare_tokens[(int)$result]);
+        unset($this->prepare_types[(int)$result]);
         return true;
     }
+
+    // }}}
+    // {{{ autoCommit()
+
+    /**
+     * Enable/disable automatic commits
+     */
+    function autoCommit($onoff = true)
+    {
+        // XXX if $this->transaction_opcount > 0, we should probably
+        // issue a warning here.
+        $this->autocommit = $onoff ? true : false;
+        return DB_OK;
+    }
+
+    // }}}
+    // {{{ commit()
+
+    /**
+     * Commit the current transaction.
+     */
+    function commit()
+    {
+        if ($this->transaction_opcount > 0) {
+            $result = @ifx_query('COMMIT WORK', $this->connection);
+            $this->transaction_opcount = 0;
+            if (!$result) {
+                return $this->ifxRaiseError();
+            }
+        }
+        return DB_OK;
+    }
+
+    // }}}
+    // {{{ rollback()
+
+    /**
+     * Roll back (undo) the current transaction.
+     */
+    function rollback()
+    {
+        if ($this->transaction_opcount > 0) {
+            $result = @ifx_query('ROLLBACK WORK', $this->connection);
+            $this->transaction_opcount = 0;
+            if (!$result) {
+                return $this->ifxRaiseError();
+            }
+        }
+        return DB_OK;
+    }
+
+    // }}}
+    // {{{ ifxraiseError()
 
     function ifxraiseError($errno = null)
     {
@@ -260,6 +341,8 @@ class DB_ifx extends DB_common
                             $this->errorNative());
     }
 
+    // }}}
+    // {{{ errorCode()
     /**
      * Map native error codes to DB's portable ones.  Requires that
      * the DB implementation's constructor fills in the $errorcode_map
@@ -280,6 +363,8 @@ class DB_ifx extends DB_common
         return DB_ERROR;
     }
 
+    // }}}
+    // {{{ errorNative()
     /**
      * Get the native error message of the last error (if any) that
      * occured on the current connection.
@@ -291,6 +376,7 @@ class DB_ifx extends DB_common
         return ifx_error() . ' ' . ifx_errormsg();
     }
 
+    // }}}
     // {{{ getSpecialQuery()
 
     /**

@@ -1,9 +1,9 @@
 <?php
-//
+/* vim: set expandtab tabstop=4 shiftwidth=4 foldmethod=marker: */
 // +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
+// | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2001 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.02 of the PHP license,      |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -13,11 +13,10 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors: Frank M. Kromann <frank@frontbase.com>                      |
-// |                                                                      |
+// | Author: Frank M. Kromann <frank@frontbase.com>                       |
 // +----------------------------------------------------------------------+
 //
-// $Id: fbsql.php,v 1.5 2002/07/18 21:39:39 cyface Exp $
+// $Id: fbsql.php,v 1.6 2003/09/16 19:20:26 cyface Exp $
 //
 // Database independent query interface definition for PHP's FrontBase
 // extension.
@@ -107,7 +106,6 @@ class DB_fbsql extends DB_common
 
         $connect_function = $persistent ? 'fbsql_pconnect' : 'fbsql_connect';
 
-        ini_set('track_errors', true);
         if ($dbhost && $user && $pw) {
             $conn = @$connect_function($dbhost, $user, $pw);
         } elseif ($dbhost && $user) {
@@ -117,7 +115,6 @@ class DB_fbsql extends DB_common
         } else {
             $conn = false;
         }
-        ini_restore("track_errors");
         if (empty($conn)) {
             if (empty($php_errormsg)) {
                 return $this->raiseError(DB_ERROR_CONNECT_FAILED);
@@ -205,29 +202,6 @@ class DB_fbsql extends DB_common
     function nextResult($result)
     {
         return @fbsql_next_result($result);
-    }
-
-    // }}}
-    // {{{ fetchRow()
-
-    /**
-     * Fetch and return a row of data (it uses fetchInto for that)
-     * @param $result fbsql result identifier
-     * @param   $fetchmode  format of fetched row array
-     * @param   $rownum     the absolute row number to fetch
-     *
-     * @return  array   a row of data, or false on error
-     */
-    function fetchRow($result, $fetchmode = DB_FETCHMODE_DEFAULT, $rownum=null)
-    {
-        if ($fetchmode == DB_FETCHMODE_DEFAULT) {
-            $fetchmode = $this->fetchmode;
-        }
-        $res = $this->fetchInto ($result, $arr, $fetchmode, $rownum);
-        if ($res !== DB_OK) {
-            return $res;
-        }
-        return $arr;
     }
 
     // }}}
@@ -424,7 +398,8 @@ class DB_fbsql extends DB_common
         $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
         $repeat = 0;
         do {
-            $result = $this->query("INSERT INTO ${sqn}_seq VALUES(NULL)");
+            $seqname = sprintf($this->getOption("seqname_format"), $sqn);
+            $result = $this->query("INSERT INTO ${seqname} VALUES(NULL)");
             if ($ondemand && DB::isError($result) &&
                 $result->getCode() == DB_ERROR_NOSUCHTABLE) {
                 $repeat = 1;
@@ -448,7 +423,8 @@ class DB_fbsql extends DB_common
     function createSequence($seq_name)
     {
         $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
-        return $this->query("CREATE TABLE ${sqn}_seq ".
+        $seqname = sprintf($this->getOption("seqname_format"), $sqn);
+        return $this->query("CREATE TABLE ${seqname} ".
                             '(id INTEGER UNSIGNED AUTO_INCREMENT NOT NULL,'.
                             ' PRIMARY KEY(id))');
     }
@@ -459,7 +435,8 @@ class DB_fbsql extends DB_common
     function dropSequence($seq_name)
     {
         $sqn = preg_replace('/[^a-z0-9_]/i', '_', $seq_name);
-        return $this->query("DROP TABLE ${sqn}_seq RESTRICT");
+        $seqname = sprintf($this->getOption("seqname_format"), $sqn);
+        return $this->query("DROP TABLE ${seqname} RESTRICT");
     }
 
     // }}}
