@@ -18,6 +18,7 @@ class DataObjects_Convention extends DB_DataObject {
     var $sponsor_organization;            // string(50)  not_null
     var $rpga_convention_code;            // string(20)  not_null
     var $web_site_url;                    // string(200)  not_null
+	var $logo_file;                       // string(200)  not_null
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 
 
