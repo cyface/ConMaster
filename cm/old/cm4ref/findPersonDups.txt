@@ -1,0 +1,48 @@
+  `Procedure pFindPersonDups
+  `Tim White
+  `11-29-97
+  `0753
+  `This procedure makes the current selection of the person file
+  `equal to all the duplicate person records it found so
+  `you can do something about them
+
+
+C_INTEGER($i;$j;$NumRecs)
+ALL RECORDS([Person])
+CREATE EMPTY SET([Person];"Dup People")
+ARRAY LONGINT($aPerRecNums;0)
+
+FIRST RECORD([Person])
+$OldLast:=[Person]Last Name
+$OldFirst:=[Person]First Name
+$OldRPGA:=[Person]Misc Fees
+$OldRecNum:=Record number([Person])
+
+ORDER BY([Person];[Person]Last Name;[Person]First Name;[Person]Misc Fees)
+$NumRecs:=Records in selection([Person])
+
+NEXT RECORD([Person])
+$j:=1
+For ($i;1;$NumRecs-1)
+  If ((($OldLast=[Person]Last Name) & ($OldFirst=[Person]First Name)) | (($OldRPGA # "") & ($OldRPGA=[Person]Misc Fees)))
+    ADD TO SET([Person];"Dup People")
+    INSERT ELEMENT($aPerRecNums;$i)
+    $aPerRecNums{$j}:=$OldRecNum  `now we know the previous record is this record's Dup
+    $j:=$j+1
+  End if 
+  $OldLast:=[Person]Last Name
+  $OldFirst:=[Person]First Name
+  $OldRPGA:=[Person]Misc Fees
+  $OldRecNum:=Record number([Person])
+  NEXT RECORD([Person])
+End for 
+
+$NumRecs:=Size of array($aPerRecNums)
+
+For ($i;1;$NumRecs)
+  GOTO RECORD([Person];$aPerRecNums{$i})
+  ADD TO SET([Person];"Dup People")
+End for 
+
+USE SET("Dup People")
+ORDER BY([Person];[Person]Last Name;[Person]First Name;[Person]Misc Fees)

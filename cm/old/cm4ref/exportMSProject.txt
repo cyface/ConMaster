@@ -1,0 +1,21 @@
+  `    pExportEvMSP
+  `    Tim White
+  `    3-26-96
+  `    1658
+  `    This procedure exports the current selection of the events file to a
+  `« MS Project
+
+C_INTEGER($NumRecs;$i)
+
+vExpFile:=Create document("")
+If (OK=1)
+  FIRST RECORD([Section])
+  $numRecs:=Records in selection([Section])
+  $DayDate:="  "
+  For ($i;1;$NumRecs)
+    RELATE ONE([Section]Event ID)
+    SEND PACKET(vExpFile;([Event]Full Name+<>TB+String([Section]Date)+" "+String([Section]Start Time)+<>TB+String([Section]Date)+" "+String([Section]End Time)+<>CR))
+    NEXT RECORD([Section])
+  End for 
+  CLOSE DOCUMENT(vExpFile)
+End if 

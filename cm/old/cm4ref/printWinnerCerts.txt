@@ -1,0 +1,66 @@
+  `Procedure: pPrintEvCerts
+  `Tim White
+  `February 15, 1994
+  `2:53 PM
+  `This Procedure prints the 1st through 3rd place certs for the currently
+  `selected section or Score Packet records
+
+C_INTEGER($NumFirst;$NumSecond;$NumThird)
+
+  `••• Find out what kind of cert we'll be printing
+Confirm2 ("Include Item/Character Name?";<>NOTE_ICON;"No";"Yes")
+If (OK=1)
+  OUTPUT FORM([Person Section];"Big Cert")
+Else 
+  OUTPUT FORM([Person Section];"Item Cert")
+End if 
+
+  `•••select only the winners of the selected items in the [Person Section] file
+
+Case of 
+  : (gInput=True)  `We're on an input layout
+    COPY NAMED SELECTION(gFilePtr->;"$TempSave")
+    ONE RECORD SELECT(gFilePtr->)
+    
+  : (Records in set("UserSet")>0)  `Then the user has clicked on some records in the list.
+    COPY NAMED SELECTION(gFilePtr->;"$TempSave")
+    USE SET("UserSet")
+End case 
+
+  `###get the related [Person Section] Records
+If (gFilePtr=(->[Section]))
+  RELATE MANY SELECTION([Person Section]Section Full Code)
+Else 
+  RELATE MANY SELECTION([Person Section]Packet ID)
+End if 
+
+  `###Reduce to only the 1-3rd place folks
+QUERY SELECTION([Person Section];[Person Section]Place<4;*)
+QUERY SELECTION([Person Section]; & ;[Person Section]Place>0)
+
+  `##Now we got 'em, hold on to 'em
+CREATE SET([Person Section];"WinnerSet")
+
+  `count the number of each kind of cert
+$NumFirst:=0
+$NumSecond:=0
+$NumThird:=0
+QUERY SELECTION([Person Section];[Person Section]Place=1)
+$NumFirst:=Records in selection([Person Section])
+USE SET("WinnerSet")  `bring back all our winners
+QUERY SELECTION([Person Section];[Person Section]Place=2)
+$NumSecond:=Records in selection([Person Section])
+USE SET("WinnerSet")  `bring back all our winners
+QUERY SELECTION([Person Section];[Person Section]Place=3)
+$NumThird:=Records in selection([Person Section])
+
+Confirm2 ("You now need to load the certificate paper.  You will need to load "+String($NumFirst)+" Blue, "+String($NumSecond)+" Red, and "+String($NumThird)+" Green.";<>NOTE_ICON;"Print Now";"Cancel")
+
+If (OK=1)
+  USE SET("WinnerSet")  `bring back all our winners
+  ORDER BY([Person Section];[Person Section]Place;>)  `sort by place for printing
+  PRINT SELECTION([Person Section])
+End if 
+
+OUTPUT FORM([Section];"Output")
+USE NAMED SELECTION("$TempSave")

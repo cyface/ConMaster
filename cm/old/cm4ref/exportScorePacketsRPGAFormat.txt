@@ -1,0 +1,146 @@
+ `Procedure pExportSPRPGA
+  `Tim White
+  `12/14/97
+  `12:26
+  `This procedure exports the current selection of RPGA [Score Packets] to a text
+  `file in the standard RPGA format.
+
+C_TIME(vExpFile)
+C_INTEGER($i;$j;$NumRecs;$NumRecs2;$RPGACount;$ModCodeCnt)
+
+  `This is a report, we don't want to lock a record accidentally.
+READ ONLY([Person])
+READ ONLY([Event])
+READ ONLY([Section])
+READ ONLY([Person Section])
+READ ONLY([Score Packet])
+READ ONLY([Convention Info])
+
+  `Select the first convention info record
+ALL RECORDS([Convention Info])
+FIRST RECORD([Convention Info])
+
+vExpFile:=Create document("")
+
+If (*ConCode="")
+  OK:=0
+  Alert2 ("You have not set the RPGA Convention Code.  Go to Convention Info and set it "+"first.")
+End if 
+
+If (OK=1)
+  Message2 ("Exporting Score Packets in RPGA Format..."+*CR+"Please Wait...")
+  COPY NAMED SELECTION([Score Packet];"$TempSave")  `Keep the current selection for later restoral
+  SEARCH SELECTION([Score Packet];[Event]RPGA=True)  `Find only the RPGA events
+  $RPGACount:=Records in selection([Score Packet])
+  SEARCH SELECTION([Score Packet];[Event]RPGA Event Code#"")  `Only events with module codes
+  $ModCodeCnt:=Records in selection([Score Packet])
+  
+  If ($RPGACount#$ModCodeCnt)
+    Confirm2 ("You have some events without RPGA event codes.  These will not be processed. "+"Do you want to process the events (if any) that do have codes?")
+  Else 
+    OK:=1
+  End if 
+  If (OK=1)
+    
+    
+    SORT SELECTION([Score Packet];[Score Packet]Packet ID;>)
+    
+    
+      `BEGIN MAIN LOOP, ONE ITERATION PER SCORE PACKET
+    FIRST RECORD([Score Packet])
+    $NumRecs:=Records in selection([Score Packet])
+    For ($i;1;$NumRecs)
+      RELATE MANY([Score Packet]Packet ID)  `Get the person section records for this packet
+      RELATE ONE([Score Packet]Complete EvNum)
+      RELATE ONE([Section]Event Number)
+      
+      SORT SELECTION([Person Section];[Person Section]Place;>)
+      
+        `BEGIN INNER LOOP, ONE ITERATION PER PERSON SECTION
+      $NumRecs2:=Records in selection([Person Section])
+      FIRST RECORD([Person Section])
+      For ($j;1;$NumRecs2)
+        
+        SEND PACKET(vExpFile;*ConCode)  `CONVENTION CODE
+        SEND PACKET(vExpFile;*TB)  `Tab Character          
+        
+        SEND PACKET(vExpFile;[Event]RPGA Event Code)  `EVENT CODE
+        SEND PACKET(vExpFile;*TB)  `Tab Character      
+        
+        SEND PACKET(vExpFile;String([Section]Slot Date;1))  `SLOT DATE
+        SEND PACKET(vExpFile;*TB)  `Tab Character
+        
+        SEND PACKET(vExpFile;String([Section]Round Number))  `ROUND NUMBER
+        SEND PACKET(vExpFile;*TB)  `Tab Character
+        
+        SEND PACKET(vExpFile;String([Score Packet]Packet ID))  `PACKET ID
+        SEND PACKET(vExpFile;*TB)  `Tab Character
+        
+        SEND PACKET(vExpFile;[Score Packet]RPGA Event Type)  `EVENT TYPE
+        SEND PACKET(vExpFile;*TB)  `Tab Character
+        
+        If ([Person Section]Judge=True)
+          
+          If ([Score Packet]NonVoting=True)  `NON-VOTING PACKET EXCEPTION
+            SEND PACKET(vExpFile;"0")  `SCENARIO SCORE
+            SEND PACKET(vExpFile;*TB)  `Tab Character         
+          Else   `IT IS A VOTING PACKET
+            SEND PACKET(vExpFile;String([Score Packet]Scenario Score))  `SCENARIO SCORE
+            SEND PACKET(vExpFile;*TB)  `Tab Character
+          End if 
+          
+          SEND PACKET(vExpFile;"0")  `GROUP SCORE
+          SEND PACKET(vExpFile;*TB)  `Tab Character
+          
+          SEND PACKET(vExpFile;"JU")  `PLACE
+          
+        Else   `PLAYER, NOT JUDGE
+          SEND PACKET(vExpFile;"0")  `SCENARIO SCORE
+          SEND PACKET(vExpFile;*TB)  `Tab Character          
+          
+          If ([Score Packet]NonVoting=True)  `NON-VOTING PACKET EXCEPTION
+            SEND PACKET(vExpFile;"18")  `Group Score
+            SEND PACKET(vExpFile;*TB)  `Tab Character
+            
+            SEND PACKET(vExpFile;"P"+"4")  `PLACE
+          Else   `IT IS A VOTING PACKET
+            SEND PACKET(vExpFile;String([Score Packet]Group Score))  `GROUP SCORE
+            SEND PACKET(vExpFile;*TB)  `Tab Character
+            
+            SEND PACKET(vExpFile;"P"+String([Person Section]Place))  `PLACE
+          End if 
+          
+        End if 
+        SEND PACKET(vExpFile;*TB)  `Tab Character
+        
+        RELATE ONE([Person Section]Person ID)  `We're finally to the player info!
+        SEND PACKET(vExpFile;[Person]RPGA Number)  `RPGA NUMBER
+        SEND PACKET(vExpFile;*TB)  `Tab Character      
+        
+        If ([Person Section]Judge=True)
+          If ([Score Packet]NonVoting=True)  `NON-VOTING PACKET EXCEPTION        
+            SEND PACKET(vExpFile;"140")  `JUDGE SCORE This exports the non prorated number
+          Else   `IT IS A VOTING PACKET
+            SEND PACKET(vExpFile;String([Person Section]Judge Score))  `JUDGE SCORE This exports the non prorated number          
+          End if 
+        Else   `PLAYER NOT JUDGE
+          If ([Score Packet]NonVoting=True)  `NON-VOTING PACKET EXCEPTION             
+            SEND PACKET(vExpFile;"10")  `PLAYER SCORE
+          Else   `IT IS A VOTING PACKET
+            SEND PACKET(vExpFile;String([Person Section]Score))  `PLAYER SCORE          
+          End if 
+        End if 
+        
+        SEND PACKET(vExpFile;*CR+*LF)  `Return Character and Line Feed Character
+        
+        NEXT RECORD([Person Section])
+      End for   `END INNER LOOP
+      
+      NEXT RECORD([Score Packet])
+    End for   `END MAIN LOOP
+    
+    CLOSE DOCUMENT(vExpFile)
+    USE NAMED SELECTION("$TempSave")
+    Message2Close 
+  End if   `OK=1 if
+End if   `Other OK=1 if  

@@ -1,0 +1,11 @@
+  `Procedure: pPrintWinners
+  `Tim White
+  `10/03/94
+  `8:42
+  `This Procedure prints a list of the winners of all events
+
+QUERY([Person Section];[Person Section]Section Full Code=False)
+ORDER BY([Person Section];[Person Section]Registration Type;>;[Person]Last Name;>;[Person]First Name;>)
+OUTPUT FORM([Person Section];"Winners List.p")
+PRINT SELECTION([Person Section])
+OUTPUT FORM([Person Section];"Output.w")

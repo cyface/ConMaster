@@ -1,0 +1,60 @@
+  `    pExportEvPMSch
+  `    Tim White
+  `    4-1-96
+  `    20:52
+  `    This procedure exports the current selection of the events file to a
+  `         pagemaker tagged text file,  for making a schedule.
+  `    marking each field with a style tag in brackets <Stylename>
+  `    This allows importation into a page layout program.
+  `<Schedule>
+  `<Body Title Block>
+
+C_DATE($LastDay)
+C_INTEGER($LastSection;$DayNum)
+vExpFile:=Create document("")
+If (gFilePtr=(->[Event]))
+  RELATE MANY SELECTION([Section]Event ID)
+End if 
+If (OK=1)
+  ORDER BY([Section];[Section]Date;>;[Section]Numeric Section;>;[Section]Start Time;>;[Section]Event ID;>)
+  FIRST RECORD([Section])
+  numRecs:=Records in selection([Section])
+  For ($i;1;numRecs)
+    RELATE ONE([Section]Event ID)
+    $FirstEvFlag:=False
+    If ($LastDay # [Section]Date)
+      $FirstEvFlag:=True
+      $DayNum:=Day number([Section]Date)
+      Case of   `convert the date to a full day name
+        : ($DayNum=1)
+          $DayName:="Sunday"
+        : ($DayNum=2)
+          $DayName:="Monday"
+        : ($DayNum=3)
+          $DayName:="Tuesday"
+        : ($DayNum=4)
+          $DayName:="Wednesday"
+        : ($DayNum=5)
+          $DayName:="Thursday"
+        : ($DayNum=6)
+          $DayName:="Friday"
+        : ($DayNum=7)
+          $DayName:="Saturday"
+        Else 
+          $0:=""
+      End case 
+      SEND PACKET(vExpFile;"<Body Title Block>"+$DayName+<>CR)
+      $LastDay:=[Section]Date
+    End if 
+    
+    If ([Event]Event SubType Code=True)
+      $RPGA:="RPGA "
+      $RPGADesc:=" "+fGetRPGADesc ([Event]Event SubType Code)
+    Else 
+      $RPGA:=("")
+    End if 
+    SEND PACKET(vExpFile;"<Schedule>"+fGetTimeCode ([Section]Start Time)+"-"+fGetTimeCode ([Section]End Time)+<>TB+[Section]Full Code+<>TB+$RPGA+[Event]System+$RPGADesc+<>CR)
+    NEXT RECORD([Section])
+  End for 
+  CLOSE DOCUMENT(vExpFile)
+End if 

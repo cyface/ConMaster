@@ -1,0 +1,48 @@
+  `pImportEvents
+  `Tim White
+  `4-9-95
+  `0858
+  `This procedure imports a tab-delimited file in the official RPGA Person Export
+  `Format
+
+C_STRING(80;$RPGANumber;$LastName;$FirstName;$City;$State;$ClassLvl;$CampLvl;$JudgeLvl;$Expiry;$MemType)
+C_BOOLEAN($FirstRow)
+vImpFile:=Open document("")
+If (OK=1)
+  $FirstRow:=True
+  Repeat 
+    RECEIVE PACKET(vImpFile;$RPGANumber;<>TB)
+    RECEIVE PACKET(vImpFile;$LastName;<>TB)
+    RECEIVE PACKET(vImpFile;$FirstName;<>TB)
+    RECEIVE PACKET(vImpFile;$City;<>TB)
+    RECEIVE PACKET(vImpFile;$State;<>TB)
+    RECEIVE PACKET(vImpFile;$MemType;<>TB)
+    RECEIVE PACKET(vImpFile;$Expiry;<>TB)
+    RECEIVE PACKET(vImpFile;$CampLvl;<>TB)
+    RECEIVE PACKET(vImpFile;$ClassLvl;<>TB)
+    RECEIVE PACKET(vImpFile;$JudgeLvl;<>CR)
+    If ($FirstRow=False)
+      QUERY([Person];[Person]Misc Fees=$RPGANumber)
+      If (Records in selection([Person])=0)
+        CREATE RECORD([Person])
+        [Person]ID:=SeqNoGet ("Person ID")
+      Else 
+        FIRST RECORD([Person])
+      End if 
+      [Person]Misc Fees:=$RPGANumber
+      [Person]Last Name:=$LastName
+      [Person]First Name:=$FirstName
+      :=Date($Expiry)
+      :=$MemType
+      [Person]City:=$City
+      [Person]State:=$State
+      :=Num($ClassLvl)
+      :=Num($CampLvl)
+      :=Num($JudgeLvl)
+      SAVE RECORD([Person])
+    End if 
+  Until (OK=0)
+Else 
+  $FirstRow:=False
+End if 
+CLOSE DOCUMENT(vImpFile)
