@@ -18,12 +18,13 @@ class DataObjects_Section extends DB_DataObject {
     var $event_number;                    // int(6)  not_null multiple_key
     var $section_number;                  // int(4)  not_null multiple_key
     var $complete_event_number;           // string(10)  not_null
-    var $slot_date;                       // date(10)  not_null
+    var $date;                    		  // date(10)  not_null
     var $start_time;                      // time(8)  not_null
     var $end_time;                        // time(8)  not_null
     var $location;                        // string(255)  
     var $num_registered;                  // int(4)  
     var $max_registered;                  // int(4)  
+	var $registrations_open;              // int(4)  
     var $event_full;                      // string(7)  
     var $results_entered;                 // string(7)  
     var $event_ran;                       // string(7)  not_null
@@ -42,5 +43,41 @@ class DataObjects_Section extends DB_DataObject {
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	
+	function insert() {
+		//Based on the supplied slot number, look up the default slot information
+		//Find the slot row that matches the slot that was input
+		$slotObject = DB_DataObject::staticGet('DataObjects_Slot','slot_number',$this->section_number);
+		
+		//Error if that slot wasn't found
+		if (!$slotObject) {
+			require_once('PEAR.php');
+			return new PEAR_Error('That Slot Does Not Exist.  Edit Your Convention To Add This Slot.');
+		}
+		
+		//Copy the default information from the slot record to this object
+		$this->date = $slotObject->date;
+		$this->start_time = $slotObject->start_time;
+		$this->end_time = $slotObject->end_time;
+		
+		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
+		
+		return DB_DataObject::insert(); //Call the parent method
+	}
+	
+	function update() {
+		$this->complete_event_number = $this->event_number . '.' . $this->section_number; //Build the complete event number
+		
+		//Set the event_full indicator & registrations_open
+		$this->registrations_open = $this->max_registered - $this->num_registered;
+		if ($this->registrations_open <= 0) {
+			$this->event_full = 'CHECKED';
+		} else {
+			$this->event_full = 'N';
+		}
+		
+		return DB_DataObject::update(); //Call the parent method
+	}
+	
 }
 ?>
