@@ -6,7 +6,7 @@
  *
  * @see FormObject for usage information
  *
- * CVS Info: $Id: ScorePacketFormObject.php,v 1.3 2002/08/14 20:51:55 cyface Exp $
+ * CVS Info: $Id: ScorePacketFormObject.php,v 1.4 2002/08/15 04:15:50 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -82,11 +82,16 @@ class ScorePacketFormObject extends FormObject {
 	 *
      **/
 	function edit ()
-	{
+	{		
 		$this->dataObject->getLinks();
+		
 		objectValueFill($this->dataObject, $this->template);
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
-
+		
+		if ($this->template->getVarValue('form_error') != '') {  //If there is an error, skip the rest
+			return true;
+		}
+		
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
 			objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
@@ -187,8 +192,8 @@ class ScorePacketFormObject extends FormObject {
 	function save()
 	{
 		$scenario_max = $this->data['number_of_players'] * 15;
-		$this->data['prorated_scenario_score'] = ($this->data['scenario_score'] / $scenario_max) * 105;
-		FormObject::save(); //Call parent object's method
+		$this->data['prorated_scenario_score'] = round(($this->data['scenario_score'] / $scenario_max) * 105);
+		return FormObject::save(); //Call parent object's method
 	}
 
 	/**
@@ -201,74 +206,112 @@ class ScorePacketFormObject extends FormObject {
 		$this->dataObject->get($this->data['parent_id']);
 
 		//Locate the person who's RPGA number was entered
-		$personObject = DB_DataObject::staticGet('DataObjects_Person','rpga_number',rtrim($this->data['included_search']));
-		if (!$personObject) { //If the number wasn't found, exit with error
-            $this->errorString .= ' That RPGA Number Does Not Exist.';
-            $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
-			$incClassName = get_class($this->incDataObject);
-    		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
-      		if ($this->data['included_order_by']) {
-         	 	$this->incDataObject->orderBy($this->data['included_order_by']);
-      		}
-			$this->edit();
-			return true;
-		} else {
-			//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
-			require_once('./lib/DataObjects/Person_section.php');
-			$personSectionObject = new DataObjects_Person_section;
-			$personSectionObject->person_id = $personObject->id;
-			$personSectionObject->event_id = $this->data['event_id'];
-			$personSectionObject->section_id = $this->data['section_id'];
-			$personSectionObject->find();
-			if ($personSectionObject->N > 0) {//Found a match
-				$personSectionObject->fetch(); //get the found record
-				$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
-				//Calculate prorated score
-				if ($personSectionObject->packet_position == 0) {
-					$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
-				} else {
-					$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+		if (intval(rtrim($this->data['included_search'])) == 0) { //Only search if something reasonable was entered.
+			$personObject = DB_DataObject::staticGet('DataObjects_Person','rpga_number',rtrim($this->data['included_search']));
+		}
+		if (!$personObject) { //If the rpga number was not found
+			if (file_exists('resources/RPGAList.txt')) {
+				$fp = fopen("resources/RPGAList.txt",'r');
+				while ($data = fgetcsv ($fp, 1000, "\t")) {
+					if ($data[0] == $this->data['included_search']) { //Found them in the external file
+						$foundData = $data;
+						break;
+					}
 				}
-				$personSectionObject->update();
-                $this->template->assign('action_message', '<font color="#66CC00">Participant Attached</font>');
-                if ($personSectionObject->packet_position == 0) {
-                	$this->dataObject->person_id = $personSectionObject->person_id;
-                	$this->dataObject->update();
-            	}
-			} else { //We need to create a new Person Section Record for this combo
-				$personSectionObject = new DataObjects_Person_section; //Have to start over with a new object due to a DB_DataObject "feature"
+				if (isset($foundData)) {
+					require_once('./lib/DataObjects/Person.php');
+					$personObject = new DataObjects_Person;
+					$personObject->first_name = $data[1];
+					$personObject->last_name = $data[2];
+					$personObject->city = $data[3];
+					$personObject->state = $data[4];
 
-				$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
-				$personSectionObject->person_id = $personObject->id;
-				$personSectionObject->reg_type = 'Score Packet';
-				$personSectionObject->price = 0.00;
-				$personSectionObject->old_price = 0.00; //old_price is used to minus off the old price of an event when the price is updated
-
-				//Calculate prorated score
-				if ($personSectionObject->packet_position == 0) {
-					$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
-				} else {
-					$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+					$personObject->find();
+					
+					if ($personObject->N !=0) { //We found them!
+						$personObject->fetch();
+						if ($personObject->rpga_number == 0) {
+							$personObject->rpga_number = $data[0];
+							$personObject->update();
+						}
+					} else { //no luck
+						$personObject->rpga_number = $data[0];
+						$personObject->country = $data[5];
+						$id = $personObject->insert();
+						$personObject->id = $id;
+					}
+					echo '<pre>'; print_r($personObject); echo '</pre>';
 				}
-
-				$personSectionObject->insert(); //Save the record to the database
-				$this->template->assign('action_message', '<font color="#66CC00">Participant Added</font>');
-
-				//Attach the judge's person_id directly to the packet
-				if ($personSectionObject->packet_position == 0) {
-					$this->dataObject->person_id = $personSectionObject->person_id;
-					$this->dataObject->update();
-                }
-			} //End 'if existing person section record not found...'
-
-			$incClassName = get_class($this->incDataObject);
-			$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
-			if ($this->data['included_order_by']) {
-				$this->incDataObject->orderBy($this->data['included_order_by']);
 			}
-			$this->edit();
-			return true;
-		} //End 'if person not found...'
+			
+			if (!$personObject) { //Still can't find them
+				$this->errorString .= ' That RPGA Number Does Not Exist.';
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+				$incClassName = get_class($this->incDataObject);
+				$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
+				if ($this->data['included_order_by']) {
+					$this->incDataObject->orderBy($this->data['included_order_by']);
+				}
+				$this->edit();
+				return true;
+			}
+		}
+		
+		//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
+		require_once('./lib/DataObjects/Person_section.php');
+		$personSectionObject = new DataObjects_Person_section;
+		$personSectionObject->person_id = $personObject->id;
+		$personSectionObject->event_id = $this->data['event_id'];
+		$personSectionObject->section_id = $this->data['section_id'];
+		$personSectionObject->find();
+		if ($personSectionObject->N > 0) {//Found a match
+			$personSectionObject->fetch(); //get the found record
+			$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
+			//Calculate prorated score
+			if ($personSectionObject->packet_position == 0) {
+				$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
+			} else {
+				$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+			}
+			$personSectionObject->update();
+			$this->template->assign('action_message', '<font color="#66CC00">Participant Attached</font>');
+			if ($personSectionObject->packet_position == 0) {
+				$this->dataObject->person_id = $personSectionObject->person_id;
+				$this->dataObject->update();
+			}
+		} else { //We need to create a new Person Section Record for this combo
+			$personSectionObject = new DataObjects_Person_section; //Have to start over with a new object due to a DB_DataObject "feature"
+
+			$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
+			$personSectionObject->person_id = $personObject->id;
+			$personSectionObject->reg_type = 'Score Packet';
+			$personSectionObject->price = 0.00;
+			$personSectionObject->old_price = 0.00; //old_price is used to minus off the old price of an event when the price is updated
+
+			//Calculate prorated score
+			if ($personSectionObject->packet_position == 0) {
+				$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
+			} else {
+				$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+			}
+
+			$personSectionObject->insert(); //Save the record to the database
+			$this->template->assign('action_message', '<font color="#66CC00">Participant Added</font>');
+
+			//Attach the judge's person_id directly to the packet
+			if ($personSectionObject->packet_position == 0) {
+				$this->dataObject->person_id = $personSectionObject->person_id;
+				$this->dataObject->update();
+			}
+		} //End 'if existing person section record not found...'
+
+		$incClassName = get_class($this->incDataObject);
+		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
+		if ($this->data['included_order_by']) {
+			$this->incDataObject->orderBy($this->data['included_order_by']);
+		}
+		$this->edit();
+		return true;
 	} //End function addParticipant
 
 	/**
