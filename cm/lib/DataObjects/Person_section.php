@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for person_section
-* CVS Info: $Id: Person_section.php,v 1.10 2002/08/16 23:45:54 cyface Exp $
+* CVS Info: $Id: Person_section.php,v 1.11 2002/12/17 16:27:31 cyface Exp $
 */
 
 
@@ -139,3 +139,4 @@ class DataObjects_Person_section extends DB_DataObject {
 	} //End function includedInsert
 }
 ?>
+

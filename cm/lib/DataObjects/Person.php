@@ -52,5 +52,25 @@ class DataObjects_Person extends DB_DataObject {
 
 		return DB_DataObject::insert();
 	}
+
+	function delete() {
+		//Delete the person_section records attached to this person
+		$personSectionClass = DB_DataObject::staticAutoloadTable('person_section');
+		$personSectionObject = new $personSectionClass;
+		$personSectionObject->person_id = $this->person_id;
+		$personSectionObject->find();
+		echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>';
+
+		while ($personSectionObject->fetch()) {
+			//echo '<PRE> Found Person Section Objects'; print_r($personSectionObject); echo '<PRE>';
+			$deleteObject = new $personSectionClass;
+			$deleteObject->id = $personSectionObject->id;
+			$deleteObject->section_id = $personSectionObject->section_id;
+			$deleteObject->person_id = $this->id;
+			$deleteObject->delete();
+		}
+
+		return DB_DataObject::delete(); //Call the parent method
+	}
 }
 ?>
