@@ -10,9 +10,9 @@ if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE")) {
   header("Content-Disposition: attachment; filename=$myfile"); // For Other browsers
 }
 
-require_once('ExportObject.php'); //Object to perform the export
+require_once('ReportObject.php'); //Object to perform the export
 
-$exportObject = new ExportObject($_GET);
+$exportObject = new ReportObject($_GET);
 
 $resultArray = $exportObject->getRawResults();
 

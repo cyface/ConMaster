@@ -120,7 +120,7 @@ function popSetup() {
   <table border="0" cellspacing="2" cellpadding="2">
     <tr> 
       <td class="FieldName">Event</td>
-      <td colspan="3"> 
+      <td colspan="5"> 
         <select name="events" size="1" width="500" onChange="eventChange(form.events.options[selectedIndex].value)">
         </select>
         <font color="#FF0000"><b class="FieldError"> 
@@ -129,7 +129,7 @@ function popSetup() {
     </tr>
     <tr> 
       <td class="FieldName">Section</td>
-      <td colspan="3"> 
+      <td colspan="5"> 
         <select name="sections" size="1" width="500" onChange="form.section_id.value=form.sections.options[selectedIndex].value">
         </select>
         <font color="#FF0000"><b class="FieldError"> 
@@ -150,6 +150,8 @@ function popSetup() {
       <td> 
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
         <b class="FieldError">{number_of_players_error}</b> </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>
     <tr> 
       <td class="FieldName">Scenario Score</td>
@@ -161,6 +163,10 @@ function popSetup() {
       <td> 
         <input type="text" name="group_score" value="{group_score}" maxlength="40" size="10" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
+      </td>
+      <td class="FieldName">No Vote Packet</td>
+      <td class="FieldName">
+        <input type="checkbox" name="no_vote" value="CHECKED" {no_vote}>
       </td>
     </tr>
   </table>
@@ -184,6 +190,7 @@ function popSetup() {
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
+		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="convention_id" value="1">
         <input type="submit" name="save" value="Save">
@@ -204,6 +211,7 @@ function popSetup() {
     <td class="TableTitle">Score</td>
     <td class="TableTitle">Place</td>
     <td class="TableTitle">Position</td>
+    <td class="TableTitle">Prorated Score</td>
   </tr>
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
@@ -215,7 +223,6 @@ function popSetup() {
         <input type="hidden" name="action" value="deleteIncluded">
         <input type="hidden" name="parent_id" value="{score_packet_id}">
         <input type="hidden" name="included_table" value="person_section">
-        <input type="hidden" name="included_order_by" value="packet_position">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -226,8 +233,10 @@ function popSetup() {
         <input type="hidden" name="packet_position" value="{packet_position}">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="parent_id" value="{score_packet_id}">
+        <input type="hidden" name="included_order_by2" value="packet_position">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
+        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="hidden" name="score_packet_id" value="{score_packet_id}">
         <input type="hidden" name="person_id" value="{person_id}">
         <input type="submit" name="update" value="Update">
@@ -242,6 +251,7 @@ function popSetup() {
         <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
         </span></td>
       <td class="TableDataBold"> {position_disp}</td>
+      <td class="TableDataBold">{prorated_score}</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_row -->
@@ -272,6 +282,7 @@ function popSetup() {
         <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
         </span></td>
       <td class="TableDataBold"> {position_disp}</td>
+      <td class="TableDataBold">&nbsp;</td>
     </form>
   </tr>
   <!-- END BLOCK : person_section_footer -->

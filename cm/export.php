@@ -2,7 +2,11 @@
 
 header("Content-type: application/force-download");
 
-$myfile = $_GET['filename'];
+if (isset($_POST['filename'])) {
+	$myfile = $_POST['filename'];
+} else {
+	$myfile = $_GET['filename'];
+}
 
 if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE")) {
   header("Content-Disposition: filename=$myfile" . "%20"); // For IE
@@ -10,11 +14,11 @@ if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE")) {
   header("Content-Disposition: attachment; filename=$myfile"); // For Other browsers
 }
 
-require_once('ExportObject.php'); //Object to perform the export
+require_once('ReportObject.php'); //Object to perform the export
 
-$exportObject = new ExportObject($_GET);
+$reportObject = new ReportObject($_GET,$_POST);
 
-$resultArray = $exportObject->getFormattedResults();
+$resultArray = $reportObject->getDelimitedResults();
 
 foreach ($resultArray as $row) {
 	echo $row;

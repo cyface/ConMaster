@@ -15,7 +15,7 @@
 // | Author:  Alan Knowles <alan@akbkhome.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: DataObject.php,v 1.3 2002/07/26 23:07:43 cyface Exp $
+// $Id: DataObject.php,v 1.4 2002/08/09 16:43:23 cyface Exp $
 //
 // Object Based Database Query Builder and data store
 //
@@ -1199,7 +1199,7 @@ Class DB_DataObject {
                 continue; // ignore empty keys!!! what
             }
             if (is_object($from) && @isset($from->$k)) {
-                $this->$k = $this->$k;    
+                $this->$k = $from->$k;    
                 continue;
             }
             if (!@isset($from[$k])) {

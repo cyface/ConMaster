@@ -22,6 +22,7 @@ class DataObjects_Score_packet extends DB_DataObject {
     var $number_of_players;               // int(4)
     var $rpga_event_type;                 // string(15)
     var $status;                          // string(15)
+    var $no_vote;                         // string(7) (boolean)
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
 

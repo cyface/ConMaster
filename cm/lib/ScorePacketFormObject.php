@@ -6,7 +6,7 @@
  *
  * @see FormObject for usage information
  *
- * CVS Info: $Id: ScorePacketFormObject.php,v 1.1 2002/07/26 23:09:42 cyface Exp $
+ * CVS Info: $Id: ScorePacketFormObject.php,v 1.2 2002/08/09 16:43:23 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -43,45 +43,156 @@ class ScorePacketFormObject extends FormObject {
 
 	/* BEGIN PRIVATE METHODS */
 
-	function edit ()
+	/**
+	 * newPacket sets up the lists of events and sections to pick from, then shows the edit form
+	 *
+     **/
+	function newPacket ()
 	{
-	
 		require_once('./lib/DataObjects/Event.php');
-        $this->eventObject = new DataObjects_Event;
+		$this->eventObject = new DataObjects_Event;
 		$this->eventObject->whereAdd("type = 'Role-Playing'");
 		$this->eventObject->orderBy("event_name");
 		$this->eventObject->find();
-		
+
 		while ($this->eventObject->fetch()) { // Pull the results through the object and put them on the form
-                $this->template->newBlock('EventList_row'); //create a new result row
-                objectValueFill($this->eventObject, $this->template); //Fill in values on the included row
+				$this->template->newBlock('EventList_row'); //create a new result row
+				objectValueFill($this->eventObject, $this->template); //Fill in values on the included row
 		}
-		
+
 		$this->template->gotoBlock("_ROOT");
-		
+
 		require_once('./lib/DataObjects/Section.php');
-        $this->sectionObject = new DataObjects_Section;
+		$this->sectionObject = new DataObjects_Section;
 		$this->sectionObject->query("SELECT section.* FROM section,event WHERE section.event_id = event.id AND event.type = 'Role-Playing'");
-	
+
 		while ($this->sectionObject->fetch()) { // Pull the results through the object and put them on the form
-                $this->template->newBlock('SectionList_row'); //create a new result row
-                objectValueFill($this->sectionObject, $this->template); //Fill in values on the included row
+				$this->template->newBlock('SectionList_row'); //create a new result row
+				objectValueFill($this->sectionObject, $this->template); //Fill in values on the included row
 		}
-		
+
 		$this->template->gotoBlock("_ROOT");
-		
-		return FormObject::edit(); //Call parent class's method.
+
+		$this->edit();
+		return true;
 	}
-	
+
+	/**
+	 * edit overloads FormObject->edit() to allow error checking and precise control over the included stuff
+	 *
+     **/
+	function edit ()
+	{
+		$this->dataObject->getLinks();
+		objectValueFill($this->dataObject, $this->template);
+		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
+
+		if ($this->incDataObject) {
+			$this->template->newBlock('included_header'); //create a new header for the included rows
+			objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
+			rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
+			$this->incDataObject->score_packet_id = $this->dataObject->id;
+			$this->incDataObject->find(); //Try and load it with the current data
+
+			$judge_score = 0;
+			$player_total_score = 0;
+			$player_total_places = 0;
+			while ($this->incDataObject->fetch()) { // Pull the results through the object and put them on the form
+				$this->incDataObject->getLinks();
+				$this->template->newBlock($this->included_table . '_row'); //create a new result row
+				objectValueFill($this->incDataObject, $this->template); //Fill in values on the included row
+				if ($this->incDataObject->packet_position == 0) {
+					$judge_score = $this->incDataObject->score;
+					$this->template->assign('place','N/A');
+					$this->template->assign('position_disp','Judge');
+				} else {
+					$player_total_score += $this->incDataObject->score;
+					$player_total_places += $this->incDataObject->place;
+					$this->template->assign('position_disp',$this->incDataObject->packet_position);
+				}
+				$position_list[] = $this->incDataObject->packet_position; //Toss the position into an array
+			}
+
+			//See if the packet is complete.
+			if ($this->incDataObject->N-1 != $this->dataObject->number_of_players) { //-1 to remove the judge
+				$this->template->newBlock($this->included_table . '_footer'); //create a new result row
+				objectValueFill($this->dataObject, $this->template); //Fill in values on the included row //Fills in event, section id
+				if ($this->incDataObject->N == 0) { //new packet
+					$this->template->assign('packet_position',0);
+					$this->template->assign('place','N/A');
+					$this->template->assign('judge','CHECKED');
+					$this->template->assign('position_disp','Judge');
+				} else {
+
+					$nextPosition = $this->incDataObject->packet_position+1;
+					foreach ($position_list as $rownum=>$position) { //Look for a hole and use it if found.
+						if ($rownum != $position) {
+							$nextPosition = $rownum;
+							break;
+						}
+					}
+					$this->template->assign('packet_position',$nextPosition);
+					$this->template->assign('position_disp',$nextPosition);
+				}
+				$this->template->gotoBlock('_ROOT');
+				$this->template->assign('status','Incomplete');
+				$this->dataObject->status = 'Incomplete';
+				$this->dataObject->update();
+				$numMissing = $this->dataObject->number_of_players - ($this->incDataObject->N - 1);
+				$this->errorString .= " You must add $numMissing participants(s) to complete this packet.";
+				$this->template->assign('form_error', $this->errorString);
+				return true;
+			}
+
+			//Begin error checking
+			$status = 'Complete';  //Optimistic, eh?
+
+			if ($player_total_score != ($this->dataObject->number_of_players+2) * 10) {
+				$this->errorString .= ' The player scores must total ' . ($this->dataObject->number_of_players+2) * 10 . ", but they total $player_total_score.";
+			}
+
+			$placeTotals = array(3=>6,4=>10,5=>15,6=>21,7=>28);
+			if ($player_total_places != $placeTotals[$this->dataObject->number_of_players] ) {
+				$this->errorString .= ' The player places must total ' . $placeTotals[$this->dataObject->number_of_players] . ', but they total $player_total_places.';
+			}
+
+			if ($this->dataObject->group_score < 6 OR $this->dataObject->group_score > 30) {
+				$this->errorString .= ' The group score must be between 6 and 30';
+			}
+
+			$scenario_score_max = ($this->dataObject->number_of_players + 1) * 15;
+			$scenario_score_min = ($this->dataObject->number_of_players + 1) * 3;
+			if ($this->dataObject->scenario_score < $scenario_score_min OR $this->dataObject->scenario_score > $scenario_score_max ) {
+				$this->errorString .= " The scenario score must be between $scenario_score_min and $scenario_score_max";
+			}
+
+			$this->template->gotoBlock('_ROOT');
+
+			if ($this->errorString != '') {
+				$this->template->assign('form_error', $this->errorString);
+				$status = 'Error';
+			}
+
+			$this->template->assign('status', $status);
+			$this->dataObject->status = $status;
+			$this->dataObject->update();
+		} //End "If incDataObject...
+        return true;
+	}
+
+	/**
+	 * addParticipant adds a given participant to the packet by locating or creating a person_section record
+	 *
+     **/
 	function addParticipant()
 	{
 		//Set up the master data object with the correct stuff
 		$this->dataObject->get($this->data['parent_id']);
-		
+
 		//Locate the person who's RPGA number was entered
-		$personObject = DB_DataObject::staticGet('DataObjects_Person','rpga_number',$this->data['included_search']);
+		$personObject = DB_DataObject::staticGet('DataObjects_Person','rpga_number',rtrim($this->data['included_search']));
 		if (!$personObject) { //If the number wasn't found, exit with error
-            $this->template->assign('form_error', 'That RPGA Number Does Not Exist.');
+            $this->errorString .= ' That RPGA Number Does Not Exist.';
             $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
 			$incClassName = get_class($this->incDataObject);
     		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
@@ -89,7 +200,7 @@ class ScorePacketFormObject extends FormObject {
          	 	$this->incDataObject->orderBy($this->data['included_order_by']);
       		}
 			$this->edit();
-			return false;
+			return true;
 		} else {
 			//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
 			require_once('./lib/DataObjects/Person_section.php');
@@ -100,42 +211,108 @@ class ScorePacketFormObject extends FormObject {
 			$personSectionObject->find();
 			if ($personSectionObject->N > 0) {//Found a match
 				$personSectionObject->fetch(); //get the found record
-				$personSectionObject->score_packet_id = $this->data['score_packet_id'];
-				$personSectionObject->packet_position = $this->data['packet_position'];
+				$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
+				//Calculate prorated score
+				if ($personSectionObject->packet_position == 0) {
+					$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
+				} else {
+					$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+				}
 				$personSectionObject->update();
-                $this->template->assign('action_message', '<font color="#66CC00">Record Attached</font>');
-				$this->edit();
-				return true;
+                $this->template->assign('action_message', '<font color="#66CC00">Participant Attached</font>');
+                if ($personSectionObject->packet_position == 0) {
+                	$this->dataObject->person_id = $personSectionObject->person_id;
+                	$this->dataObject->update();
+            	}
 			} else { //We need to create a new Person Section Record for this combo
 				$personSectionObject = new DataObjects_Person_section; //Have to start over with a new object due to a DB_DataObject "feature"
-				
+
+				$personSectionObject->setFrom($this->data); //Copy the matching items onto the object
 				$personSectionObject->person_id = $personObject->id;
-				$personSectionObject->event_id = $this->data['event_id'];
-				$personSectionObject->section_id = $this->data['section_id'];
-				$personSectionObject->score_packet_id = $this->data['score_packet_id'];
-				$personSectionObject->packet_position = $this->data['packet_position'];
-				$personSectionObject->score = $this->data['score'];
-				$personSectionObject->place = $this->data['place'];
 				$personSectionObject->reg_type = 'Score Packet';
 				$personSectionObject->price = 0.00;
 				$personSectionObject->old_price = 0.00; //old_price is used to minus off the old price of an event when the price is updated
-			
+
+				//Calculate prorated score
+				if ($personSectionObject->packet_position == 0) {
+					$personSectionObject->prorated_score = ($personSectionObject->score / (30 * $this->dataObject->number_of_players)) * 180;
+				} else {
+					$personSectionObject->prorated_score = ($personSectionObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+				}
+
 				$personSectionObject->insert(); //Save the record to the database
-				$this->template->assign('action_message', '<font color="#66CC00">Record Added</font>');
-				
-				//Get the section record related to this object
-				$sectionObject =  DB_DataObject::staticGet('DataObjects_Section',$this->data['section_id']);
-			
-				//Update the section's event fullness indicators
-				$sectionObject->num_registered++;
-				$sectionObject->update(); //Save the section record ASAP.
-				
-				$this->edit(); //Show the packet edit form again.
-				return true;
+				$this->template->assign('action_message', '<font color="#66CC00">Participant Added</font>');
+
+				//Attach the judge's person_id directly to the packet
+				if ($personSectionObject->packet_position == 0) {
+					$this->dataObject->person_id = $personSectionObject->person_id;
+					$this->dataObject->update();
+                }
 			} //End 'if existing person section record not found...'
+
+			$incClassName = get_class($this->incDataObject);
+			$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
+			if ($this->data['included_order_by']) {
+				$this->incDataObject->orderBy($this->data['included_order_by']);
+			}
+			$this->edit();
+			return true;
 		} //End 'if person not found...'
 	} //End function addParticipant
 
+
+	/**
+	 * deleteIncluded overloads FormObject->deleteIncluded, and allows non-Score Packet person sections to survive
+	 *
+	 **/
+	function deleteIncluded ()
+	{
+		if ($this->data['included_id'] == '') { // No id for this record
+			$this->dataObject->validation_results['form'] .= '<br> Tried to delete a non-existent record.';
+			$this->template->assign('action_message', '<font color="#FF0000">Delete Failed!</font>');
+			$this->dataObject->get($this->data['parent_id']);
+			$incClassName = get_class($this->incDataObject);
+			$this->incDataObject = new $incClassName; //reinit the object to get around DataObject bug
+			$this->edit();
+			return false;
+		}
+
+		$this->incDataObject->get($this->data['included_id']);
+
+		if ($this->incDataObject->reg_type == 'Score Packet') {
+			$this->incDataObject->score_packet_id = '';
+			$this->incDataObject->update();
+		} else {
+			$result = $this->incDataObject->delete(); //Try to delete the record in the DB using the object
+			if (PEAR::isError($result)) {
+				$this->template->assign('form_error', $result->getMessage());
+				$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+			} else {
+				$this->template->assign('action_message', '<font color="#FF0000">Row Deleted</font>');
+			}
+		}
+
+		$this->dataObject->get($this->data['parent_id']);
+
+		if ($this->incDataObject->packet_position == 0) { //judge
+			$this->dataObject->person_id = '';
+			$this->dataObject->update();
+		}
+
+
+		$incClassName = get_class($this->incDataObject);
+		$this->incDataObject = new $incClassName; //reinit the object to get around DataObject bug
+		if ($this->data['included_order_by']) {
+			$this->incDataObject->orderBy($this->data['included_order_by']);
+		}
+		$this->edit();
+		return true;
+	}
+
+	/**
+	 * search overloads FormObject->search, and uses a four table join to allow very flexible searches
+	 *
+     **/
 	 function search()
     {
 		$this->template = new TemplatePower('./templates/' . $this->table . '_' . 'search' . '.html'); //make a new TemplatePower object
@@ -143,18 +320,19 @@ class ScorePacketFormObject extends FormObject {
         valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the search form
         if ($this->data['search']) { // Only bother to search if they submit critera, show the blank form regardless
             valueFill($this->data, $this->template); //Put the search values back in the form fields
-            
+
 			//Add the table name to the id field.  Can't do this from the form becuase TemplatePower sees . as a block separator
 			$this->data['search']['score_packet.id'] = $this->data['search']['id'];
 			$this->data['search_operators']['score_packet.id'] = $this->data['search_operators']['id'];
 			unset($this->data['search']['id']);
-			unset($this->data['search_operators']['id']);	
-			
+			unset($this->data['search_operators']['id']);
+
 			//Build up the query
-			$query = 'SELECT score_packet.* FROM score_packet, event, section, person';
-			$query .= ' WHERE score_packet.event_id = event.id';
-			$query .= ' AND score_packet.section_id = section.id';
-			$query .= ' AND score_packet.person_id = person.id';
+			$query = 'SELECT score_packet.* FROM score_packet';
+			$query .= ' LEFT JOIN event ON score_packet.event_id=event.id';
+			$query .= ' LEFT JOIN section ON score_packet.section_id=section.id';
+			$query .= ' LEFT JOIN person ON score_packet.person_id=person.id';
+			$query .= ' WHERE 1';
 			foreach ($this->data['search'] as $field => $value) {
                 $whereLine = $this->buildWhereLine($field, $this->data['search_operators'][$field], $value);
                 if ($whereLine) {
@@ -179,7 +357,7 @@ class ScorePacketFormObject extends FormObject {
         }
         return true;
 	}
-	
+
 }  //End class ScorePacketFormObject
 
 ?>

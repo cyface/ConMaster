@@ -22,34 +22,18 @@
   </tr>
   <tr> 
     <td class="FormTitle">&nbsp;</td>
-    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=state&selcols[2]=city&selcols[3]=count(*)&groupcols[1]=state&groupcols[2]=city&where[1]=length(reg_type)!=0">Person 
-      City/State</a></td>
-    <td class="TableData">Summarizes the person table by state and city.</td>
+    <td class="TableDataBold"><a href="report.php?queryFile=state_city_count.sql&templateFile=report_two_col.html">Person City/State</a></td>
+    <td class="TableData">Summarizes the registrants by state and city.</td>
   </tr>
   <tr> 
-    <td class="FormTitle">&nbsp;</td>
-    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=reg_type&selcols[2]=total_fee&selcols[3]=sum(total_fee)&groupcols[1]=reg_type&groupcols[2]=total_fee&where[0]=length(reg_type)!=0">Person 
-      Reg Type/Total Fee Sum</a></td>
-    <td class="TableData">Sums the person table by Reg Type and total fee.</td>
+	  <td class="FormTitle">&nbsp;</td>
+	  <td class="TableDataBold"><a href="report.php?queryFile=event_section_reg_totals.sql&templateFile=report_two_col.html">Event/Section Registration Totals</a></td>
+	  <td class="TableData">Summarizes the events and sections by number of people registered.</td>
   </tr>
   <tr> 
-    <td class="FormTitle">&nbsp;</td>
-    <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=reg_type&selcols[2]=total_fee&selcols[3]=count(*)&groupcols[1]=reg_type&groupcols[2]=total_fee&where[0]=length(reg_type)!=0">Person 
-      Reg Type/Total Fee</a></td>
-    <td class="TableData">Summarizes the person table by Reg Type and total fee.</td>
-  </tr>
-  <tr> 
-    <td class="FormTitle">&nbsp;</td>
-    <td class="TableDataBold"><a href="form.php?table=person_section&action=report&selcols[1]=reg_type&selcols[2]=price&selcols[3]=count(*)&groupcols[1]=reg_type&groupcols[2]=price">Person 
-      Section Reg Type/Price</a></td>
-    <td class="TableData">Summarizes the person section (registration) table by 
-      Reg Type and event fee.</td>
-  </tr>
-  <tr> 
-    <td class="FormTitle">&nbsp;</td>
-    <td class="TableDataBold"><a href="form.php?table=event&action=report&selcols[1]=type&selcols[2]=price&selcols[3]=count(*)&groupcols[1]=type&groupcols[2]=price">Event 
-      Type/Price</a></td>
-    <td class="TableData">Summarizes the event table by type and price</td>
+  	  <td class="FormTitle">&nbsp;</td>
+  	  <td class="TableDataBold"><a href="report.php?queryFile=section_max_vs_reg.sql&templateFile=report_two_col.html&totals=off">Section vs. Max</a></td>
+  	  <td class="TableData">Shows each event and section, and how many are registered as compared to the max.</td>
   </tr>
   <tr> 
     <td class="FormTitle">Exports</td>

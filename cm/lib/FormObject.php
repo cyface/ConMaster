@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.16 2002/07/31 22:04:12 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.17 2002/08/09 16:43:22 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -66,7 +66,7 @@ class FormObject {
         $this->table = $this->data['table'];
 		$this->form_constants = $this->data['form_constants']; //Copy any passed in constants to the property
 		$this->form_constants['table'] = $this->table;  //Some forms need to have the table name passed in
-        
+
 		$this->action = $this->data['action'];
 
         // initialize DataObject
@@ -78,6 +78,10 @@ class FormObject {
         $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
         if ($this->data['id']) { //If id is not null, we are loading a single record
             $this->dataObject = DB_DataObject::staticGet($objectName, $this->data['id']);
+            if (!$this->dataObject) {
+            	echo "Object Id Not Found";
+            	return false;
+            }
         } else { //We are loading mutiple records, or more like, processing the included table
             require_once('./lib/DataObjects/' . ucwords($this->table) . '.php');
             $this->dataObject = new $objectName;
@@ -356,113 +360,7 @@ class FormObject {
         }
         return true;
     }  //End function search
-	/**
-     * report pulls the $this->data columns, and displays the results with breaks and subtotals
-	 * @access private
-	 * @return boolean True if success False if Failure
-     **/
-    function report()
-    {
-        $this->template = new TemplatePower('./templates/report_two_col.html'); //make a new TemplatePower object
-        $this->template->prepare(); //let TemplatePower do its thing, parsing etc.
-        valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the report form
-        // Using the arrays passed in via $this->data, set up the query
-        if ($this->data['selcols']) {
-            $this->dataObject->selectAdd(); //Clear the default '*'
-            foreach ($this->data['selcols'] as $colName) {
-                $this->dataObject->selectAdd(stripslashes(urldecode($colName)));
-            }
-        } else {
-            return false;
-        }
 
-        if ($this->data['titles']) {
-            foreach ($this->data['titles'] as $colNum => $colName) {
-                $this->template->assign('col' . $colNum . 'Header', $colName);
-            }
-        } else {
-            foreach ($this->data['selcols'] as $colNum => $colName) {
-                $this->data['titles'][$colNum] = ucwords(str_replace('_', ' ', $colName));
-                $this->template->assign('col' . $colNum . 'Header', $this->data['titles'][$colNum]);
-            }
-        }
-
-        if ($this->data['groupcols']) {
-            foreach ($this->data['groupcols'] as $colName) {
-                $this->dataObject->groupBy(stripslashes(urldecode($colName)));
-            }
-        }
-        if ($this->data['ordercols']) {
-            foreach ($this->data['ordercols'] as $colName) {
-                $this->dataObject->orderBy(stripslashes(urldecode($colName)));
-            }
-        }
-        if ($this->data['where']) {
-            foreach ($this->data['where'] as $whereRow) {
-                $this->dataObject->whereAdd(stripslashes(urldecode($whereRow)));
-            }
-        }
-        if ($this->data['limit']) {
-            foreach ($this->data['limit'] as $limit) {
-                $this->dataObject->limit($limit);
-            }
-        }
-
-        $result = $this->dataObject->find(); //Run the query with the stuff we just set
-        if (PEAR::isError($result)) {
-            $this->template->assign('form_error', $result->getMessage());
-            $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
-        } else {
-            $this->template->assign('action_message', $this->dataObject->N . ' Found');
-        }
-
-        $lastCol1 = -1;
-        $subtotalCol1Col1 = 0;
-        $totalCol1Col1 = 0;
-
-        while ($this->dataObject->fetch()) {
-            foreach ($this->data['selcols'] as $colNum => $colName) {
-                $varName = 'col' . $colNum;
-                $varName = $this->dataObject->$colName; //Tricky.  See the 'variable variables section of the PHP manual
-            }
-
-            // echo '<pre>Col1:'; echo print_r($col1); echo '</pre>';
-            switch ($lastCol1) {
-            case -1:
-                $lastCol1 = $this->dataObject;
-                $this->template->newBlock('result_row');
-                $this->template->assign('col1', $col1);
-                break;
-            case ($col1):
-                $foo = 'state';
-                $this->template->newBlock('result_row');
-                $this->template->assign('col1', '');
-                break;
-            default: // when col1 != $lastCol1
-                $this->template->newBlock("total_row");
-                $this->template->assign('col1', $lastCol1 . ' Subtotal');
-                $this->template->assign('col3', $subtotalCol1);
-                $subtotalCol1 = 0;
-
-                $this->template->newBlock('result_row');
-                $this->template->assign('col1', $col1);
-                break;
-			}  //end switch
-			$lastCol1 = $col1;
-			$subtotalCol1 += $col3;
-			$totalCol1 += $col3;
-			$this->template->assign('col2', $col2);
-			$this->template->assign('col3', $col3);
-		}
-		$this->template->newBlock("total_row"); //Final subtotal
-		$this->template->assign('col1', $lastCol1 . ' Subtotal');
-		$this->template->assign('col3', $subtotalCol1);
-		$this->template->newBlock("total_row"); //Final total
-		$this->template->assign('col1', 'Grand Total');
-		$this->template->assign('col3', $totalCol1);
-
-    	return true;
-	}  //End function report
 	/**
 	 * loadConstants loads the groups in $this->data['load_constants'] into form_constants[] from constant
 	 * @access private

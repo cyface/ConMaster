@@ -5,11 +5,11 @@ SELECT
 	sec.round, 
 	pkt.id AS packet_id, 
 	pkt.rpga_event_type, 
-	IF(ps.packet_position = 0,pkt.scenario_score,0) AS scenario_score, 
-	IF(ps.packet_position = 0,0,pkt.group_score) AS group_score, 
-	IF(ps.packet_position = 0,'JU',CONCAT('P',ps.packet_position)) AS packet_postition, 
+	IF((ps.packet_position = 0)||(pkt.no_vote != 'CHECKED'),pkt.scenario_score,0) AS scenario_score, 
+	IF(ps.packet_position = 0,0,IF(pkt.no_vote = 'CHECKED',18,pkt.group_score)) AS group_score, 
+	IF(ps.packet_position = 0,'JU',IF(pkt.no_vote = 'CHECKED',4,CONCAT('P',ps.place))) AS place, 
 	per.rpga_number, 
-	IFNULL(ps.score,0) AS score
+	IF(pkt.no_vote = 'CHECKED',IF(ps.packet_position = 0,140,10),IFNULL(ps.score,0)) AS score
 FROM
 	convention AS con,
 	event AS ev,
@@ -27,5 +27,5 @@ AND ev.rpga_event_code IS NOT NULL
 AND ev.rpga_event_code != ''
 ORDER BY
 	pkt.id,
-	ps.packet_position
+	IF(ps.place IS NULL,0,ps.place)
 ;
