@@ -20,7 +20,7 @@
  * @package  DB_DataObject
  * @category DB
  *
- * $Id: DataObject.php,v 1.10 2003/09/16 19:20:25 cyface Exp $
+ * $Id: DataObject.php,v 1.11 2003/09/17 20:36:48 cyface Exp $
  */
 
 /**
@@ -2424,9 +2424,12 @@ Class DB_DataObject
 }
 // technially 4.3.2RC1 was broken!!
 // looks like 4.3.3 may have problems too....
+//THIS CODE IS BROKEN!  TLWHIT2 9/18/2003
+/*
 if ((phpversion() != '4.3.2-RC1') && (version_compare( phpversion(), "4.3.1") > 0)) {
    overload('DB_DataObject');
    $GLOBALS['_DB_DATAOBJECT']['OVERLOADED'] = true;
 }
+*/
 
 ?>
