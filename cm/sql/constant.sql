@@ -4,7 +4,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 24, 2002 at 03:42 PM
+# Generation Time: Jul 29, 2002 at 02:43 PM
 # Server version: 3.23.51
 # PHP Version: 4.1.2
 # Database : `cyface`
@@ -49,12 +49,12 @@ INSERT INTO constant VALUES (15, 'event_type', 'Mechandise', NULL, NULL, NULL, 1
 INSERT INTO constant VALUES (16, 'event_type', 'Demonstration', '0', NULL, NULL, 1, 20020722105022);
 INSERT INTO constant VALUES (17, 'event_type', 'Seminar', '0', NULL, NULL, 1, 20020722105036);
 INSERT INTO constant VALUES (18, 'event_type', 'Special Event', NULL, NULL, NULL, 1, 20020722105102);
-INSERT INTO constant VALUES (19, 'rpga_event_type', 'BE', 'Benefit', NULL, NULL, 1, 20020722105340);
-INSERT INTO constant VALUES (20, 'rpga_event_type', 'FE', 'Feature', NULL, NULL, 1, 20020722105410);
-INSERT INTO constant VALUES (21, 'rpga_event_type', 'MA', 'Masters', NULL, NULL, 1, 20020722105420);
-INSERT INTO constant VALUES (22, 'rpga_event_type', 'GM', 'Grand Masters', NULL, NULL, 1, 20020722105438);
-INSERT INTO constant VALUES (23, 'rpga_event_type', 'PA', 'Paragon', NULL, NULL, 1, 20020722105448);
-INSERT INTO constant VALUES (24, 'rpga_event_type', 'TE', 'Team', NULL, NULL, 1, 20020722105507);
+INSERT INTO constant VALUES (19, 'rpga_event_type', 'Benefit', 'BE', NULL, NULL, 1, 20020729143507);
+INSERT INTO constant VALUES (20, 'rpga_event_type', 'Feature', 'FE', NULL, NULL, 1, 20020729143518);
+INSERT INTO constant VALUES (21, 'rpga_event_type', 'Masters', 'MA', NULL, NULL, 1, 20020729143530);
+INSERT INTO constant VALUES (22, 'rpga_event_type', 'Grand Masters', 'GM', NULL, NULL, 1, 20020729143544);
+INSERT INTO constant VALUES (23, 'rpga_event_type', 'Paragon', 'PA', NULL, NULL, 1, 20020729143556);
+INSERT INTO constant VALUES (24, 'rpga_event_type', 'Team', 'TE', NULL, NULL, 1, 20020729143607);
 INSERT INTO constant VALUES (25, 'event_level', 'Beginner - Rules Taught', NULL, NULL, NULL, 1, 20020722105524);
 INSERT INTO constant VALUES (26, 'event_level', 'Beginner', NULL, NULL, NULL, 1, 20020722105530);
 INSERT INTO constant VALUES (27, 'event_level', 'Intermediate', NULL, NULL, NULL, 1, 20020722105542);
