@@ -1,43 +1,43 @@
 # phpMyAdmin MySQL-Dump
-# version 2.3.0-rc2
+# version 2.3.0-rc4
 # http://phpwizard.net/phpMyAdmin/
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Jul 29, 2002 at 08:14 PM
-# Server version: 3.22.32
+# Generation Time: Aug 07, 2002 at 01:27 PM
+# Server version: 3.23.51
 # PHP Version: 4.1.2
-# Database : cyface
+# Database : `cyface`
 # --------------------------------------------------------
 
 #
-# Table structure for table person_section
+# Table structure for table `person_section`
 #
 
 DROP TABLE IF EXISTS person_section;
 CREATE TABLE person_section (
-   id int(10) unsigned DEFAULT '0' NOT NULL auto_increment,
-   person_id int(10) unsigned DEFAULT '0' NOT NULL,
-   section_id int(10) unsigned DEFAULT '0' NOT NULL,
-   event_id int(10) unsigned DEFAULT '0' NOT NULL,
-   reg_type varchar(80) DEFAULT 'default' NOT NULL,
-   score int(10) unsigned,
-   prorated_score int(10) unsigned,
-   place int(10) unsigned,
-   judge varchar(10),
-   price decimal(10,0),
-   old_price decimal(10,0),
-   score_packet_id int(10) unsigned,
-   packet_position int(10) unsigned,
-   judge_score int(10) unsigned,
-   scenario_score int(10) unsigned,
-   convention_id int(10) unsigned DEFAULT '1' NOT NULL,
-   last_modified timestamp(14),
-   PRIMARY KEY (id)
-);
+  id int(10) unsigned NOT NULL auto_increment,
+  person_id int(10) unsigned NOT NULL default '0',
+  section_id int(10) unsigned NOT NULL default '0',
+  event_id int(10) unsigned NOT NULL default '0',
+  reg_type varchar(80) NOT NULL default 'default',
+  score int(10) unsigned default NULL,
+  prorated_score int(10) unsigned default NULL,
+  place int(10) unsigned default NULL,
+  judge varchar(10) default NULL,
+  price decimal(10,0) default NULL,
+  old_price decimal(10,0) default NULL,
+  score_packet_id int(10) unsigned default NULL,
+  packet_position int(10) unsigned default NULL,
+  judge_score int(10) unsigned default NULL,
+  scenario_score int(10) unsigned default NULL,
+  convention_id int(10) unsigned NOT NULL default '1',
+  last_modified timestamp(14) NOT NULL,
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;
 
 #
-# Dumping data for table person_section
+# Dumping data for table `person_section`
 #
 
 INSERT INTO person_section VALUES (2, 11, 201, 138, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -58,7 +58,6 @@ INSERT INTO person_section VALUES (16, 7, 133, 107, 'VIP', 16, NULL, 3, NULL, '3
 INSERT INTO person_section VALUES (17, 7, 159, 115, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (18, 7, 4, 4, 'VIP', NULL, NULL, NULL, NULL, '18', '18', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (19, 7, 136, 108, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (20, 561, 152, 113, 'EB VIP', 14, NULL, 3, NULL, '3', '3', 112, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (21, 561, 148, 112, 'EB VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (22, 561, 142, 110, 'EB VIP', 10, NULL, 4, NULL, '3', '3', 15, 5, 28, 12, 1, 20020717105144);
 INSERT INTO person_section VALUES (23, 561, 147, 111, 'EB VIP', 13, NULL, 4, NULL, '3', '3', 59, 1, NULL, NULL, 1, 20020717105144);
@@ -75,7 +74,7 @@ INSERT INTO person_section VALUES (33, 1115, 170, 119, 'Early Bird', NULL, NULL,
 INSERT INTO person_section VALUES (34, 1115, 160, 116, 'Early Bird', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (35, 1115, 141, 109, 'Early Bird', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (36, 1115, 178, 122, 'Early Bird', 16, NULL, 2, NULL, '3', '3', 34, 1, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (37, 152, 168, 118, 'VIP', 3, NULL, 5, NULL, '3', '3', 106, 5, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (37, 152, 168, 118, 'VIP', 3, NULL, 5, NULL, '3', '3', 106, 5, NULL, NULL, 1, 20020807132607);
 INSERT INTO person_section VALUES (38, 1115, 131, 107, 'Early Bird', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (39, 1115, 143, 110, 'Early Bird', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (40, 1115, 168, 118, 'Early Bird', 7, NULL, 6, NULL, '3', '3', 95, 5, NULL, NULL, 1, 20020717105144);
@@ -104,7 +103,6 @@ INSERT INTO person_section VALUES (62, 896, 169, 118, 'Pre-Reg', 3, NULL, 6, NUL
 INSERT INTO person_section VALUES (63, 896, 157, 114, 'Pre-Reg', 7, NULL, 6, NULL, '3', '3', 18, 7, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (64, 896, 159, 115, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (65, 896, 161, 116, 'Pre-Reg', 15, NULL, 2, NULL, '3', '3', 50, 2, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (66, 896, 177, 121, 'Pre-Reg', 7, NULL, 5, NULL, '3', '3', 111, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (67, 896, 148, 112, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (68, 896, 5, 5, 'Pre-Reg', NULL, NULL, NULL, NULL, '18', '18', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (69, 2207, 225, 154, 'Dealer', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -116,7 +114,6 @@ INSERT INTO person_section VALUES (74, 26, 175, 121, 'Pre-Reg', 20, NULL, 1, NUL
 INSERT INTO person_section VALUES (75, 26, 149, 112, 'Pre-Reg', 8, NULL, 4, NULL, '3', '3', 69, 5, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (76, 26, 153, 113, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (77, 26, 156, 114, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (78, 26, 146, 111, 'Pre-Reg', 12, NULL, 4, NULL, '3', '3', 113, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (79, 26, 6, 6, 'Pre-Reg', NULL, NULL, NULL, NULL, '18', '18', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (80, 2148, 226, 155, 'Dealer', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (81, 20043, 50, 49, 'Pre-Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -309,10 +306,8 @@ INSERT INTO person_section VALUES (267, 392, 151, 112, 'VIP', NULL, NULL, NULL, 
 INSERT INTO person_section VALUES (268, 392, 140, 109, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (269, 392, 129, 107, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (270, 392, 173, 120, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (271, 392, 179, 122, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (272, 392, 157, 114, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (273, 806, 148, 112, 'Staff', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (274, 806, 146, 111, 'Staff', 22, NULL, 1, NULL, '3', '3', 113, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (275, 806, 250, 177, 'Staff', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (276, 158, 257, 183, 'EB VIP', NULL, NULL, NULL, NULL, '5', '5', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (277, 158, 179, 122, 'EB VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -354,7 +349,6 @@ INSERT INTO person_section VALUES (312, 20271, 250, 177, 'Pre-Reg', NULL, NULL, 
 INSERT INTO person_section VALUES (313, 2013, 139, 109, 'Early Bird', 20, NULL, 1, NULL, '3', '3', 35, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (314, 2013, 149, 112, 'Early Bird', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (315, 528, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (316, 275, 152, 113, 'VIP', 11, NULL, 4, NULL, '3', '3', 114, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (317, 275, 140, 109, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (318, 275, 157, 114, 'VIP', 4, NULL, 7, NULL, '3', '3', 18, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (319, 275, 159, 115, 'VIP', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -466,7 +460,6 @@ INSERT INTO person_section VALUES (424, 89, 12, 12, 'Pre-Reg', NULL, NULL, NULL,
 INSERT INTO person_section VALUES (425, 389, 136, 108, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (426, 389, 140, 109, 'Pre-Reg', 8, NULL, 5, NULL, '3', '3', 64, 6, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (427, 20306, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (428, 314, 177, 121, 'Pre-Reg', 27, NULL, 1, NULL, '3', '3', 111, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (429, 314, 171, 119, 'Pre-Reg', 21, NULL, 1, NULL, '3', '3', 43, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (430, 314, 145, 110, 'Pre-Reg', 17, NULL, 2, NULL, '3', '3', 37, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (431, 314, 139, 109, 'Pre-Reg', 10, NULL, 4, NULL, '3', '3', 25, 4, 26, NULL, 1, 20020717105144);
@@ -489,7 +482,6 @@ INSERT INTO person_section VALUES (447, 2073, 169, 118, 'Pre-Reg', 5, NULL, 5, N
 INSERT INTO person_section VALUES (448, 2073, 151, 112, 'Pre-Reg', 14, NULL, 3, NULL, '3', '3', 10, 6, 27, 11, 1, 20020717105144);
 INSERT INTO person_section VALUES (449, 2073, 159, 115, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (450, 2073, 162, 116, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (451, 2073, 152, 113, 'Pre-Reg', 19, NULL, 1, NULL, '3', '3', 114, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (452, 2073, 12, 12, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (453, 20742, 133, 107, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (454, 20742, 149, 112, 'Pre-Reg', 9, NULL, 4, NULL, '3', '3', 79, 4, NULL, NULL, 1, 20020717105144);
@@ -515,7 +507,7 @@ INSERT INTO person_section VALUES (473, 1155, 16, 18, 'Pre-Reg', NULL, NULL, NUL
 INSERT INTO person_section VALUES (474, 1155, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (475, 2075, 120, 100, 'SAT Only', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (476, 805, 257, 183, 'Staff', NULL, NULL, NULL, NULL, '5', '5', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (477, 805, 144, 110, 'Staff', 21, NULL, 1, NULL, '3', '3', 109, 1, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (477, 805, 144, 110, 'Staff', 21, NULL, 1, NULL, '3', '3', 0, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (478, 568, 141, 109, 'Pre-Reg', 24, NULL, 1, NULL, '3', '3', 110, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (479, 568, 137, 108, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (480, 568, 149, 112, 'Pre-Reg', 17, NULL, 2, NULL, '3', '3', 76, 2, NULL, NULL, 1, 20020717105144);
@@ -647,7 +639,7 @@ INSERT INTO person_section VALUES (605, 2118, 257, 183, 'MON Only', NULL, NULL, 
 INSERT INTO person_section VALUES (606, 2120, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (607, 2122, 257, 183, 'MON Only', NULL, NULL, NULL, NULL, '5', '5', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (608, 708, 5, 5, 'Pre-Reg', NULL, NULL, NULL, NULL, '18', '18', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (609, 708, 144, 110, 'Pre-Reg', 17, NULL, 2, NULL, '3', '3', 109, 2, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (609, 708, 144, 110, 'Pre-Reg', 17, NULL, 2, NULL, '3', '3', 0, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (610, 708, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (611, 2124, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (612, 266, 254, 180, 'Pre-Reg', NULL, NULL, NULL, NULL, '5', '5', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -661,7 +653,6 @@ INSERT INTO person_section VALUES (619, 265, 135, 108, 'Pre-Reg', NULL, NULL, NU
 INSERT INTO person_section VALUES (620, 265, 131, 107, 'Pre-Reg', 11, NULL, 3, NULL, '3', '3', 67, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (621, 265, 5, 5, 'Pre-Reg', NULL, NULL, NULL, NULL, '18', '18', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (622, 853, 172, 119, 'Pre-Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (623, 853, 177, 121, 'Pre-Reg', 23, NULL, 2, NULL, '3', '3', 111, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (624, 853, 112, 92, 'Pre-Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (625, 853, 110, 90, 'Pre-Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (626, 20467, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -713,7 +704,6 @@ INSERT INTO person_section VALUES (671, 7690, 214, 143, 'Reg', NULL, NULL, NULL,
 INSERT INTO person_section VALUES (672, 2207, 226, 155, 'Dealer', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (673, 2063, 151, 112, 'Special Guest', 27, NULL, 1, NULL, '3', '3', 10, 1, 27, 8, 1, 20020717105144);
 INSERT INTO person_section VALUES (674, 2063, 143, 110, 'Special Guest', 9, NULL, 4, NULL, '3', '3', 73, 5, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (675, 2063, 152, 113, 'Special Guest', 23, NULL, 1, NULL, '3', '3', 112, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (676, 2063, 136, 108, 'Special Guest', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (677, 2210, 245, 172, 'Ben Con Jr.', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (678, 6236, 138, 108, 'Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -721,9 +711,7 @@ INSERT INTO person_section VALUES (679, 6236, 129, 107, 'Reg', 16, NULL, 3, NULL
 INSERT INTO person_section VALUES (680, 2065, 169, 118, 'Special Guest', 20, NULL, 2, NULL, '3', '3', 8, 3, 28, 10, 1, 20020717105144);
 INSERT INTO person_section VALUES (681, 2065, 158, 114, 'Special Guest', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (682, 977, 229, 158, 'SAT Only', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (683, 2065, 152, 113, 'Special Guest', 11, NULL, 4, NULL, '3', '3', 112, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (684, 2064, 133, 107, 'Special Guest', 14, NULL, 4, NULL, '3', '3', 1, 4, 30, 9, 1, 20020717105144);
-INSERT INTO person_section VALUES (685, 2064, 152, 113, 'Special Guest', 18, NULL, 2, NULL, '3', '3', 112, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (686, 2064, 168, 118, 'Special Guest', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (687, 716, 225, 154, 'Dealer', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (688, 716, 234, 162, 'Dealer', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -766,7 +754,7 @@ INSERT INTO person_section VALUES (724, 93, 222, 151, 'Reg', NULL, NULL, NULL, N
 INSERT INTO person_section VALUES (725, 93, 223, 152, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (726, 93, 24, 24, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (727, 20267, 101, 81, 'FRI Only', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (728, 1079, 228, 157, 'Staff', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (728, 1079, 228, 157, 'Staff', 175, NULL, 0, NULL, '2', '2', 0, 0, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (729, 444, 54, 53, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (730, 444, 57, 56, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (731, 444, 82, 72, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -801,7 +789,6 @@ INSERT INTO person_section VALUES (759, 2235, 160, 116, 'Playing Judge', 6, NULL
 INSERT INTO person_section VALUES (760, 2235, 181, 123, 'Playing Judge', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (761, 2235, 113, 93, 'Playing Judge', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (762, 2235, 250, 177, 'Playing Judge', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (763, 240, 177, 121, 'Pre-Reg', 9, NULL, 3, NULL, '3', '3', 111, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (764, 20084, 232, 160, 'Staff', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (765, 20527, 247, 174, 'Reg', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (766, 351, 167, 118, 'Score Packet', 126, NULL, 105, 'CHECKED', '0', '0', 42, 0, 105, NULL, 1, 20020717105144);
@@ -825,7 +812,6 @@ INSERT INTO person_section VALUES (783, 2428, 226, 155, 'SUN Only', NULL, NULL, 
 INSERT INTO person_section VALUES (784, 2264, 250, 177, 'FRI Only', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (785, 2091, 250, 177, 'Pre-Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (786, 560, 12, 12, 'Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (787, 560, 152, 113, 'Reg', 15, NULL, 2, NULL, '3', '3', 114, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (788, 560, 156, 114, 'Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (789, 20063, 133, 107, 'Score Packet', 135, NULL, 135, 'CHECKED', '0', '0', 2, 0, 135, 10, 1, 20020717105144);
 INSERT INTO person_section VALUES (790, 995, 138, 108, 'Score Packet', 146, NULL, 170, 'CHECKED', '0', '0', 3, 0, 170, 14, 1, 20020717105144);
@@ -856,7 +842,6 @@ INSERT INTO person_section VALUES (814, 218, 12, 12, 'Reg', NULL, NULL, NULL, NU
 INSERT INTO person_section VALUES (815, 218, 145, 110, 'Reg', 21, NULL, 1, NULL, '3', '3', 36, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (816, 218, 154, 113, 'Reg', 20, NULL, 1, NULL, '3', '3', 48, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (817, 218, 162, 116, 'Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (818, 218, 146, 111, 'Reg', 17, NULL, 3, NULL, '3', '3', 113, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (819, 20975, 224, 153, 'SAT Only', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (820, 2274, 224, 153, 'SAT Only', NULL, NULL, NULL, NULL, '2', '2', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (821, 2277, 12, 12, 'SAT Only', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -940,7 +925,6 @@ INSERT INTO person_section VALUES (898, 2364, 208, 141, 'SAT Only', NULL, NULL, 
 INSERT INTO person_section VALUES (899, 181, 160, 116, 'Score Packet', 122, NULL, 102, 'CHECKED', '0', '0', 12, 0, 102, 12, 1, 20020717105144);
 INSERT INTO person_section VALUES (900, 158, 160, 116, 'Score Packet', 135, NULL, 135, 'CHECKED', '0', '0', 13, 0, 135, 13, 1, 20020717105144);
 INSERT INTO person_section VALUES (901, 240, 160, 116, 'Score Packet', 17, NULL, 2, NULL, '0', '0', 13, 2, 27, 14, 1, 20020717105144);
-INSERT INTO person_section VALUES (902, 20059, 177, 121, 'Pre-Reg', 6, NULL, 6, NULL, '3', '3', 111, 6, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (903, 420, 227, 156, 'Dealer', NULL, NULL, NULL, NULL, '6', '6', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (904, 1028, 250, 177, 'Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (905, 2376, 250, 177, 'Reg', NULL, NULL, NULL, NULL, '8', '8', NULL, NULL, NULL, NULL, 1, 20020717105144);
@@ -1089,7 +1073,6 @@ INSERT INTO person_section VALUES (1047, 2064, 166, 117, 'Score Packet', 145, NU
 INSERT INTO person_section VALUES (1048, 20155, 154, 113, 'Score Packet', 26, NULL, 1, NULL, '0', '0', 54, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1049, 192, 154, 113, 'Score Packet', 135, NULL, 158, 'CHECKED', '0', '0', 54, 0, 158, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1050, 192, 155, 113, 'Score Packet', 81, NULL, 81, 'CHECKED', '0', '0', 55, 0, 81, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1051, 398, 146, 111, 'Pre-Reg', 18, NULL, 2, NULL, '3', '3', 113, 5, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1052, 1022, 137, 108, 'Reg', NULL, NULL, NULL, NULL, '3', '3', NULL, NULL, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1053, 84, 179, 122, 'Score Packet', 148, NULL, 148, 'CHECKED', '0', '0', 66, 0, 149, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1054, 240, 154, 113, 'Score Packet', 3, NULL, 5, NULL, '0', '0', 54, 6, NULL, NULL, 1, 20020717105144);
@@ -1206,7 +1189,6 @@ INSERT INTO person_section VALUES (1164, 1079, 263, 189, 'Score Packet', 11, NUL
 INSERT INTO person_section VALUES (1165, 71, 263, 189, 'Score Packet', 5, NULL, 6, NULL, '0', '0', 92, 5, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1166, 192, 263, 189, 'Score Packet', 6, NULL, 5, NULL, '0', '0', 92, 6, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1167, 853, 198, 135, 'Score Packet', 125, NULL, 104, 'CHECKED', '0', '0', 93, 0, 104, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1168, 351, 152, 113, 'Early Bird', 11, NULL, 3, NULL, '3', '3', 114, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1169, 20076, 186, 128, 'Score Packet', 142, NULL, 118, 'CHECKED', '0', '0', 94, 0, 118, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1170, 20077, 186, 128, 'Score Packet', 16, NULL, 2, NULL, '0', '0', 94, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1171, 20207, 186, 128, 'Score Packet', 14, NULL, 3, NULL, '0', '0', 94, 3, NULL, NULL, 1, 20020717105144);
@@ -1231,35 +1213,16 @@ INSERT INTO person_section VALUES (1189, 611, 156, 114, 'Score Packet', NULL, NU
 INSERT INTO person_section VALUES (1190, 158, 172, 119, 'Score Packet', 23, NULL, 1, NULL, '0', '0', 104, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1191, 1079, 172, 119, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 104, 0, 147, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1192, 611, 168, 118, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 106, 0, 169, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1193, 275, 168, 118, 'Score Packet', 2, NULL, 6, NULL, '0', '0', 106, 6, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1194, 20155, 144, 110, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 109, 0, 142, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1195, 2065, 144, 110, 'Score Packet', 16, NULL, 3, NULL, '0', '0', 109, 3, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1196, 896, 144, 110, 'Score Packet', 12, NULL, 4, NULL, '0', '0', 109, 4, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1197, 351, 144, 110, 'Score Packet', 4, NULL, 5, NULL, '0', '0', 109, 5, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (1301, 275, 169, 118, 'Score Packet', 2, NULL, 6, NULL, '0', '0', 106, 6, NULL, NULL, 1, 20020807132314);
 INSERT INTO person_section VALUES (1198, 20084, 141, 109, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 110, 0, 174, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1199, 939, 141, 109, 'Score Packet', 18, NULL, 2, NULL, '0', '0', 110, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1200, 20155, 141, 109, 'Score Packet', 13, NULL, 4, NULL, '0', '0', 110, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1201, 829, 141, 109, 'Score Packet', 2, NULL, 6, NULL, '0', '0', 110, 6, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1202, 2017, 177, 121, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 111, 0, 152, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1203, 20658, 177, 121, 'Score Packet', 8, NULL, 4, NULL, '0', '0', 111, 5, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1204, 2049, 152, 113, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 112, 0, 139, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1205, 265, 152, 113, 'Score Packet', 4, NULL, 5, NULL, '0', '0', 112, 5, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1206, 1163, 146, 111, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 113, 0, 176, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1207, 1093, 146, 111, 'Score Packet', 10, NULL, 5, NULL, '0', '0', 113, 3, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1208, 501, 146, 111, 'Score Packet', 1, NULL, 6, NULL, '0', '0', 113, 6, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1209, 397, 152, 113, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 114, 0, 109, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1210, 2454, 141, 109, 'Score Packet', 8, NULL, 5, NULL, '0', '0', 115, 4, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1211, 250, 141, 109, 'Score Packet', 15, NULL, 3, NULL, '0', '0', 115, 3, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1212, 583, 141, 109, 'Score Packet', 19, NULL, 2, NULL, '0', '0', 115, 2, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1213, 534, 141, 109, 'Score Packet', 26, NULL, 1, NULL, '0', '0', 115, 1, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1214, 828, 141, 109, 'Score Packet', NULL, NULL, NULL, 'CHECKED', '0', '0', 115, 0, 178, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1215, 11, 143, 110, 'Score Packet', 19, NULL, 1, NULL, '0', '0', 72, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1216, 2049, 143, 110, 'Score Packet', 14, NULL, 3, NULL, '0', '0', 72, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1217, 6236, 143, 110, 'Score Packet', 12, NULL, 4, NULL, '0', '0', 72, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1218, 829, 143, 110, 'Score Packet', 17, NULL, 2, NULL, '0', '0', 72, 4, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1219, 779, 143, 110, 'Score Packet', 8, NULL, 5, NULL, '0', '0', 72, 5, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1220, 2037, 141, 109, 'Score Packet', 11, NULL, 4, NULL, '0', '0', 115, 5, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1221, 2061, 141, 109, 'Score Packet', 1, NULL, 6, NULL, '0', '0', 115, 6, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1222, 829, 157, 114, 'Score Packet', 14, NULL, 2, NULL, '0', '0', 17, 1, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1223, 939, 157, 114, 'Score Packet', 22, NULL, 1, NULL, '0', '0', 17, 2, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1224, 2037, 157, 114, 'Score Packet', 7, NULL, 6, NULL, '0', '0', 17, 3, NULL, NULL, 1, 20020717105144);
@@ -1307,6 +1270,9 @@ INSERT INTO person_section VALUES (1265, 389, 136, 108, 'Score Packet', 5, NULL,
 INSERT INTO person_section VALUES (1266, 2087, 136, 108, 'Score Packet', 2, NULL, 6, NULL, '0', '0', 45, 6, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1267, 158, 179, 122, 'Score Packet', 13, NULL, 3, NULL, '0', '0', 66, 3, NULL, NULL, 1, 20020717105144);
 INSERT INTO person_section VALUES (1268, 11, 179, 122, 'Score Packet', 9, NULL, 5, NULL, '0', '0', 66, 4, NULL, NULL, 1, 20020717105144);
-INSERT INTO person_section VALUES (1269, 392, 179, 122, 'Score Packet', 10, NULL, 4, NULL, '0', '0', 66, 5, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (1279, 392, 0, 0, 'Score Packet', 10, NULL, 4, NULL, '0', '0', 0, 5, NULL, NULL, 1, 20020805125450);
 INSERT INTO person_section VALUES (1270, 0, 0, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 20020717105144);
+INSERT INTO person_section VALUES (1276, 20984, 0, 0, 'Score Packet', 0, NULL, 0, NULL, '0', '0', 0, 0, NULL, NULL, 1, 20020801144702);
+INSERT INTO person_section VALUES (1280, 392, 179, 122, 'Score Packet', 10, NULL, 4, NULL, '0', '0', 66, 5, NULL, NULL, 1, 20020805133805);
+INSERT INTO person_section VALUES (1281, 1079, 0, 0, 'Score Packet', 172, NULL, 0, NULL, '0', '0', 0, 0, NULL, NULL, 1, 20020805150748);
 
