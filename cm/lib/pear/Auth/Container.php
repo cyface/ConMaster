@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2003 The PHP Group                                |
 // +----------------------------------------------------------------------+
 // | This source file is subject to version 2.02 of the PHP license,      |
 // | that is bundled with this package in the file LICENSE, and is        |
@@ -16,7 +16,7 @@
 // | Authors: Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Container.php,v 1.4 2002/07/18 21:39:39 cyface Exp $
+// $Id: Container.php,v 1.5 2003/09/16 19:18:47 cyface Exp $
 //
 
 define("AUTH_METHOD_NOT_SUPPORTED", -4);
@@ -65,6 +65,47 @@ class Auth_Container
     }
 
     // }}}
+    // {{{ verifyPassword()
+
+    /**
+     * Crypt and verfiy the entered password
+     *
+     * @param  string Entered password
+     * @param  string Password from the data container (usually this password
+     *                is already encrypted.
+     * @param  string Type of algorithm with which the password from
+     *                the container has been crypted. (md5, crypt etc.)
+     *                Defaults to "md5".
+     * @return bool   True, if the passwords match
+     */
+    function verifyPassword($password1, $password2, $cryptType = "md5")
+    {
+        switch ($cryptType) {
+        case "crypt" :
+            return (($password2 == "**" . $password1) ||
+                    (crypt($password1, $password2) == $password2)
+                    );
+            break;
+
+        case "none" :
+            return ($password1 == $password2);
+            break;
+
+        case "md5" :
+            return (md5($password1) == $password2);
+            break;
+
+        default :
+            if (function_exists($cryptType)) {
+                return ($cryptType($password1) == $password2);
+            } else {
+                return false;
+            }
+            break;
+        }
+    }
+
+    // }}}
     // {{{ listUsers()
 
     /**
@@ -87,7 +128,7 @@ class Auth_Container
      *
      * @return boolean
      */
-    function addUser($username, $password, $additional)
+    function addUser($username, $password, $additional=null)
     {
         return AUTH_METHOD_NOT_SUPPORTED;
     }
