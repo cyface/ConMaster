@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>{form_constants[form_label]} Notes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
+<script language="JavaScript" src="/cm/templates/cm.js"></script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td class="FormTitle">{form_constants[form_label]}</td>
+    <td class="FormTitle">
+      <div align="right"></div>
+    </td>
+  </tr>
+</table>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
+<hr>
+<!-- START BLOCK : included_header -->
+<span class="FormTitle">Notes </span> 
+<table width="100%" border="1">
+  <tr> 
+    <td class="TableTitle" colspan=2>Action</td>
+    <td class="TableTitle" width="28%">Subject</td>
+    <td class="TableTitle" width="13%"> By</td>
+    <td class="TableTitle" width="41%"> Last Modified</td>
+  </tr>
+  <tr> 
+    <form name="slot_add" method="post" action="form.php">
+      <td class="TableDataBold" colspan=2> 
+        <input type="submit" name="add" value="Add">
+      </td>
+      <td class="TableDataBold" width="28%"><span class="FieldName"> 
+        <input type="hidden" name="parent_table" value="{form_constants[table]}">
+        <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="table" value="{form_constants[table]}">
+        <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="included_table" value="note">
+        <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="hidden" name="included_parent_id_col" value="parent_id">
+		<input type="hidden" name="template" value="note_edit.html">
+		<input type="hidden" name="form_constants[table]" value="{form_constants[table]}">
+		<input type="hidden" name="form_constants[form_label]" value="{form_constants[form_label]}">
+        <input type="text" name="subject" size="30" maxlength="255" class="FieldData">
+        </span> </td>
+      <td class="TableData" width="13%"><span class="FieldName"> 
+        <input type="text" name="sender" size="8" maxlength="8" class="FieldData" value="">
+        </span></td>
+      <td class="TableData" width="41%">&nbsp;</td>
+    </form>
+  </tr>
+  <!-- END BLOCK : included_header -->
+  <!-- START BLOCK : note_row -->
+  <form name="note_save" method="post" action="form.php">
+  <tr> 
+      <td class="TableHeader" width="9%">
+	  	<a href="form.php?table={form_constants[table]}&action=deleteIncluded&parent_id={parent_id}&included_table=note&included_id={id}&included_order_by=last_modified desc&included_parent_id_col=parent_id&template=note_edit.html&form_constants[table]={form_constants[table]}&form_constants[form_label]={form_constants[form_label]}">Delete</a>
+      </td>
+      <td class="TableHeader" width="9%"> 
+        <input type="hidden" name="parent_id" value="{parent_id}">
+        <input type="hidden" name="parent_table" value="{form_constants[table]}">
+	    <input type="hidden" name="table" value="{form_constants[table]}">
+        <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="included_table" value="note">
+        <input type="hidden" name="included_id" value="{id}">
+        <input type="hidden" name="included_order_by" value="last_modified desc">
+        <input type="hidden" name="included_parent_id_col" value="parent_id">
+		<input type="hidden" name="template" value="note_edit.html">
+		<input type="hidden" name="form_constants[table]" value="{form_constants[table]}">
+		<input type="hidden" name="form_constants[form_label]" value="{form_constants[form_label]}">
+        <input type="submit" name="update" value="Update">
+      </td>
+      <td class="TableDataBold" width="28%"> 
+        <input type="text" name="subject" size="30" maxlength="80" class="FieldData" value="{subject}">
+        </td>
+      <td class="TableData" width="13%"> 
+        <input type="text" name="sender" size="8" maxlength="8" class="FieldData" value="{sender}">
+        </td>
+      <td class="TableData" width="41%">{last_modified}</td>
+  </tr>
+  <tr> 
+    <td class="TableData" width="9%">&nbsp;</td>
+    <td class="TableTitle" width="9%" align="right"> 
+      Body
+    </td>
+    <td class="TableData" colspan="3">
+      <textarea name="body" cols="60" class="FieldData" rows="3">{body}</textarea>
+    </td>
+  </tr>
+ </form>
+ <!-- END BLOCK : note_row -->
+</table>
+<form><input type="button" onClick="window.close()" name="close" value="Finished Editing Notes"></form>
+</body>
+</html>
