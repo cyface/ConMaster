@@ -14,16 +14,28 @@
 </table>
 <span class="FormTitle"> Score Packet Search Form</span>
 <hr noshade>
-<form name="person_search_form" method="post" action="form.php">
+<form name="person_search_form" method="post" action="score_packet.php">
   <table width="75%" border="0" cellspacing="2" cellpadding="2" name="searchCriteria" align="center">
-    <tr>
+    <tr> 
       <td width="10%" class="FieldName">Packet ID</td>
-      <td width="38%">
+      <td width="38%"> 
         <input type="text" name="search[id]" value="{search[id]}" class="FieldData">
         <input type="hidden" name="search_operators[id]" value="equals">
       </td>
-      <td width="10%" class="FieldName">&nbsp;</td>
-      <td width="38%">&nbsp; </td>
+      <td width="10%" class="FieldName">Complete Event Number</td>
+      <td width="38%"> 
+        <input type="text" name="search[complete_event_number]" value="{search[complete_event_number]}" class="FieldData">
+      </td>
+    </tr>
+    <tr> 
+      <td width="10%" class="FieldName">Judge Last Name</td>
+      <td width="38%"> 
+        <input type="text" name="search[last_name]" value="{search[last_name]}" class="FieldData">
+      </td>
+      <td width="10%" class="FieldName">Event Name</td>
+      <td width="38%"> 
+        <input type="text" name="search[event_name]" value="{search[event_name]}" class="FieldData">
+      </td>
     </tr>
   </table>
   <p align="center" class="FieldData">
@@ -44,7 +56,7 @@
   </tr>
   <!-- START BLOCK : result_row -->
   <tr> 
-    <td class="TableDataBold"><a href="" class="TableData" onclick="popWin('score_packet.php?table=score_packet&included_table=person_section&included_order_by=packet_position&action=edit&id={id}','score_packet_edit');return false">{id}</a></td>
+    <td class="TableDataBold"><a href="" class="TableData" onclick="popWin('score_packet.php?table=score_packet&included_table=person_section&included_order_by=packet_position&action=edit&id={id}&load_constants[rpga_event_type]=constant','score_packet_edit');return false">{id}</a></td>
     <td class="TableData">{_section_id[complete_event_number]}</td>
     <td class="TableData">{_event_id[event_name]}</td>
     <td class="TableData">{_person_id[first_name]} {_person_id[last_name]} 
@@ -53,7 +65,7 @@
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="" onclick="popWin('form.php?table=score_packet&action=edit','score_packet_edit');return false">Create a New Score Packet</a></span>
+<span class="FieldName"><a href="" onclick="popWin('score_packet.php?table=score_packet&action=edit&load_constants[rpga_event_type]=constant','score_packet_edit');return false">Create a New Score Packet</a></span>
 <hr noshade>
 </body>
 </html>

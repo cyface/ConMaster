@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for person_section
-* CVS Info: $Id: Person_section.php,v 1.4 2002/07/17 23:26:48 cyface Exp $
+* CVS Info: $Id: Person_section.php,v 1.5 2002/07/26 23:07:43 cyface Exp $
 */
 
 
@@ -70,7 +70,7 @@ class DataObjects_Person_section extends DB_DataObject {
 	}
 	
 	function update() {	
-		//Now find the related person record, and update their total fee
+		//Find the related person record, and update their total fee
 		$personObject = DB_DataObject::staticGet('DataObjects_Person',$this->person_id);
 		$personObject->total_fee -= $this->old_price;
 		$personObject->total_fee += $this->price;
@@ -88,92 +88,47 @@ class DataObjects_Person_section extends DB_DataObject {
 	* @param string inValue - search value
 	*/
 	function includedInsert($inValue) {
-		if ($this->reg_type != 'Score Packet') {
-			
-			//Find the section row that matches the complete event number that was input
-			require_once('./lib/DataObjects/Section.php');
-			$sectionObject =  new DataObjects_Section;
-			$sectionObject->complete_event_number = $inValue;
-			$sectionObject->convention_id = $this->convention_id;
-			$sectionObject->find();
-			
-			//Error if that complete event number wasn't found
-			if ($sectionObject->N == 0) {//Didn't find a match
-				require_once('PEAR.php');
-				return new PEAR_Error('That Complete Event Number Does Not Exist.');
-			}
-			
-			//If we got this far, we found a matching section
-			$sectionObject->fetch(); //Pull the matching record
-			//Check to make sure that the event is not full
-			if ($sectionObject->event_full == 'CHECKED' or $sectionObject->event_full == 'True') {
-				require_once('PEAR.php');
-				return new PEAR_Error('Event Full');
-			}
-			
-			//Update the section's event fullness indicators
-			$sectionObject->num_registered++;
-			$sectionObject->update(); //Save the section record ASAP.
-			
-			$sectionObject->getLinks(); //Load the related event info
-			//echo '<PRE> Found Section Object'; print_r($sectionObject); echo '<PRE>';
-			
-			//Copy the default information from the section & event records to this object
-			$this->section_id = $sectionObject->id;
-			$this->event_id = $sectionObject->event_id;
-			$this->price = $sectionObject->_event_id->price;
-			$this->old_price = $sectionObject->_event_id->price; //old_price is used to minus off the old price of an event when the price is updated
-			
-			//Now find the related person record, and update their total fee
-			$personObject = DB_DataObject::staticGet('DataObjects_Person',$this->person_id);
-			$personObject->total_fee += $this->price;
-			$personObject->update();
-			
-			return DB_DataObject::insert(); //Call the parent method
-		} //End "if $this->reg_type != 'Score Packet'"
+		//Find the section row that matches the complete event number that was input
+		require_once('./lib/DataObjects/Section.php');
+		$sectionObject =  new DataObjects_Section;
+		$sectionObject->complete_event_number = $inValue;
+		$sectionObject->convention_id = $this->convention_id;
+		$sectionObject->find();
 		
-		if ($this->reg_type == 'Score Packet') {
-			//Try to find an existing Person Section record for this person/event combo - i.e. their registration for this event
-			$personSectionSearcher = new DataObjects_Person_section;
-			$personSectionSearcher->person_id = $personObject->id;
-			$personSectionSearcher->event_id = $personObject->event_id;
-			$personSectionSearcher->section_id = $personObject->section_id;
-			$personSectionSearcher->find();
-			if ($personSectionSearcher->N != 0) {//Found a match
-				$personSectionSearcher->fetch(); //get the found record
-				$this->setFrom($personSectionSearcher); //Copy the found records's fields into this object
-				return DB_DataObject::insert(); //Call the parent method
-			}
-			
-			//If we got this far, we need to create a score-packet only record for this person/event combo - i.e. they used a generic ticket
-			//Find the person row that matches the rpga_number that was input
-			//Note that this needs to be fixed to search within a convention...
-			require_once('./lib/DataObjects/Person.php');
-			$personObject = DataObjects_Person;
-			
-			//Error if that person wasn't found
-			if (!$personObject) {
-				require_once('PEAR.php');
-				return new PEAR_Error('That RPGA Number Does Not Exist.');
-			}
-			$this->person_id = $personObject->id; //Copy the person's id to this record
-			
-			//Get the section record related to this object
-			$sectionObject =  DB_DataObject::staticGet('DataObjects_Section',$this->section_id);
-			
-			//Update the section's event fullness indicators
-			$sectionObject->num_registered++;
-			$sectionObject->update(); //Save the section record ASAP.
-			
-			//Set the price information to 0 since this is a score packet only record
-			$this->price = 0.00;
-			$this->old_price = 0.00; //old_price is used to minus off the old price of an event when the price is updated
-			
-			return DB_DataObject::insert(); //Call the parent method
-			return true;
-		}//End "if $this->reg_type == 'Score Packet'"
+		//Error if that complete event number wasn't found
+		if ($sectionObject->N == 0) {//Didn't find a match
+		require_once('PEAR.php');
+		return new PEAR_Error('That Complete Event Number Does Not Exist.');
+		}
 		
+		//If we got this far, we found a matching section
+		$sectionObject->fetch(); //Pull the matching record
+		//Check to make sure that the event is not full
+		if ($sectionObject->event_full == 'CHECKED' or $sectionObject->event_full == 'True') {
+		require_once('PEAR.php');
+		return new PEAR_Error('Event Full');
+		}
+		
+		//Update the section's event fullness indicators
+		$sectionObject->num_registered++;
+		$sectionObject->update(); //Save the section record ASAP.
+		
+		$sectionObject->getLinks(); //Load the related event info
+		//echo '<PRE> Found Section Object'; print_r($sectionObject); echo '<PRE>';
+		
+		//Copy the default information from the section & event records to this object
+		$this->section_id = $sectionObject->id;
+		$this->event_id = $sectionObject->event_id;
+		$this->price = $sectionObject->_event_id->price;
+		$this->old_price = $sectionObject->_event_id->price; //old_price is used to minus off the old price of an event when the price is updated
+		
+		//Now find the related person record, and update their total fee
+		$personObject = DB_DataObject::staticGet('DataObjects_Person',$this->person_id);
+		$personObject->total_fee += $this->price;
+		$personObject->update();
+		
+		return DB_DataObject::insert(); //Call the parent method
 		return false; //If we got this far, something is wrong!
-	} //End function includedSearch
+	} //End function includedInsert
 }
 ?>

@@ -3,101 +3,166 @@
 <head>
 
 <title>Score Packet Edit</title>
-
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
 <link rel="stylesheet" href="/cm/templates/cm.css" type="text/css">
-
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
+<script language="JavaScript">
+function Event (id,rpga_event_type,name) { //Event Class
+	this.id = id;
+	this.rpga_event_type = rpga_event_type;
+	this.name = name;
+}
 
+function Section (id,event_id,dateblock) { //Section Class
+	this.id = id;
+	this.event_id = event_id;
+	this.dateblock = dateblock;
+}
+
+function initEvents() {
+	<!-- START BLOCK : EventList_row -->
+	this["{id}"] = new Event({id},"{rpga_event_type}","{event_name}");
+    <!-- END BLOCK : EventList_row -->
+}
+var events = new initEvents();
+
+function setEventList() {
+	var i=0
+	for (var id in events) { //populate the events select list
+		document.event_edit.events.options[i]=new Option(events[id].name,id);
+		i++;
+	}
+}
+
+function initSections() {
+	<!-- START BLOCK : SectionList_row -->
+	this["{id}"] = new Section({id},{event_id},"{complete_event_number}: {date} {start_time}-{end_time}");
+    <!-- END BLOCK : SectionList_row -->
+}
+var sections = new initSections();
+
+function searchSections(inEventId) {
+	var resultArray = new Array()
+	var i=0
+	for (var id in sections) { //Build an array of just the sections for this event
+		if (sections[id].event_id == inEventId) {
+			resultArray[i] = sections[id];
+			i++;
+		}
+	}
+	for (i=0;i<document.event_edit.sections.options.length;i++) { //clear the sections select list
+		document.event_edit.sections.options[i]=null;
+	}
+	
+	for (i=0;i<resultArray.length;i++) { //Set the options for the section list to the array we just built
+		document.event_edit.sections.options[i]=new Option(resultArray[i].dateblock,resultArray[i].id);
+	}
+	document.event_edit.sections.options[0].selected=true;
+	document.event_edit.section_id.value=resultArray[0].id;
+}
+
+function popSetup() {
+	setEventList();
+	if (document.event_edit.section_id.value != '') {
+		document.event_edit.events.size=1;
+		document.event_edit.sections.size=1;
+		searchSections(document.event_edit.event_id.value);
+		searchEvents(document.event_edit.event_id.value);
+	}
+}
+
+function searchEvents(inEventId) {
+	for (i=0;i<document.event_edit.events.options.length;i++) {
+		if (document.event_edit.events.options[i].value == inEventId) {
+			document.event_edit.events.options[i].selected=true;
+		}
+	}
+}
+
+function setRPGAType(inEventId) {
+	var searchType = events[inEventId].rpga_event_type
+	for (i=0;i<document.event_edit.rpga_event_type.options.length;i++) {
+		if (document.event_edit.rpga_event_type.options[i].text == searchType) {
+			document.event_edit.rpga_event_type.options[i].selected=true;
+		}
+	}
+}
+
+function eventChange(inEventId) {
+	searchSections(inEventId);
+	document.event_edit.event_id.value=inEventId;
+	setRPGAType(inEventId);
+}
+
+</script>
 </head>
 
-
-
-<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{id} {last_name} Score Packet Record'" class="BodyClass">
-
+<body bgcolor="#FFFFFF" text="#000000" onLoad="self.document.title = '{id} {last_name} Score Packet Record';popSetup()" class="BodyClass">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
-
   <tr>
-
     <td class="FormTitle">{id}</td>
-
     <td class="FormTitle">
-
       <div align="right"></div>
-
     </td>
-
   </tr>
-
 </table>
-
 <span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
-
 <hr>
 
-<form name="event_edit" method="post" action="form.php">
-
-  <table width="75%" border="0" cellspacing="2" cellpadding="2">
+<form name="event_edit" method="post" action="score_packet.php">
+  <table border="0" cellspacing="2" cellpadding="2">
     <tr> 
-      <td class="FieldName" width="4%">Event</td>
-      <td rowspan="5"> 
-        <select name="event_name" size="15">
-		{form_constants[event_options]}
+      <td class="FieldName">Event</td>
+      <td class="FieldName" colspan="3"> 
+        <select name="events" size="15" onChange="eventChange(form.events.options[selectedIndex].value)">
         </select>
-      </td>
+        <font color="#FF0000"><b class="FieldError"> 
+        <input type="hidden" name="event_id" value="{event_id}" maxlength="10" size="10" class="FieldData">
+        </b></font></td>
+    </tr>
+    <tr> 
+      <td class="FieldName">Section</td>
+      <td class="FieldName" colspan="3"> 
+        <select name="sections" size="6" onChange="form.section_id.value=form.sections.options[selectedIndex].value">
+        </select>
+        <font color="#FF0000"><b class="FieldError"> 
+        <input type="hidden" name="section_id" value="{section_id}" maxlength="10" size="10" class="FieldData">
+        </b></font></td>
+    </tr>
+    <tr> 
       <td class="FieldName">RPGA Type</td>
       <td><span class="FieldError"><font color="#FF0000"><b> 
         <select name="rpga_event_type">
           <option selected>{rpga_event_type}</option>
-          <option>BE</option>
-          <option>FE</option>
-          <option>MA</option>
-          <option>GM</option>
-          <option>PA</option>
-          <option>TE</option>
+          <!-- START BLOCK : form_constants[rpga_event_type]_row -->
+          <option>{form_constants[rpga_event_type][name]}</option>
+          <!-- END BLOCK : form_constants[rpga_event_type]_row -->
         </select>
         {rpga_event_type_error}</b></font></span> </td>
-    </tr>
-    <tr> 
-      <td class="FieldName" height="50">&nbsp;</td>
-      <td class="FieldName" width="4%" height="50">Scenario Score</td>
-      <td class="FieldName" colspan="3" height="50"> 
-        <input type="text" name="scenario_score" value="{scenario_score}" maxlength="100" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{scenario_score_error}</b></font></span> 
-      </td>
-    </tr>
-    <tr> 
-      <td class="FieldName" width="4%">&nbsp;</td>
       <td class="FieldName">Number of Players</td>
       <td> <font color="#FF0000"><b class="FieldError"> 
         <input type="text" name="number_of_players" value="{number_of_players}" maxlength="10" size="10" class="FieldData">
         {number_of_players_error}</b></font> </td>
     </tr>
     <tr> 
-      <td class="FieldName" width="4%">&nbsp;</td>
-      <td class="FieldName" height="50">Judge ID</td>
-      <td width="33%" height="50"> 
-        <input type="text" name="person_id" value="{person_id}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><font color="#FF0000"><b>{judge_id_error}</b></font></span> 
+      <td class="FieldName">Scenario Score</td>
+      <td class="FieldName"> 
+        <input type="text" name="scenario_score" value="{scenario_score}" maxlength="100" size="10" class="FieldData">
+        <span class="FieldError"><font color="#FF0000"><b>{scenario_score_error}</b></font></span> 
       </td>
-    </tr>
-    <tr> 
-      <td class="FieldName" width="4%">&nbsp;</td>
-      <td class="FieldName" width="4%">Group Score</td>
+      <td class="FieldName">Group Score</td>
       <td> 
         <input type="text" name="group_score" value="{group_score}" maxlength="40" size="10" class="FieldData">
         <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
       </td>
     </tr>
-    <tr>
-      <td class="FieldName" width="4%">Section</td>
-      <td>
-        <select name="select" size="15">
-		{form_constants[section_options]}
-        </select>
+    <tr> 
+      <td class="FieldName">Judge ID</td>
+      <td> 
+        <input type="text" name="person_id" value="{person_id}" maxlength="40" size="10" class="FieldData">
+        <font color="#FF0000"><b class="FieldError">{group_score_error}</b></font> 
       </td>
-      <td class="FieldName" width="4%">&nbsp;</td>
+      <td class="FieldName">&nbsp;</td>
       <td>&nbsp;</td>
     </tr>
   </table>
@@ -110,34 +175,28 @@
           <input type="button" name="delete" value="Delete" onClick="deleteCheck('score_packet','{id}');return document.MM_returnValue">
         </div>
       </td>
-      <td>
-        <div align="center">
+      <td align="center">
           <input type="button" name="cancel" value="Cancel" onClick="window.close()">
-        </div>
       </td>
-      <td>
-        <div align="center"><span class="FieldName">
+      <td align="center">
           <input type="hidden" name="id" value="{id}">
           <input type="hidden" name="last_modified" value="{last_modified}">
           <input type="hidden" name="badge_number" value="{badge_number}">
-          <input type="hidden" name="table" value="person">
+          <input type="hidden" name="table" value="score_packet">
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
-          </span> 
-          <input type="hidden" name="convention_id2" value="1">
+          <input type="hidden" name="convention_id" value="1">
           <input type="submit" name="save" value="Save">
-        </div>
       </td>
     </tr>
   </table>
   <hr>
 
 </form>
-<p><b><font size="4" color="#FF0000">WARNING: THIS SCREEN DOES NOT WORK. IT IS 
-  FOR DISPLAY ONLY. THERE IS A LOT OF WORK TO DO HERE! DO NOT USE IT!</font></b></p>
-<!-- START BLOCK : included_header -->
-<span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 
-  <span class="FieldError">{form_error} </span>
+<p>
+  <!-- START BLOCK : included_header -->
+  <span class="FormTitle">Participants</span> <span class="FormTitle">{action_message}</span> 
+  <span class="FieldError">{form_error} </span> </p>
 <table width="100%" border="1">
   <tr> 
     <td class="TableTitle" width="5%" colspan=2>Action</td>
@@ -145,32 +204,37 @@
     <td class="TableTitle"> Person Name</td>
     <td class="TableTitle">Score</td>
     <td class="TableTitle">Place</td>
+    <td class="TableTitle">Position</td>
     <td class="TableTitle">Judge</td>
   </tr>
   <tr> 
-    <form name="person_section_add" method="post" action="form.php">
+    <form name="person_section_add" method="post" action="score_packet.php">
       <td class="TableDataBold" colspan=2> 
-        <input type="button" name="add" value="Add">
+        <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
+        <input type="hidden" name="table" value="score_packet">
+        <input type="hidden" name="action" value="addParticipant">
         <input type="hidden" name="parent_id" value="{id}">
         <input type="hidden" name="convention_id" value="{id}">
-        <input type="hidden" name="person_id" value="{id}">
-        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="score_packet_id" value="{id}">
+        <input type="hidden" name="event_id" value="{event_id}">
+        <input type="hidden" name="section_id" value="{section_id}">
         <input type="hidden" name="included_table" value="person_section">
-        <input type="hidden" name="action" value="saveIncluded">
-        <input type="hidden" name="reg_type" value="{reg_type}">
-        <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="text" name="rpga_number" size="6" maxlength="10" class="FieldData">
+        <input type="hidden" name="included_order_by" value="packet_position">
+        <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
         </span> </td>
       <td class="TableData">&nbsp;</td>
-      <td class="TableData"><span class="FieldName">
+      <td class="TableData"><span class="FieldName"> 
         <input type="text" name="score" size="6" maxlength="10" class="FieldData">
         </span></td>
-      <td class="TableData"><span class="FieldName">
+      <td class="TableData"><span class="FieldName"> 
         <input type="text" name="place" size="6" maxlength="10" class="FieldData">
         </span></td>
-      <td class="TableData">
+      <td class="TableData"><span class="FieldName">
+        <input type="text" name="packet_position" size="6" maxlength="10" class="FieldData" value="{packet_position}">
+        </span></td>
+      <td class="TableData"> 
         <input type="checkbox" name="judge" value="CHECKED">
       </td>
     </form>
@@ -178,9 +242,9 @@
   <!-- END BLOCK : included_header -->
   <!-- START BLOCK : person_section_row -->
   <tr> 
-    <form name="person_section_delete" method="post" action="form.php">
+    <form name="person_section_delete" method="post" action="score_packet.php">
       <td class="TableData" width="5%"> 
-        <input type="hidden" name="table" value="person">
+        <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
         <input type="hidden" name="parent_id" value="{score_packet_id}">
@@ -189,25 +253,29 @@
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
-    <form name="person_section_save" method="post" action="form.php" target="popup">
+    <form name="person_section_save" method="post" action="score_packet.php">
       <td class="TableData" width="5%"> 
         <input type="hidden" name="table" value="score_packet">
-        <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
+        <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="parent_id" value="{score_packet_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
         <input type="hidden" name="score_packet_id" value="{score_packet_id}">
-        <input type="submit" name="update" value="Update" onClick="popWin()">
+		<input type="hidden" name="person_id" value="{person_id}">
+        <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold">{_person_id[rpga_number]}</td>
       <td class="TableData"><a href="form.php?table=event&action=edit&id={id}" target="popup" onClick="popWin()" class="TableData">{_person_id[first_name]} 
         {_person_id[last_name]}</a></td>
-      <td class="TableData"><span class="FieldName">
+      <td class="TableData"><span class="FieldName"> 
         <input type="text" name="score" size="6" maxlength="10" class="FieldData" value="{score}">
         </span></td>
       <td class="TableData"><span class="FieldName"> 
         <input type="text" name="place" size="6" maxlength="10" class="FieldData" value="{place}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="packet_position" size="6" maxlength="10" class="FieldData" value="{packet_position}">
         </span></td>
       <td class="TableData"> 
         <input type="checkbox" name="judge" value="CHECKED" {judge} onClick="MM_setTextOfTextfield('price','','0.00')">

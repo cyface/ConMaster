@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.13 2002/07/24 21:43:58 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.14 2002/07/26 23:07:42 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -490,13 +490,22 @@ class FormObject {
 			$cols['extra_info']='extra_info';
 			if ($this->data['load_constants_cols']) {
 				if ($this->data['load_constants_cols'][$constant]) {
-					list($cols['name'],$cols['value'],$cols['ordinal'],$cols['extra_info'])=split(',',$this->data['load_constants_cols'][$constant]);
+					list($cols['name'],$cols['value'],$cols['ordinal'],$cols['extra_info'])=split('\|',urldecode(stripslashes($this->data['load_constants_cols'][$constant])));
 				}
+				$constantObject->selectAdd(); //Clear the *
+				foreach ($cols as $col => $name) {
+					if ($name) {
+						$colList .= ',' . $name;
+					}
+				}
+				$colList = ltrim($colList,',');
+				$constantObject->selectAdd($colList);
 			}
-			//echo "Columns:" . $cols['name'] . $cols['value'] . "<br>"; //Testing Only
+			//echo 'Columns: Name=' . $cols['name'] . 'Value= ' . $cols['value'] . '<br>'; //Testing Only
 
 			//Search
 			$constantObject->find();
+			//echo '<PRE> constantObject:<br>'; print_r($constantObject); echo '</PRE>';
 			$loopCnt = 0;
 			while ($constantObject->fetch()) {  //Loop through multiple results and assign to form_constants
 				$this->form_constants[$constant][$loopCnt]['name'] = $constantObject->$cols['name'];

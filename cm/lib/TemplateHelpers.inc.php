@@ -8,7 +8,7 @@
  *
  * These are mainly used by FormObject.php and form_merge.php
  *
- * CVS Info: $Id: TemplateHelpers.inc.php,v 1.9 2002/07/24 21:43:58 cyface Exp $
+ * CVS Info: $Id: TemplateHelpers.inc.php,v 1.10 2002/07/26 23:07:43 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -81,6 +81,7 @@ function valueFill ($inHash, &$inTemplate)  //& means that we can change inTempl
 	        if (is_array($value)) {
 	            foreach ($value as $subKey => $subValue) {
 	                $inTemplate->assign($key . '[' . $subKey . ']', stripslashes($subValue));
+					//echo '<PRE>Key: '; echo $key . '[' . $subKey . ']' . '=' . stripslashes($subValue); echo '<PRE>'; //Testing Only
 	            }
 	        } else {
 	            $inTemplate->assign($key, stripslashes($value));
