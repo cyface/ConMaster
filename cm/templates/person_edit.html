@@ -37,10 +37,25 @@ function regTypeLookup(inType) {
 	var old_cost = parseInt(regTypes[document.person_edit.old_reg_type.value])
 	var old_value = parseInt(document.person_edit.total_fee.value)
 	var new_cost = parseInt(regTypes[inType])
-	var new_value = (old_value - old_cost) + new_cost
+	var additional_fees = 0
+	if (document.person_edit.additional_fees.value != '') {
+	   additional_fees = parseInt(document.person_edit.additional_fees.value);
+	}
+	var old_additional_fees = 0
+	if (document.person_edit.old_additional_fees.value != '') {
+	   old_additional_fees = parseInt(document.person_edit.old_additional_fees.value);
+	}
+	var amount_paid = 0
+	if (document.person_edit.amount_paid.value != '') {
+	   amount_paid = parseInt(document.person_edit.amount_paid.value);
+	}
+	var new_value = (old_value - old_cost - old_additional_fees) + new_cost + additional_fees
+	
 	document.person_edit.total_fee_display.value = new_value;
 	document.person_edit.total_fee.value = new_value;
+	document.person_edit.amount_owed.value = new_value - amount_paid;
 	document.person_edit.old_reg_type.value = inType;
+	document.person_edit.old_additional_fees.value = additional_fees;
 }
 //-->
 </script>
@@ -63,18 +78,15 @@ function regTypeLookup(inType) {
       <td class="FieldName">First Name</td>
       <td> 
         <input type="text" name="first_name" value="{first_name}" maxlength="40" size="20" class="FieldData">
-        <b class="FieldError">{first_name_error}</b> 
-      </td>
+        <b class="FieldError">{first_name_error}</b> </td>
       <td class="FieldName">Last Name</td>
       <td> 
         <input type="text" name="last_name" value="{last_name}" maxlength="40" size="20" class="FieldData">
-        <span class="FieldError"><b>{last_name_error}</b></span> 
-      </td>
+        <span class="FieldError"><b>{last_name_error}</b></span> </td>
       <td class="FieldName">Middle Name</td>
       <td colspan="3"> 
         <input type="text" name="middle_name" value="{middle_name}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><b>{middle_name_error}</b></span> 
-      </td>
+        <span class="FieldError"><b>{middle_name_error}</b></span> </td>
     </tr>
     <tr> 
       <td class="FieldName">Street</td>
@@ -102,30 +114,30 @@ function regTypeLookup(inType) {
       <td class="FieldName">Email</td>
       <td colspan="5"> 
         <input type="text" name="email_address" value="{email_address}" maxlength="40" size="20" class="FieldData">
-        <b class="FieldError">{email_address_error}</b> 
-      </td>
+        <b class="FieldError">{email_address_error}</b> </td>
     </tr>
     <tr> 
       <td class="FieldName">Reg Type</td>
-      <td>
-	  <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[selectedIndex].text)">
-	    <option selected>{reg_type}</option>	
-		<script language = "JavaScript">
+      <td> 
+        <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+          <option selected>{reg_type}</option>
+          <script language = "JavaScript">
 			for (var name in regTypes) {
 				document.writeln("<option>" + name + "</option>");
 			}
 		</script>
-	  </select>
-        <b class="FieldError">
+        </select>
+        <b class="FieldError"> 
         <input type="hidden" name=old_reg_type value="{reg_type}">
         {reg_type_error}</b> </td>
-      <td class="FieldName">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td class="FieldName">Judge</td>
+      <td> 
+        <input type="checkbox" name="judge" value="CHECKED" {judge} class="FieldData">
+        <b class="FieldError">{judge_error}</b> </td>
       <td class="FieldName">Volunteer</td>
       <td> 
         <input type="checkbox" name="volunteer" value="CHECKED"  {volunteer} class="FieldData">
-        <b class="FieldError">{volunteer_error}</b> 
-      </td>
+        <b class="FieldError">{volunteer_error}</b> </td>
       <td class="FieldName">Staff</td>
       <td> 
         <input type="checkbox" name="staff" value="CHECKED" {staff} class="FieldData">
@@ -135,19 +147,42 @@ function regTypeLookup(inType) {
       <td class="FieldName">RPGA Number</td>
       <td> 
         <input type="text" name="rpga_number" value="{rpga_number}" maxlength="20" size="20" class="FieldData">
-        <b class="FieldError">{rpga_number_error}</b> 
+        <b class="FieldError">{rpga_number_error}</b> </td>
+      <td class="FieldName">Add'l Fees</td>
+      <td class="FieldData">$ 
+        <input type="text" name="additional_fees" value="{additional_fees}" maxlength="6" size="6" class="FieldData" onBlur="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+        <input type="hidden" name="old_additional_fees" value="{additional_fees}">
       </td>
+      <td class="FieldName">Payment Type</td>
+      <td colspan="2"> 
+        <select name="payment_type" class="FieldData">
+          <option selected>{payment_type}</option>
+          <!-- START BLOCK : form_constants[payment_type]_row -->
+          <option>{form_constants[payment_type][name]}</option>
+          <!-- END BLOCK : form_constants[payment_type]_row -->
+          <option>Other</option>
+        </select>
+        <b class="FieldError"> </b></td>
+      <td>&nbsp; </td>
+    </tr>
+    <tr>
       <td class="FieldName">Total Fee</td>
-      <td class="FieldData">$
-        <input type="text" name="total_fee_display" value="{total_fee}" maxlength="18" size="18" class="FieldData" onFocus="blur()">
+      <td class="FieldData">$ 
+        <input type="text" name="total_fee_display" value="{total_fee}" maxlength="6" size="6" class="FieldData" onFocus="blur()">
         <input type="hidden" name="total_fee" value="{total_fee}">
-        <b class="FieldError">{total_fee_error}</b> </td>
-      <td class="FieldName">Judge</td>
-      <td> 
-        <input type="checkbox" name="judge" value="CHECKED" {judge} class="FieldData">
-        <b class="FieldError">{judge_error}</b> </td>
-      <td class="FieldName">&nbsp;</td>
-      <td>&nbsp;</td>
+      </td>
+      <td class="FieldName">Amt. Paid</td>
+      <td class="FieldData">$ 
+        <input type="text" name="amount_paid" value="{amount_paid}" maxlength="6" size="6" class="FieldData"  onBlur="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+      </td>
+      <td class="FieldName">Amt. Owed</td>
+      <td class="FieldData">$ 
+        <input type="text" name="amount_owed" value="{amount_owed}" maxlength="6" size="6" class="FieldData" onFocus="blur()">
+      </td>
+      <td class="FieldName">&nbsp; </td>
+      <td class="FieldData">
+        <input type="button" name="all_paid" value="All Paid" onClick="form.amount_paid.value = form.total_fee.value;regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+      </td>
     </tr>
   </table>
   <hr>
@@ -168,6 +203,7 @@ function regTypeLookup(inType) {
           <input type="hidden" name="action" value="save">
           <input type="hidden" name="convention_id" value="1">
           <input type="hidden" name="load_constants[reg_type]" value="constant">
+		  <input type="hidden" name="load_constants[payment_type]" value="constant">
           <input type="submit" name="save" value="Save">
       </td>
     </tr>
@@ -175,6 +211,7 @@ function regTypeLookup(inType) {
 </form>
 <!-- START BLOCK : included_header -->
 <hr>
+<input type="hidden" name="load_constants[payment_type]" value="constant">
 <form name="actions_form" method="post" action="form.php">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -258,6 +295,7 @@ function regTypeLookup(inType) {
         <input type="hidden" name="old_price" value="{old_price}">
         <input type="hidden" name="person_id" value="{person_id}">
         <input type="hidden" name="load_constants[reg_type]" value="constant">
+        <input type="hidden" name="load_constants[payment_type]" value="constant">
         <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>
