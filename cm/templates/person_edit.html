@@ -50,18 +50,29 @@ function regTypeLookup(inType) {
 	   amount_paid = parseInt(document.person_edit.amount_paid.value);
 	}
 	var new_value = (old_value - old_cost - old_additional_fees) + new_cost + additional_fees
-	
+
 	document.person_edit.total_fee_display.value = new_value;
 	document.person_edit.total_fee.value = new_value;
 	document.person_edit.amount_owed.value = new_value - amount_paid;
 	document.person_edit.old_reg_type.value = inType;
 	document.person_edit.old_additional_fees.value = additional_fees;
 }
+
+function popSetup() {
+	document.person_edit.amount_owed.value = document.person_edit.total_fee.value-document.person_edit.amount_paid.value;			
+}
+
+
+function setRegTypeList() {
+	for (var name in regTypes) { //populate the reg_type select list
+		document.person_edit.reg_type.options[document.person_edit.reg_type.length] = new Option(name,name,false,false);
+	}
+}
 //-->
 </script>
 </head>
 
-<body class="BodyClass" onLoad="self.document.title = '{first_name} {last_name} Person Record'">
+<body class="BodyClass" onLoad="self.document.title = '{first_name} {last_name} Person Record';popSetup()">
 <table width="100%" border="0" cellspacing="2" cellpadding="2">
   <tr>
     <td class="FormTitle">{first_name} {middle_name} {last_name}</td>
@@ -70,91 +81,84 @@ function regTypeLookup(inType) {
     </td>
   </tr>
 </table>
-<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span>
-<hr>
+<span class="FormTitle">{action_message}</span> <span class="FieldError">{form_error}</span> 
 <form name="person_edit" method="post" action="form.php">
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
     <tr> 
       <td class="FieldName">First Name</td>
       <td> 
         <input type="text" name="first_name" value="{first_name}" maxlength="40" size="20" class="FieldData">
-        <b class="FieldError">{first_name_error}</b> </td>
+      </td>
       <td class="FieldName">Last Name</td>
-      <td> 
-        <input type="text" name="last_name" value="{last_name}" maxlength="40" size="20" class="FieldData">
-        <span class="FieldError"><b>{last_name_error}</b></span> </td>
-      <td class="FieldName">Middle Name</td>
       <td colspan="3"> 
-        <input type="text" name="middle_name" value="{middle_name}" maxlength="40" size="10" class="FieldData">
-        <span class="FieldError"><b>{middle_name_error}</b></span> </td>
+        <input type="text" name="last_name" value="{last_name}" maxlength="40" size="20" class="FieldData">
+      </td>
+      <td class="FieldName">Middle Name</td>
+      <td> 
+        <input type="text" name="middle_name" value="{middle_name}" maxlength="40" size="8" class="FieldData">
+      </td>
     </tr>
     <tr> 
       <td class="FieldName">Street</td>
-      <td> <span class="FieldError"><b> 
-        <input type="text" name="street" value="{street}" maxlength="40" size="20" class="FieldData">
-        {street_error}</b></span> </td>
+      <td class="FieldData" colspan="5" > 
+        <input type="text" name="street" value="{street}" maxlength="100" size="30" class="FieldData">
+      </td>
+      <td class="FieldName">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr> 
       <td class="FieldName">City</td>
       <td> 
         <input type="text" name="city" value="{city}" maxlength="40" size="20" class="FieldData">
-        <b class="FieldError">{city_error}</b> </td>
+      </td>
       <td class="FieldName">State</td>
-      <td> 
+      <td class="FieldData" > 
         <input type="text" name="state" value="{state}" maxlength="40" size="2" class="FieldData">
-        <b class="FieldError">{state_error}</b> </td>
+      </td>
       <td class="FieldName">Zip</td>
       <td> 
         <input type="text" name="zip" value="{zip}" maxlength="8" size="8" class="FieldData">
-        <b class="FieldError">{zip_error}</b> </td>
+      </td>
+      <td class="FieldName">Country</td>
+      <td> 
+        <input type="text" name="country" value="{country}" maxlength="40" size="8" class="FieldData">
+      </td>
     </tr>
     <tr> 
       <td class="FieldName">Phone</td>
       <td> 
         <input type="text" name="phone" value="{phone}" maxlength="20" size="20" class="FieldData">
-        <b class="FieldError">{phone_error}</b> </td>
+      </td>
       <td class="FieldName">Email</td>
       <td colspan="5"> 
-        <input type="text" name="email_address" value="{email_address}" maxlength="40" size="20" class="FieldData">
-        <b class="FieldError">{email_address_error}</b> </td>
+        <input type="text" name="email_address2" value="{email_address}" maxlength="100" size="41" class="FieldData">
+      </td>
+    </tr>
+    <tr>
+      <td class="FieldName">RPGA Number</td>
+      <td> 
+        <input type="text" name="rpga_number" value="{rpga_number}" maxlength="20" size="10" class="FieldData">
+      </td>
+      <td class="FieldName">&nbsp;</td>
+      <td colspan="3">&nbsp;</td>
+      <td class="FieldName">&nbsp;</td>
+      <td class="FieldData">&nbsp; </td>
     </tr>
     <tr> 
       <td class="FieldName">Reg Type</td>
       <td> 
-        <select name="reg_type" class="FieldData" onChange="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
-          <option selected>{reg_type}</option>
-          <script language = "JavaScript">
-			for (var name in regTypes) {
-				document.writeln("<option>" + name + "</option>");
-			}
-		</script>
+        <select name="reg_type" class="FieldData" width="30" onChange="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+          <script language="JavaScript">
+				for (var name in regTypes) {
+					document.writeln("<option>" + name + "</option>");
+				}
+				document.writeln("<option selected>{reg_type}</option>");
+				</script>
         </select>
-        <b class="FieldError"> 
         <input type="hidden" name=old_reg_type value="{reg_type}">
-        {reg_type_error}</b> </td>
-      <td class="FieldName">Judge</td>
-      <td> 
-        <input type="checkbox" name="judge" value="CHECKED" {judge} class="FieldData">
-        <b class="FieldError">{judge_error}</b> </td>
-      <td class="FieldName">Volunteer</td>
-      <td> 
-        <input type="checkbox" name="volunteer" value="CHECKED"  {volunteer} class="FieldData">
-        <b class="FieldError">{volunteer_error}</b> </td>
-      <td class="FieldName">Staff</td>
-      <td> 
-        <input type="checkbox" name="staff" value="CHECKED" {staff} class="FieldData">
-        <b class="FieldError">{staff_error}</b> </td>
-    </tr>
-    <tr> 
-      <td class="FieldName">RPGA Number</td>
-      <td> 
-        <input type="text" name="rpga_number" value="{rpga_number}" maxlength="20" size="20" class="FieldData">
-        <b class="FieldError">{rpga_number_error}</b> </td>
-      <td class="FieldName">Add'l Fees</td>
-      <td class="FieldData">$ 
-        <input type="text" name="additional_fees" value="{additional_fees}" maxlength="6" size="6" class="FieldData" onBlur="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
-        <input type="hidden" name="old_additional_fees" value="{additional_fees}">
       </td>
-      <td class="FieldName">Payment Type</td>
-      <td colspan="2"> 
+      <td class="FieldName">Pay Type</td>
+      <td colspan="3">
         <select name="payment_type" class="FieldData">
           <option selected>{payment_type}</option>
           <!-- START BLOCK : form_constants[payment_type]_row -->
@@ -162,31 +166,31 @@ function regTypeLookup(inType) {
           <!-- END BLOCK : form_constants[payment_type]_row -->
           <option>Other</option>
         </select>
-        <b class="FieldError"> </b></td>
-      <td>&nbsp; </td>
+      </td>
+      <td class="FieldName">Add'l Fees</td>
+      <td> $ 
+        <input type="text" name="additional_fees" value="{additional_fees}" maxlength="6" size="6" class="FieldData" onBlur="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+        <input type="hidden" name="old_additional_fees" value="{additional_fees}">
+      </td>
     </tr>
-    <tr>
+    <tr> 
       <td class="FieldName">Total Fee</td>
-      <td class="FieldData">$ 
+      <td>$ 
         <input type="text" name="total_fee_display" value="{total_fee}" maxlength="6" size="6" class="FieldData" onFocus="blur()">
         <input type="hidden" name="total_fee" value="{total_fee}">
       </td>
       <td class="FieldName">Amt. Paid</td>
-      <td class="FieldData">$ 
+      <td colspan="3">$ 
         <input type="text" name="amount_paid" value="{amount_paid}" maxlength="6" size="6" class="FieldData"  onBlur="regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
+        <input type="button" name="all_paid" value="All Paid" onClick="form.amount_paid.value = form.total_fee.value;regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
       </td>
       <td class="FieldName">Amt. Owed</td>
-      <td class="FieldData">$ 
+      <td>$ 
         <input type="text" name="amount_owed" value="{amount_owed}" maxlength="6" size="6" class="FieldData" onFocus="blur()">
-      </td>
-      <td class="FieldName">&nbsp; </td>
-      <td class="FieldData">
-        <input type="button" name="all_paid" value="All Paid" onClick="form.amount_paid.value = form.total_fee.value;regTypeLookup(form.reg_type.options[reg_type.selectedIndex].text)">
       </td>
     </tr>
   </table>
-  <hr>
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <table width="100%" border="0" cellspacing="5" cellpadding="5">
     <tr>
       <td align="center">
           <input type="button" name="delete" value="Delete" onClick="deleteCheck('person','{id}');return document.MM_returnValue">
@@ -210,7 +214,6 @@ function regTypeLookup(inType) {
   </table>
 </form>
 <!-- START BLOCK : included_header -->
-<hr>
 <input type="hidden" name="load_constants[payment_type]" value="constant">
 <form name="actions_form" method="post" action="form.php">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -243,8 +246,8 @@ function regTypeLookup(inType) {
   </tr>
   <tr> 
     <form name="person_section_add" method="post" action="form.php">
-      <td class="TableDataBold">&nbsp; </td>
-      <td class="TableDataBold" align="right" colspan=2>
+      <td>&nbsp; </td>
+      <td align="right" colspan=2>
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"> 
@@ -273,7 +276,7 @@ function regTypeLookup(inType) {
       <td class="TableData" width="5%"> 
         <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},form.ticket_print.checked)">
       </td>
-      <td class="TableData" width="5%"> 
+      <td width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
@@ -285,7 +288,7 @@ function regTypeLookup(inType) {
       </td>
     </form>
     <form name="person_section_save_{id}" method="post" action="form.php">
-      <td class="TableData" width="5%"> 
+      <td width="5%"> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
