@@ -45,9 +45,8 @@ class DataObjects_Person extends DB_DataObject {
     ###END_AUTOCODE
 
 	function insert() {
-		global $_DB_DATAOBJECT;
+		global $_DB_DATAOBJECT; //Indicate to PHP that we want to use the already-defined global, as opposed to declaring a local var
 		//Grab the database connection that has already been made by the parent's constructor:
-		require_once('DB.php');
 		$__DB  = &$_DB_DATAOBJECT['CONNECTIONS'][$this->_database_dsn_md5];
 		if ($this->reg_type != null) {
 			$this->badge_number = $__DB->nextId('badge_number'); //Fetch the next id in the sequence.  To set the sequence to a specifc value, use phpMyAdmin to tweak the value in the badge_number_seq table
