@@ -68,7 +68,7 @@
     <tr>
       <td class="FieldName" width="4%">RPGA</td>
       <td>
-        <input type="checkbox" name="rpga" value="CHECKED" {rpga}>
+        <input type="checkbox" name="rpga" value="CHECKED" {rpga} onClick="if (form.rpga.checked) {form.sponsor.value='the RPGA';}">
         <font color="#FF0000"><b class="FieldError">{rpga_error}</b></font> </td>
       <td class="FieldName">Level</td>
       <td colspan="3">
@@ -116,13 +116,12 @@
         <font color="#FF0000"><b class="FieldError">{rpga_only_error}</b></font>
       </td>
       <td class="FieldName">Price</td>
-      <td>
-        <input type="text" name="price" value="{price}" maxlength="5" size="5" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{price_error}</b></font> </td>
+      <td class="FieldName"> $<input type="text" name="price" value="{price}" maxlength="5" size="5" class="FieldData">
+        <b class="FieldError">{price_error}</b> </td>
       <td class="FieldName">Rounds</td>
       <td width="33%">
         <input type="text" name="round_count" value="{round_count}" maxlength="5" size="5" class="FieldData">
-        <font color="#FF0000"><b class="FieldError">{round_count_error}</b></font>
+        <b class="FieldError">{round_count_error}</b>
       </td>
     </tr>
     <tr>
@@ -157,7 +156,9 @@
           <input type="hidden" name="action" value="save">
           <input type="hidden" name="included_order_by" value="section_number">
           <input type="hidden" name="convention_id" value="1">
-          <input type="hidden" name="load_constants[1]" value="event_type">
+        <input type="hidden" name="load_constants[event_type]" value="constant">
+        <input type="hidden" name="load_constants[event_level]" value="constant">
+        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
           <input type="submit" name="save" value="Save">
         </span></div>
       </td>
@@ -181,15 +182,24 @@
   <hr>
 <!-- START BLOCK : included_header -->
 <p><span class="FormTitle">Sections</span>
-</p><table width="100%" border="1">
+</p>
+<table width="100%" border="1">
   <tr> 
-    <td class="TableTitle" colspan="2">Action</td>
-    <td class="TableTitle">Section Number</td>
-    <td class="TableTitle">Max Register</td>
-    <td class="TableTitle">Date</td>
-    <td class="TableTitle">Start Time</td>
-    <td class="TableTitle">End Time</td>
-    <td class="TableTitle"> Round</td>
+    <td class="TableTitle" colspan="2" rowspan="2">Action</td>
+    <td class="TableTitle" rowspan="2">Section Number</td>
+    <td class="TableTitle" colspan="2">
+      <div align="center">Registrations</div>
+    </td>
+    <td class="TableTitle" rowspan="2">Date</td>
+    <td class="TableTitle" rowspan="2">Start Time</td>
+    <td class="TableTitle" rowspan="2">End Time</td>
+    <td class="TableTitle" rowspan="2"> Round</td>
+    <td class="TableTitle" rowspan="2">Adv To Sect</td>
+    <td class="TableTitle" rowspan="2">Results Entered</td>
+  </tr>
+  <tr> 
+    <td class="TableTitle">Max</td>
+    <td class="TableTitle">Curr</td>
   </tr>
   <tr> 
     <form name="section_add" method="post" action="form.php">
@@ -206,15 +216,18 @@
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="load_constants[event_type]" value="constant">
-		<input type="hidden" name="load_constants[event_level]" value="constant">
-		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
-        <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
+        <input type="hidden" name="load_constants[event_level]" value="constant">
+        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
+        <input type="text" name="included_search" size="3" maxlength="5" class="FieldData">
         </span> </td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
       <td class="TableData">&nbsp;</td>
-      <td class="TableData"><span class="FieldName"> </span></td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
+      <td class="TableData">&nbsp;</td>
     </form>
   </tr>
   <!-- END BLOCK : included_header -->
@@ -229,8 +242,8 @@
         <input type="hidden" name="included_table" value="section">
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="load_constants[event_type]" value="constant">
-		<input type="hidden" name="load_constants[event_level]" value="constant">
-		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
+        <input type="hidden" name="load_constants[event_level]" value="constant">
+        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -244,15 +257,18 @@
         <input type="hidden" name="included_order_by" value="section_number">
         <input type="hidden" name="event_id" value="{event_id}">
         <input type="hidden" name="load_constants[event_type]" value="constant">
-		<input type="hidden" name="load_constants[event_level]" value="constant">
-		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
+        <input type="hidden" name="load_constants[event_level]" value="constant">
+        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="submit" name="update" value="Update">
       </td>
       <td class="TableDataBold"><span class="FieldName"> 
-        <input type="text" name="section_number" size="6" maxlength="10" class="FieldData" value="{section_number}">
+        <input type="text" name="section_number" size="3" maxlength="5" class="FieldData" value="{section_number}">
         </span></td>
       <td class="TableData"><span class="FieldName"> 
-        <input type="text" name="max_registered" size="6" maxlength="10" class="FieldData" value="{max_registered}">
+        <input type="text" name="max_registered" size="3" maxlength="4" class="FieldData" value="{max_registered}">
+        </span></td>
+      <td class="TableData"><span class="FieldName"> 
+        <input type="text" name="num_registered" size="3" maxlength="4" class="FieldData" value="{num_registered}">
         </span></td>
       <td class="TableData"><span class="FieldName"> 
         <input type="text" name="date" size="10" maxlength="10" class="FieldData" value="{date}">
@@ -265,6 +281,12 @@
         </span></td>
       <td class="TableData"> 
         <input type="text" name="round" size="2" maxlength="2" class="FieldData" value="{round}">
+      </td>
+      <td class="TableData"> 
+        <input type="text" name="advance_to_section" size="2" maxlength="2" class="FieldData" value="{advance_to_section}">
+      </td>
+      <td class="TableData"> 
+        <input type="checkbox" name="results_entered" value="CHECKED" {results_entered} class="FieldData">
       </td>
     </form>
   </tr>
