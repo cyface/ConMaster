@@ -10,6 +10,22 @@
 # --------------------------------------------------------
 
 #
+# Table structure for table `auth`
+#
+# Creation: Sep 25, 2003 at 12:05 PM
+# Last update: Sep 29, 2003 at 09:38 AM
+#
+
+CREATE TABLE `auth` (
+  `username` varchar(50) NOT NULL default '',
+  `password` varchar(32) NOT NULL default '',
+  `person_id` mediumint(9) unsigned default '0',
+  PRIMARY KEY  (`username`),
+  KEY `PASSWORD` (`password`)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Table structure for table badge_number_seq
 #
 
