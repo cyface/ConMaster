@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for person_section
-* CVS Info: $Id: Person_section.php,v 1.7 2002/08/08 18:40:39 cyface Exp $
+* CVS Info: $Id: Person_section.php,v 1.8 2002/08/08 18:47:04 cyface Exp $
 */
 
 
@@ -27,7 +27,6 @@ class DataObjects_Person_section extends DB_DataObject {
     var $old_price;                       // real(10)
     var $score_packet_id;                 // int(11)  unsigned
     var $packet_position;                 // int(4)
-    var $judge_score;                     // int(4)
     var $scenario_score;                  // int(4)
     var $convention_id;                   // int(11)  not_null unsigned
     var $last_modified;                   // timestamp(14)  not_null unsigned zerofill timestamp
