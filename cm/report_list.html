@@ -6,7 +6,7 @@
 <script language="JavaScript" src="/cm/templates/cm.js"></script>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" class="BodyClass">
+<body bgcolor="#FFFFFF" text="#000000" class="BodyClass"  TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" background="/cm/images/bluebricktileh.jpg" height="100">
   <tr>
     <td>&nbsp;</td>
@@ -26,10 +26,10 @@
       City/State</a></td>
     <td class="TableData">Summarizes the person table by state and city.</td>
   </tr>
-  <tr>
+  <tr> 
     <td class="FormTitle">&nbsp;</td>
     <td class="TableDataBold"><a href="form.php?table=person&action=report&selcols[1]=reg_type&selcols[2]=total_fee&selcols[3]=sum(total_fee)&groupcols[1]=reg_type&groupcols[2]=total_fee&where[0]=length(reg_type)!=0">Person 
-      Reg Type/Total Fee</a> Sum</td>
+      Reg Type/Total Fee Sum</a></td>
     <td class="TableData">Sums the person table by Reg Type and total fee.</td>
   </tr>
   <tr> 
@@ -50,6 +50,25 @@
     <td class="TableDataBold"><a href="form.php?table=event&action=report&selcols[1]=type&selcols[2]=price&selcols[3]=count(*)&groupcols[1]=type&groupcols[2]=price">Event 
       Type/Price</a></td>
     <td class="TableData">Summarizes the event table by type and price</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">Exports</td>
+    <td class="TableDataBold">&nbsp;</td>
+    <td class="TableData">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="conf_card_export.php?queryFile=confirmation_card_query.sql&filename=confirmations.csv&format=csv">Confirmation 
+      Card File</a></td>
+    <td class="TableData">.csv file of person/event suitable data for merging 
+      into Confirmation Cards</td>
+  </tr>
+  <tr>
+    <td class="FormTitle">&nbsp;</td>
+    <td class="TableDataBold"><a href="export.php?queryFile=rpga_export_query.sql&filename=scores.txt&format=tab&quotes=off">RPGA 
+      Score File</a></td>
+    <td class="TableData">Tab-delimited file of score packet data suitable for 
+      sending to the RPGA.</td>
   </tr>
 </table>
 </body>
