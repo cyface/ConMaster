@@ -40,5 +40,25 @@ class DataObjects_Event extends DB_DataObject {
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	
+	function insert() {
+		//Set the event name
+		if ($this->rpga == 'CHECKED') {$rpgaStr = 'RPGA ';}
+		if ($this->scenario_name !='') {' ' . $scenarioStr = $this->scenario_name;}
+		if ($this->rpga_event_type !='') {' ' . $typeStr = $this->rpga_event_type;}
+		$this->event_name = $rpgaStr . $this->game_system . $scenarioStr . $typeStr;
+		
+		return DB_DataObject::insert(); //Call the parent method
+	}
+	
+	function update() {
+		//Set the event name
+		if ($this->rpga == 'CHECKED') {$rpgaStr = 'RPGA ';}
+		if ($this->scenario_name !='') {$scenarioStr = ' ' . $this->scenario_name;}
+		if ($this->rpga_event_type !='') {$typeStr = ' ' . $this->rpga_event_type;}
+		$this->event_name = $rpgaStr . $this->game_system . $scenarioStr . $typeStr;
+		
+		return DB_DataObject::update(); //Call the parent method
+	}
 }
 ?>

@@ -14,10 +14,11 @@ class DataObjects_Score_packet extends DB_DataObject {
 
     var $__table='score_packet';                    // table name
     var $id;                              // int(11)  not_null primary_key unsigned auto_increment
-    var $judge_id;                        // int(6)  not_null
+    var $person_id;                        // int(11)  not_null
+	var $event_id;                        // int(11)  not_null
+	var $section_id;                      // int(11)  not_null
     var $scenario_score;                  // int(4)  
-    var $group_score;                     // int(4)  
-    var $complete_event_number;           // string(10)  
+    var $group_score;                     // int(4) 
     var $number_of_players;               // int(4)  
     var $rpga_event_type;                 // string(2)  
     var $convention_id;                   // int(11)  not_null unsigned

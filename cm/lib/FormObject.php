@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.11 2002/07/18 21:32:45 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.12 2002/07/19 21:22:08 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -50,53 +50,62 @@ class FormObject {
      **/
     function FormObject ($inGet, $inPost)
     {
-        if ($inPost) {
+        if ($inPost) { //Set the data of this object to the Post vars if they came through
             $this->data = $inPost;
         } else {
-            $this->data = $inGet;
+            $this->data = $inGet; //Otherwise, use the get vars
         }
-
-        if (!$this->data['action'] or !$this->data['table']) {
+		
+		//We have to have table and action in the data to continue
+        if (!$this->data['table'] or !$this->data['action']) { 
             echo '<br>No Table or Action<br>';
             return false;
-        } else {
-            $this->table = $this->data['table'];
+		}
+        
+		//Init this object's private properties from $this->data
+        $this->table = $this->data['table'];
+		$this->form_constants['table']->$this->table;  //Some forms need to have the table name passed in
+        $this->action = $this->data['action'];
 
-            // initialize DataObject
-            $options = &PEAR::getStaticProperty('DB_DataObject', 'options');
-            $config = parse_ini_file('./lib/DataObjects/cyface.ini', true);
-            $options = $config['DB_DataObject'];
-
-            $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
-            if ($this->data['id'] != '') {
-                $this->dataObject = DB_DataObject::staticGet($objectName, $this->data['id']);
-            } else {
-                require_once('./lib/DataObjects/' . ucwords($this->table) . '.php');
-                $this->dataObject = new $objectName;
-            }
-
-            $this->action = $this->data['action'];
-
-            if ($this->data['included_table']) {
-                $this->included_table = $this->data['included_table'];
-                require_once('./lib/DataObjects/' . ucwords($this->included_table) . '.php');
-                $incObjectName = 'DataObjects_' . ucwords($this->included_table); //Name of DataObject subclass to use for data access
-                $this->incDataObject = new $incObjectName; //Start with an empty included object.  It gets loaded in edit()
-                if ($this->data['included_order_by']) {
-                    $this->incDataObject->orderBy($this->data['included_order_by']);
-                }
-            }
-
-			if ($this->data['template']) {
-		    	$templateName = './templates/' . $this->data['template'];
-			} else {
-				$templateName = './templates/' . $this->table . '_edit.html';
-			}
-            $this->template = new TemplatePower($templateName); //make a new TemplatePower object with default 'Edit' template
-            $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
-
-            return true;
+        // initialize DataObject
+        $options = &PEAR::getStaticProperty('DB_DataObject', 'options');
+        $config = parse_ini_file('./lib/DataObjects/cyface.ini', true);
+        $options = $config['DB_DataObject'];
+		
+		//Load the appropriate DataObject for this form
+        $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
+        if ($this->data['id']) { //If id is not null, we are loading a single record
+            $this->dataObject = DB_DataObject::staticGet($objectName, $this->data['id']);
+        } else { //We are loading mutiple records, or more like, processing the included table
+            require_once('./lib/DataObjects/' . ucwords($this->table) . '.php');
+            $this->dataObject = new $objectName;
         }
+		
+		//Load the appropriate template and initialize it
+		if ($this->data['template']) {  //If a template specified, use it
+		  	$templateName = './templates/' . $this->data['template'];
+		} else { //Otherwise, default to <table>_edit.html
+		$templateName = './templates/' . $this->table . '_edit.html';
+		}
+        $this->template = new TemplatePower($templateName); //make a new TemplatePower object with default 'Edit' template
+        $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
+		
+		//If constants were specified, load them
+		if ($this->data['load_constants']) {
+			$this->loadConstants();
+		}
+		
+		//Set up the included object, if specified
+        if ($this->data['included_table']) {
+            $this->included_table = $this->data['included_table'];
+            require_once('./lib/DataObjects/' . ucwords($this->included_table) . '.php');
+            $incObjectName = 'DataObjects_' . ucwords($this->included_table); //Name of DataObject subclass to use for data access
+            $this->incDataObject = new $incObjectName; //Start with an empty included object.  It gets loaded in edit()
+            if ($this->data['included_order_by']) {
+                $this->incDataObject->orderBy($this->data['included_order_by']);
+            }
+        }
+        return true;
     }  //End constructor FormObject
 
 	/**
@@ -111,12 +120,13 @@ class FormObject {
         if (method_exists($this, $this->action)) {
             return call_user_func(array(&$this, $this->action));
         } else {
+			echo '<br>Invalid Action<br>';
             return false;
         }
     }  //End function processAction
 
 	/**
-	 * Display calls the displayToScreen method of the template object
+	 * Display calls the printToScreen method of the template object
 	 * @access public
 	 * @return boolean True if success False if Failure
 	 **/
@@ -131,13 +141,14 @@ class FormObject {
 	/* BEGIN PRIVATE PROPERTIES */
 
 	var $table = false; //Name of the DB table this object maps to.								@access private
-    var $included_table = false; //Name of the DB table this object's included table maps to.	@access private
+	var $action = false; //The current action to execute										@access private
+	var $included_table = false; //Name of the DB table this object's included table maps to.	@access private
     var $data = array('id' => false); //A hash of the data elements of this form 				@access private
-    var $dataObject = false; //The dataObject associcated with this form 						@access private
+    var $form_constants = array('table' => false); //A hash of constatnts to pass to the form   @access private
+	var $dataObject = false; //The dataObject associcated with this form 						@access private
     var $incDataObject = false; //The included dataObject associcated with this form (subform)	@access private
     var $template = false; //The template Object associcated with this form						@access private
-    var $action = false; //The current action to execute										@access private
-
+   
 	/* END PRIVATE PROPERTIES */
 
 	/* BEGIN PRIVATE METHODS */
@@ -153,11 +164,11 @@ class FormObject {
     {
         $this->dataObject->getLinks();
 		objectValueFill($this->dataObject, $this->template);
-		valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the main form
+		valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
 		if ($this->incDataObject) {
 			$this->template->newBlock('included_header'); //create a new header for the included rows
             objectValueFill($this->dataObject, $this->template); //Fill in values on the included header
-			valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the included header
+			valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included header
 			if ($this->data['included_parent_id_col']) {
 				$parent_id_col = $this->data['included_parent_id_col'];
 			} else {
@@ -172,7 +183,7 @@ class FormObject {
                 $this->incDataObject->getLinks();
                 $this->template->newBlock($this->included_table . '_row'); //create a new result row
                 objectValueFill($this->incDataObject, $this->template); //Fill in values on the included row
-				valueFill(array('form_constants' => $this->data['form_constants']),$this->template); //Fill in the array of constants on the included row
+				valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the included row
             }
         }
         return true;
@@ -452,9 +463,34 @@ class FormObject {
 
     return true;
 	}  //End function report
-
-
-
+	/**
+	 * loadConstants loads the groups in $this->data['load_constants'] into form_constants[] from constant
+	 * @access private
+	 **/
+	function loadConstants() {
+		foreach ($this->data['load_constants'] as $constant) {
+			//Load the appropriate DataObject for this form
+        	require_once('./lib/DataObjects/Constant.php');
+           	$constantObject = new DataObjects_Constant;
+			$constantObject->whereAdd('constant = \'' . $constant . '\'');
+			$constantObject->orderBy('ordinal');
+        	if ($this->data['load_constants_where']) {
+				if ($this->data['load_constants_where'][$constant]) {
+					$constantObject->whereAdd($this->data['load_constants_where'][$constant]);
+				}
+			}
+			$optionsName = $constant . '_options';
+			$arrayName = $constant . '_array';
+			//echo '<pre>options:'; echo $this->form_constants[$optionsName]; echo '</pre>';
+			$constantObject->find();
+			while ($constantObject->fetch()) {
+				//echo '<pre>Row:'; echo print_r($constantObject); echo '</pre>';
+				$this->form_constants[$optionsName] .= '<option value = "' . $constantObject->name . '">' . $constantObject->name . "</option>\n";
+				$this->form_constants[$arrayName] .= $constant . '["' . $constantObject->name . '"]="' . $constantObject->value . "\";\n";
+				//echo '<pre>options:'; echo $this->form_constants[$optionsName]; echo '</pre>';
+			}
+		}
+	} //End function loadConstants
 	/**
 	 * buildWhereLine takes a field, operator and value and builds a SQL where clause line
 	 * @param string $inField - name of the field to compare to a value
