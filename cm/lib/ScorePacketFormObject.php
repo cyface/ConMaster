@@ -6,7 +6,7 @@
  *
  * @see FormObject for usage information
  *
- * CVS Info: $Id: ScorePacketFormObject.php,v 1.2 2002/08/09 16:43:23 cyface Exp $
+ * CVS Info: $Id: ScorePacketFormObject.php,v 1.3 2002/08/14 20:51:55 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -181,6 +181,17 @@ class ScorePacketFormObject extends FormObject {
 	}
 
 	/**
+	 * save tweaks some data, then calls FormObject's save() method
+	 *
+     **/
+	function save()
+	{
+		$scenario_max = $this->data['number_of_players'] * 15;
+		$this->data['prorated_scenario_score'] = ($this->data['scenario_score'] / $scenario_max) * 105;
+		FormObject::save(); //Call parent object's method
+	}
+
+	/**
 	 * addParticipant adds a given participant to the packet by locating or creating a person_section record
 	 *
      **/
@@ -260,6 +271,53 @@ class ScorePacketFormObject extends FormObject {
 		} //End 'if person not found...'
 	} //End function addParticipant
 
+	/**
+	 * saveIncluded overloads FormObject->saveIncluded, and calculates prorated scores
+	 *
+	 **/
+	function saveIncluded ()
+	{
+		if (!isset($this->data['parent_id'])) { // If parent_id is null, either the form is hosed, or they somehow didn't save the main record before adding children.
+			echo "No parent_id.";
+			return false;
+		}
+
+		$this->dataObject->get($this->data['parent_id']); //Use the parent id to load up the master object
+		$this->incDataObject->setFrom($this->data); //Copy the form data into the included object.
+
+		///Calculate prorated score
+		if ($this->incDataObject->packet_position == 0) {
+			$this->incDataObject->prorated_score = ($this->incDataObject->score / (30 * $this->dataObject->number_of_players)) * 180;
+		} else {
+			$this->incDataObject->prorated_score = ($this->incDataObject->score / (4 * ($this->dataObject->number_of_players + 1))) * 28;
+		}
+
+		if ($this->data['included_id']) { // Only update the DB if an id was supplied
+			$this->incDataObject->id = $this->data['included_id'];
+			$result = $this->incDataObject->update();
+			$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+		} else { // If no id supplied we are inserting
+			if ($this->data['included_search']) {
+				$result = $this->incDataObject->includedInsert($this->data['included_search']);
+			} else {
+				$result = $this->incDataObject->id = $this->incDataObject->insert();
+			}
+			$this->template->assign('action_message', '<font color="#66CC00">Added</font>');
+		}
+
+		if (PEAR::isError($result)) {
+			$this->template->assign('form_error', $result->getMessage());
+			$this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
+		}
+
+		$incClassName = get_class($this->incDataObject);
+		$this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
+		if ($this->data['included_order_by']) {
+			$this->incDataObject->orderBy($this->data['included_order_by']);
+		}
+		$this->edit();
+        return true;
+	}
 
 	/**
 	 * deleteIncluded overloads FormObject->deleteIncluded, and allows non-Score Packet person sections to survive

@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.17 2002/08/09 16:43:22 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.18 2002/08/14 20:51:55 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -71,8 +71,12 @@ class FormObject {
 
         // initialize DataObject
         $options = &PEAR::getStaticProperty('DB_DataObject', 'options');
-        $config = parse_ini_file('./lib/DataObjects/cyface.ini', true);
+        $config = parse_ini_file('config/conmaster.ini', true);
         $options = $config['DB_DataObject'];
+        $db_name = $config['ConMaster']['db_name'];
+        $links = &PEAR::getStaticProperty('DB_DataObject', "{$db_name}.links");
+        $linkConfig = parse_ini_file("config/{$db_name}.links.ini", true);
+        $links = $linkConfig;
 
 		//Load the appropriate DataObject for this form
         $objectName = 'DataObjects_' . ucwords($this->table); //Name of DataObject subclass to use for data access
@@ -97,7 +101,7 @@ class FormObject {
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
 
 		//If constants were specified, load them
-		if ($this->data['load_constants']) {
+		if ($this->data['load_constants'] != 'no') {
 			$this->loadConstants();
 		}
 
@@ -168,6 +172,7 @@ class FormObject {
     function edit()
     {
         $this->dataObject->getLinks();
+        //echo '<pre>'; print_r ($this->dataObject); echo '</pre>';
 		objectValueFill($this->dataObject, $this->template);
 		rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the main form
 		if ($this->incDataObject) {
@@ -232,28 +237,31 @@ class FormObject {
 	 **/
     function saveIncluded()
     {
-        if ($this->data['parent_id']) { // If parent_id is null, either the form is hosed, or they forgot to save the main record before adding children.
-            $this->incDataObject->setFrom($this->data); //Copy the form data into the object.
-            if ($this->data['included_id']) { // Only update the DB if an id was supplied
-                $this->incDataObject->id = $this->data['included_id'];
-                $result = $this->incDataObject->update();
-                $this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
-            } else { // If no id supplied we are inserting
-                if ($this->data['included_search']) {
-                    $result = $this->incDataObject->includedInsert($this->data['included_search']);
-                } else {
-                    $result = $this->incDataObject->id = $this->incDataObject->insert();
-                }
-                $this->template->assign('action_message', '<font color="#66CC00">Added</font>');
-            }
-        } else {
-            $result = new PEAR_error ('You needed to save your main record before trying to add an included record.');
-        }
+		if (!isset($this->data['parent_id'])) { // If parent_id is null, either the form is hosed, or they somehow didn't save the main record before adding children.
+			echo "No parent_id.";
+			return false;
+		}
+
+		$this->dataObject->get($this->data['parent_id']); //Use the parent id to load up the master object
+		$this->incDataObject->setFrom($this->data); //Copy the form data into the included object.
+
+		if ($this->data['included_id']) { // Only update the DB if an id was supplied
+			$this->incDataObject->id = $this->data['included_id'];
+			$result = $this->incDataObject->update();
+			$this->template->assign('action_message', '<font color="#66CC00">Updated</font>');
+		} else { // If no id supplied we are inserting
+			if ($this->data['included_search']) {
+				$result = $this->incDataObject->includedInsert($this->data['included_search']);
+			} else {
+				$result = $this->incDataObject->id = $this->incDataObject->insert();
+			}
+			$this->template->assign('action_message', '<font color="#66CC00">Added</font>');
+		}
+
         if (PEAR::isError($result)) {
             $this->template->assign('form_error', $result->getMessage());
             $this->template->assign('action_message', '<font color="#FF0000">Error!</font>');
         }
-        $this->dataObject->get($this->data['parent_id']);
         $incClassName = get_class($this->incDataObject);
         $this->incDataObject = new $incClassName; //Have to clear out the old stuff so that edit() will work - workaround for DataObject 'bug'
         if ($this->data['included_order_by']) {
@@ -362,62 +370,31 @@ class FormObject {
     }  //End function search
 
 	/**
-	 * loadConstants loads the groups in $this->data['load_constants'] into form_constants[] from constant
+	 * loadConstants loads constant table into form_constants[]
 	 * @access private
 	 **/
 	function loadConstants() {
-		foreach ($this->data['load_constants'] as $constant => $table) {
-			//Load the appropriate DataObject for this form
-			$objectName = 'DataObjects_' . ucwords($table); //Name of DataObject subclass to use for data access
-			require_once('./lib/DataObjects/' . ucwords($table) . '.php');  //Load the subclass definition
-			$constantObject = new $objectName;  //Create a new instance of the object
+			require_once('./lib/DataObjects/Constant.php');  //Load the subclass definition
+			$constantObject = new DataObjects_Constant;  //Create a new instance of the object
 
-			//Set up the search criteria for the object
-			if ($table == 'constant') {
-				$constantObject->whereAdd('constant = \'' . $constant . '\'');
-				$constantObject->orderBy('ordinal');
-			}
-        	if ($this->data['load_constants_where']) {
-				if ($this->data['load_constants_where'][$constant]) {
-					$constantObject->whereAdd(urldecode(stripslashes($this->data['load_constants_where'][$constant])));
-				}
-			}
+			$constantObject->orderBy('constant,ordinal');
+			$constantObject->find();  //Get all the constants
 
-			//Set the names for the result columns
-			$cols['name']='name';
-			$cols['value']='value';
-			$cols['ordinal']='ordinal';
-			$cols['extra_info']='extra_info';
-			if ($this->data['load_constants_cols']) {
-				if ($this->data['load_constants_cols'][$constant]) {
-					list($cols['name'],$cols['value'],$cols['ordinal'],$cols['extra_info'])=split('\|',urldecode(stripslashes($this->data['load_constants_cols'][$constant])));
-				}
-				$constantObject->selectAdd(); //Clear the *
-				foreach ($cols as $col => $name) {
-					if ($name) {
-						$colList .= ',' . $name;
-					}
-				}
-				$colList = ltrim($colList,',');
-				$constantObject->selectAdd($colList);
-			}
-			//echo 'Columns: Name=' . $cols['name'] . 'Value= ' . $cols['value'] . '<br>'; //Testing Only
-
-			//Search
-			$constantObject->find();
 			//echo '<PRE> constantObject:<br>'; print_r($constantObject); echo '</PRE>';
-			$loopCnt = 0;
+
+			$lastConstant = false;
 			while ($constantObject->fetch()) {  //Loop through multiple results and assign to form_constants
-				$this->form_constants[$constant][$loopCnt]['name'] = $constantObject->$cols['name'];
-				$this->form_constants[$constant][$loopCnt]['value'] = $constantObject->$cols['value'];
-				$this->form_constants[$constant][$loopCnt]['ordinal'] = $constantObject->$cols['ordinal'];
-				$this->form_constants[$constant][$loopCnt]['extra_info'] = $constantObject->$cols['extra_info'];
+				if ($constantObject->constant != $lastConstant) {
+					$loopCnt = 0;
+				}
+				$this->form_constants[$constantObject->constant][$loopCnt] = $constantObject;
 				$loopCnt++;
+				$lastConstant = $constantObject->constant;
 			}
-		}
 	    //echo '<PRE> form_constants:<br>'; print_r($this->form_constants); echo '</PRE>';
 		return true;
 	} //End function loadConstants
+
 	/**
 	 * buildWhereLine takes a field, operator and value and builds a SQL where clause line
 	 * @param string $inField - name of the field to compare to a value
