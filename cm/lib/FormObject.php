@@ -21,7 +21,7 @@
  *	 Your forms & links will need to send a number of parms to configure the FormObject
  *	 See the FormObject Constructor for a list.
  *
- * CVS Info: $Id: FormObject.php,v 1.26 2003/09/25 16:21:34 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.27 2004/05/07 01:01:26 cyface Exp $
  *
  * @author Tim White <tim@cyface.com>
  * @since PHP 4.0
@@ -288,8 +288,7 @@ class FormObject {
 		}
 
 		//Refresh main object's data, in case saving the included object changed it.
-		$class = DB_DataObject::staticAutoloadTable($this->table); //Name of DataObject subclass to use for data access
-		$reloadObject = new $class;
+		$reloadObject = DB_DataObject::factory($this->table);
 		$reloadObject->id = $this->data['id'];
 		$reloadObject->find();
 		$reloadObject->fetch();
