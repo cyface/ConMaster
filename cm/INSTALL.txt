@@ -38,3 +38,14 @@ Recommended followup tasks:
 	B. Update cm/config/conmaster.ini with the new password ( mysql://cyface:password@localhost/cyface )
 3. Update the constants table to your needs
 	A. Use phpMyAdmin's browse function on the constant table in the cyface database.
+
+Setting Up A New Convention:
+
+1. Go to the Convention Info screen and create a record for your convention.
+2. Enter the Event Slots for your convention on the Convention record for your convention.
+3. Enter the Events and Sections for your convention.
+4. Import (via phpMyAdmin) your Person database, or enter Person records as folks register.
+5. Register people for events via the Person edit screen.
+6. Export Confirmation Cards to your Word Processing merge template via the Reports screen.
+6. Enter Score Packets for completed events via the Score Packet screen.
+7. Export your Score Packet data to a file from the Reports screen and email that file to the RPGA!
