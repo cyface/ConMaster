@@ -1,6 +1,6 @@
 <?php
 
-include_once('./lib/class.TemplatePower.inc.php');
+require_once('./lib/class.TemplatePower.inc.php');
 
 /**
 * errorFill
@@ -28,8 +28,9 @@ function errorFill ($inObject, &$inTemplate) {
 */
 function objectValueFill ($inDBObject, &$inTemplate) {
 	//Put the values back into the form
-	foreach ($inDBObject->get_data() as $key => $value) {
-		if ((strstr($key,'related_')) and (is_array($value))) {
+	foreach (get_object_vars($inDBObject) as $key => $value) {
+	//echo '<PRE> Value:'; print_r($value); echo '</PRE>';
+		if (is_object($value)) { //The related stuff
 			foreach ($value as $subKey => $subValue) {
 				$inTemplate->assign($key . '[' . $subKey . ']', stripslashes($subValue));
 			}
@@ -38,7 +39,7 @@ function objectValueFill ($inDBObject, &$inTemplate) {
 		}
 	}
 
-	foreach ($inDBObject->get_data() as $key => $value) {
+	/* foreach (get_object_vars($inDBObject) as $key => $value) {
 		if ((strstr($key,'child_')) and (is_array($value))) {
 			$nameParts = explode('_',$key);
 			unset($nameParts[0]);
@@ -49,7 +50,7 @@ function objectValueFill ($inDBObject, &$inTemplate) {
 				}
 			}
 		}
-	}	
+	}	*/
 	
 	return true;
 }
@@ -65,13 +66,7 @@ function valueFill ($inHash, &$inTemplate) {
 	//echo '<PRE>'; print_r ($inHash); echo '<PRE>';
 	//Put the values back into the form
 	foreach ($inHash as $key => $value) {
-		if ((strstr($key,'related_')) and (is_array($value))) {
-			foreach ($value as $subkey => $subvalue) {
-				$inTemplate->assign($key . '[' . $subkey . ']', stripslashes($subvalue));
-			}
-		} else {
-			$inTemplate->assign($key, stripslashes($value));
-		}
+		$inTemplate->assign($key, stripslashes($value));
 	}
 
 	return true;

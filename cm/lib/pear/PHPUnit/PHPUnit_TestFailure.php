@@ -16,7 +16,7 @@
 // | Author: Sebastian Bergmann <sb@sebastian-bergmann.de>                |
 // +----------------------------------------------------------------------+
 //
-// $Id: PHPUnit_TestFailure.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
+// $Id: PHPUnit_TestFailure.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
 //
 
 /**

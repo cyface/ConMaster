@@ -16,7 +16,7 @@
 // | Authors: Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: DB.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
+// $Id: DB.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
 //
 
 require_once "Auth/Container.php";
@@ -30,7 +30,7 @@ require_once "DB.php";
  *
  * @author   Martin Jansen <mj@php.net>
  * @package  Auth
- * @version  $Revision: 1.2 $
+ * @version  $Revision: 1.3 $
  */
 class Auth_Container_DB extends Auth_Container
 {

@@ -1,5 +1,5 @@
 <?php
-// $Id: observer.php,v 1.2 2002/07/10 13:34:26 cyface Exp $
+// $Id: observer.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
 // $Horde: horde/lib/Log/observer.php,v 1.5 2000/06/28 21:36:13 jon Exp $
 
 /**
@@ -8,7 +8,7 @@
  * actions on exceptional events.
  *
  * @author  Chuck Hagenbuch <chuck@horde.org>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @since   Horde 1.3
  * @package Log
  */

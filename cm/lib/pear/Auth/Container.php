@@ -16,7 +16,7 @@
 // | Authors: Martin Jansen <mj@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Container.php,v 1.2 2002/07/10 13:34:25 cyface Exp $
+// $Id: Container.php,v 1.3 2002/07/10 22:57:08 cyface Exp $
 //
 
 define("AUTH_METHOD_NOT_SUPPORTED", -4);

@@ -15,7 +15,7 @@
 // | Author:  Alan Knowles <alan@akbkhome.com>
 // +----------------------------------------------------------------------+
 //
-// $Id: DataObject.php,v 1.1 2002/07/10 22:54:51 cyface Exp $
+// $Id: DataObject.php,v 1.2 2002/07/10 22:57:08 cyface Exp $
 //
 // Object Based Database Query Builder and data store
 //

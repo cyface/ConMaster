@@ -16,7 +16,7 @@
 // | Authors: Sterling Hughes <sterling@php.net>                          |
 // +----------------------------------------------------------------------+
 //
-// $Id: msql.php,v 1.3 2002/07/10 22:54:51 cyface Exp $
+// $Id: msql.php,v 1.4 2002/07/10 22:57:08 cyface Exp $
 //
 // Database independent query interface definition for PHP's Mini-SQL
 // extension.

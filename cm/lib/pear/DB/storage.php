@@ -17,7 +17,7 @@
 // |                                                                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: storage.php,v 1.3 2002/07/10 22:54:51 cyface Exp $
+// $Id: storage.php,v 1.4 2002/07/10 22:57:08 cyface Exp $
 //
 // DB_storage: a class that lets you return SQL data as objects that
 // can be manipulated and that updates the database accordingly.
