@@ -46,7 +46,6 @@
   <div align="center"> 
     <input type="hidden" name="table" value="event">
     <input type="hidden" name="action" value="search">
-    <input type="hidden" name="load_constants[event_type]" value="constant">
     <input type="submit" name="Search" value="Search">
   </div>
   </form>
@@ -62,14 +61,14 @@
   <!-- START BLOCK : result_row -->
   <tr> 
     <td>{event_number}</td>
-    <td><a href="" onClick="popWin('form.php?table=event&included_table=section&action=edit&included_order_by=section_number&id={id}&load_constants[event_type]=constant&load_constants[rpga_event_type]=constant&load_constants[event_level]=constant','event_edit');return false">{event_name}</a></td>
+    <td><a href="" onClick="popWin('form.php?table=event&included_table=section&action=edit&included_order_by=section_number&id={id}','event_edit');return false">{event_name}</a></td>
     <td>{type}</td>
     <td>{level} 
   </tr>
   <!-- END BLOCK : result_row -->
 </table>
 <hr noshade>
-<span class="FieldName"><a href="" onclick="popWin('form.php?table=event&action=edit&load_constants[event_type]=constant&load_constants[rpga_event_type]=constant&load_constants[event_level]=constant','event_edit');return false">Create a New Event</a></span>
+<span class="FieldName"><a href="" onclick="popWin('form.php?table=event&action=edit','event_edit');return false">Create a New Event</a></span>
 <hr noshade>
 </body>
 </html>

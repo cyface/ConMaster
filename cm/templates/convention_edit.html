@@ -80,7 +80,7 @@
       <td align="center">&nbsp;</td>
       <td align="center">&nbsp; </td>
       <td align="center">
-        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=convention&action=edit&included_table=note&included_order_by=last_modified desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=convention&form_constants[form_label]={name}','note_edit');return false">
+        <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=convention&action=edit&included_table=note&included_order_by=last_modified desc&included_id_col=id&id={id}&template=note_edit.html&form_constants[table]=convention&form_constants[form_label]={name}','note_edit');return false">
       </td>
     </tr>
   </form>
@@ -104,7 +104,7 @@
         <input type="submit" name="add" value="Add">
       </td>
       <td>
-        <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="id" value="{id}">
         <input type="hidden" name="convention_id" value="{id}">
         <input type="hidden" name="table" value="convention">
         <input type="hidden" name="included_table" value="slot">
@@ -131,7 +131,7 @@
         <input type="hidden" name="table" value="convention">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
-        <input type="hidden" name="parent_id" value="{convention_id}">
+        <input type="hidden" name="id" value="{convention_id}">
         <input type="hidden" name="included_table" value="slot">
         <input type="hidden" name="included_order_by" value="slot_number">
         <input type="submit" name="delete" value="Delete">
@@ -142,7 +142,7 @@
         <input type="hidden" name="table" value="convention">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
-        <input type="hidden" name="parent_id" value="{convention_id}">
+        <input type="hidden" name="id" value="{convention_id}">
         <input type="hidden" name="included_table" value="slot">
         <input type="hidden" name="included_order_by" value="slot_number">
         <input type="submit" name="update" value="Update">

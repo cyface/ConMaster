@@ -174,7 +174,7 @@ function popSetup() {
     <tr> 
       <td> 
         <div align="center"> 
-           <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=score_packet&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
+           <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=score_packet&action=edit&included_table=note&included_order_by=last_modified%20desc&included_id_col=id&id={id}&template=note_edit.html&form_constants[table]=score_packet&form_constants[form_label]=Score%20Packet%20{id}','note_edit');return false">
         </div>
       </td>
       <td><input type="button" name="delete2" value="Delete" onClick="deleteCheck('score_packet','{id}');return document.MM_returnValue"></td>
@@ -183,12 +183,10 @@ function popSetup() {
       </td>
       <td align="center"> 
         <input type="hidden" name="id" value="{id}">
-        <input type="hidden" name="last_modified" value="{last_modified}">
         <input type="hidden" name="badge_number" value="{badge_number}">
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
-		<input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="convention_id" value="1">
         <input type="submit" name="save" value="Save">
@@ -219,7 +217,7 @@ function popSetup() {
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
-        <input type="hidden" name="parent_id" value="{score_packet_id}">
+        <input type="hidden" name="id" value="{score_packet_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="submit" name="delete" value="Delete">
       </td>
@@ -230,11 +228,10 @@ function popSetup() {
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="packet_position" value="{packet_position}">
         <input type="hidden" name="included_id" value="{id}">
-        <input type="hidden" name="parent_id" value="{score_packet_id}">
+        <input type="hidden" name="id" value="{score_packet_id}">
         <input type="hidden" name="number_of_players" value="{_score_packet_id[number_of_players]}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="packet_position">
-        <input type="hidden" name="load_constants[rpga_event_type]" value="constant">
         <input type="hidden" name="score_packet_id" value="{score_packet_id}">
         <input type="hidden" name="person_id" value="{person_id}">
         <input type="submit" name="update" value="Update">
@@ -262,7 +259,7 @@ function popSetup() {
       <td class="TableDataBold"><span class="FieldName"> 
         <input type="hidden" name="table" value="score_packet">
         <input type="hidden" name="action" value="addParticipant">
-        <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="id" value="{id}">
         <input type="hidden" name="score_packet_id" value="{id}">
         <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="event_id" value="{event_id}">

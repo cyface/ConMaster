@@ -206,15 +206,12 @@ function setRegTypeList() {
           <input type="hidden" name="included_table" value="person_section">
           <input type="hidden" name="action" value="save">
           <input type="hidden" name="convention_id" value="1">
-          <input type="hidden" name="load_constants[reg_type]" value="constant">
-		  <input type="hidden" name="load_constants[payment_type]" value="constant">
           <input type="submit" name="save" value="Save">
       </td>
     </tr>
   </table>
 </form>
 <!-- START BLOCK : included_header -->
-<input type="hidden" name="load_constants[payment_type]" value="constant">
 <form name="actions_form" method="post" action="form.php">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -226,7 +223,7 @@ function setRegTypeList() {
             <input type="button" name="selected_tix" value="Selected Tickets" onClick="popWinSmall('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}&template=tickets.html&logo_name={_convention_id[logo_file]}&included_where=id%20IN(' + form.ticketList.value + ')')">
         </td>
         <td>
-          <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=person&action=edit&included_table=note&included_order_by=last_modified%20desc&included_parent_id_col=parent_id&id={id}&template=note_edit.html&form_constants[table]=person&form_constants[form_label]={first_name}%20{last_name}','note_edit');return false">
+          <input type="button" name="edit_notes" value="Edit Notes" onClick="popWin('form.php?table=person&action=edit&included_table=note&included_order_by=last_modified%20desc&included_id_col=id&id={id}&template=note_edit.html&form_constants[table]=person&form_constants[form_label]={first_name}%20{last_name}','note_edit');return false">
         </td>
       </tr>
 	</table>
@@ -252,7 +249,7 @@ function setRegTypeList() {
         <input type="submit" name="add" value="Add">
       </td>
       <td class="TableDataBold"> 
-        <input type="hidden" name="parent_id" value="{id}">
+        <input type="hidden" name="id" value="{id}">
         <input type="hidden" name="convention_id" value="{convention_id}">
         <input type="hidden" name="person_id" value="{id}">
         <input type="hidden" name="table" value="person">
@@ -260,7 +257,6 @@ function setRegTypeList() {
         <input type="hidden" name="action" value="saveIncluded">
         <input type="hidden" name="reg_type" value="{reg_type}">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="hidden" name="load_constants[reg_type]" value="constant">
         <input type="text" name="included_search" size="6" maxlength="10" class="FieldData">
       </td>
       <td class="TableData">&nbsp;</td>
@@ -282,10 +278,9 @@ function setRegTypeList() {
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
-        <input type="hidden" name="parent_id" value="{person_id}">
+        <input type="hidden" name="id" value="{person_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
-        <input type="hidden" name="load_constants[reg_type]" value="constant">
         <input type="submit" name="delete" value="Delete">
       </td>
     </form>
@@ -294,13 +289,11 @@ function setRegTypeList() {
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
-        <input type="hidden" name="parent_id" value="{person_id}">
+        <input type="hidden" name="id" value="{person_id}">
         <input type="hidden" name="included_table" value="person_section">
         <input type="hidden" name="included_order_by" value="last_modified desc">
         <input type="hidden" name="old_price" value="{old_price}">
         <input type="hidden" name="person_id" value="{person_id}">
-        <input type="hidden" name="load_constants[reg_type]" value="constant">
-        <input type="hidden" name="load_constants[payment_type]" value="constant">
         <input type="submit" name="update" value="Update" onClick="popWin()">
       </td>
       <td class="TableDataBold">{_section_id[complete_event_number]}</td>

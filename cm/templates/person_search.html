@@ -57,7 +57,7 @@
   <!-- START BLOCK : result_row -->
   <tr> 
     <td class="TableDataBold" height="19">{badge_number}</td>
-    <td class="TableData" height="19"><a href="" class="TableData" onclick="popWin('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&load_constants[reg_type]=constant&load_constants[payment_type]=constant&id={id}','person_edit');return false">{last_name}, 
+    <td class="TableData" height="19"><a href="" class="TableData" onclick="popWin('form.php?table=person&action=edit&included_table=person_section&included_order_by=last_modified%20desc&id={id}','person_edit');return false">{last_name}, 
       {first_name}</a></td>
     <td class="TableData" height="19">{street}</td>
     <td class="TableData" height="19">{city} 
@@ -69,7 +69,7 @@
  
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><span class="FieldName"><a href="" onclick="popWin('form.php?table=person&action=edit&load_constants[reg_type]=constant','person_edit');return false">Create 
+    <td><span class="FieldName"><a href="" onclick="popWin('form.php?table=person&action=edit','person_edit');return false">Create 
 a New Person</a></span></td>
     <td class="FieldName">&nbsp;</td>
   </tr>
