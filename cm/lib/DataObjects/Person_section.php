@@ -1,7 +1,7 @@
 <?
 /*
 * Table Definition for person_section
-* CVS Info: $Id: Person_section.php,v 1.8 2002/08/08 18:47:04 cyface Exp $
+* CVS Info: $Id: Person_section.php,v 1.9 2002/08/15 19:57:50 cyface Exp $
 */
 
 
@@ -17,10 +17,10 @@ class DataObjects_Person_section extends DB_DataObject {
     var $id;                              // int(11)  not_null primary_key unsigned auto_increment
     var $person_id;                       // int(11)  not_null unsigned
     var $section_id;                      // int(11)  not_null unsigned
-    var $event_id;                      // int(11)  not_null unsigned
+    var $event_id;                        // int(11)  not_null unsigned
     var $reg_type;                        // string(80)  not_null
     var $score;                           // int(4)
-    var $prorated_score;                           // int(4)
+    var $prorated_score;                  // int(4)
     var $place;                           // int(4)
     var $judge;                           // string(10)
     var $price;                           // real(10)
@@ -55,7 +55,8 @@ class DataObjects_Person_section extends DB_DataObject {
 	function delete() {
 		if ($this->reg_type != 'Score Packet') {
 			//Find the section row that matches the complete event number that was input
-			$sectionObject = DB_DataObject::staticGet('DataObjects_Section',$this->section_id);
+			$sectionClass = DB_DataObject::staticAutoloadTable('section');
+			$sectionObject = DB_DataObject::staticGet($sectionClass,$this->section_id);
 			//echo '<PRE> Found Section Object'; print_r($sectionObject); echo '<PRE>';
 
 			//Update the section's event fullness indicators
@@ -74,7 +75,8 @@ class DataObjects_Person_section extends DB_DataObject {
 	function update() {
 		if ($this->reg_type != 'Score Packet') {
 			//Find the related person record, and update their total fee
-			$personObject = DB_DataObject::staticGet('DataObjects_Person',$this->person_id);
+			$personClass = DB_DataObject::staticAutoloadTable('person');
+			$personObject = DB_DataObject::staticGet($personClass,$this->person_id);
 			$personObject->total_fee -= $this->old_price;
 			$personObject->total_fee += $this->price;
 			$personObject->update();
@@ -93,8 +95,8 @@ class DataObjects_Person_section extends DB_DataObject {
 	*/
 	function includedInsert($inValue) {
 		//Find the section row that matches the complete event number that was input
-		require_once('./lib/DataObjects/Section.php');
-		$sectionObject =  new DataObjects_Section;
+		$class = DB_DataObject::staticAutoloadTable('section');
+		$sectionObject = new $class;
 		$sectionObject->complete_event_number = $inValue;
 		$sectionObject->convention_id = $this->convention_id;
 		$sectionObject->find();
@@ -127,7 +129,8 @@ class DataObjects_Person_section extends DB_DataObject {
 		$this->old_price = $sectionObject->_event_id->price; //old_price is used to minus off the old price of an event when the price is updated
 
 		//Now find the related person record, and update their total fee
-		$personObject = DB_DataObject::staticGet('DataObjects_Person',$this->person_id);
+		$personClass = DB_DataObject::staticAutoloadTable('person');
+		$personObject = DB_DataObject::staticGet($personClass,$this->person_id);
 		$personObject->total_fee += $this->price;
 		$personObject->update();
 

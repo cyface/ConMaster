@@ -37,8 +37,8 @@ class DataObjects_Score_packet extends DB_DataObject {
 
     function delete() {
     	//Go through each related person_section row and either delete or detach it.
-    	require_once('./lib/DataObjects/Person_section.php');
-    	$personSectionObject = new DataObjects_Person_section;
+    	$class = DB_DataObject::staticAutoloadTable('person_section');
+    	$personSectionObject = new $class;
     	$personSectionObject->score_packet_id = $this->id;
     	$personSectionObject->find();
 
