@@ -17,7 +17,7 @@
  *     FormObject will return the results of the action you specified
  *     by populating a form and displaying it.
  *
- * CVS Info: $Id: FormObject.php,v 1.15 2002/07/26 23:49:26 cyface Exp $
+ * CVS Info: $Id: FormObject.php,v 1.16 2002/07/31 22:04:12 cyface Exp $
  *
  * This class is copyright (c) 2002 by Tim White
  * @author Tim White <tim@cyface.com>
@@ -330,9 +330,9 @@ class FormObject {
     {
         $this->template = new TemplatePower('./templates/' . $this->table . '_' . 'search' . '.html'); //make a new TemplatePower object
         $this->template->prepare(); //let TemplatePower do its thing, parsing etc.;
-        valueFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the search form
+        valueFill($this->data, $this->template); //Put the search values back in the form fields
+        rowFill(array('form_constants' => $this->form_constants),$this->template); //Fill in the array of constants on the search form
         if ($this->data['search']) { // Only bother to search if they submit critera, show the blank form regardless
-            valueFill($this->data, $this->template); //Put the search values back in the form fields
             foreach ($this->data['search'] as $field => $value) {
                 $whereLine = $this->buildWhereLine($field, $this->data['search_operators'][$field], $value);
                 if ($whereLine) {
