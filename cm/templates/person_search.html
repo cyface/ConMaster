@@ -39,12 +39,12 @@
       </td>
     </tr>
   </table>
-  <p align="center">
+  <div align="center">
     <input type="hidden" name="table" value="person">
     <input type="hidden" name="action" value="search">
     <input type="submit" name="Search" value="Search">
-  </p>
-  </form>
+  </div>
+</form>
 <hr noshade>
 <span class="FormTitle"> People - {action_message}</span>
 <table width="100%" border="1">
@@ -72,8 +72,7 @@
   <tr>
     <td><span class="FieldName"><a href="" onclick="popWin('form.php?table=person&action=edit&load_constants[reg_type]=constant','person_edit');return false">Create 
 a New Person</a></span></td>
-    <td class="FieldName"><a href="conf_card_export.php?queryFile=confirmation_card_query.sql&filename=confirmations.csv&format=csv">Download 
-      Confirmation Card File</a></td>
+    <td class="FieldName">&nbsp;</td>
   </tr>
 </table>
 <hr noshade>
