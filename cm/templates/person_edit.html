@@ -275,10 +275,10 @@ function setRegTypeList() {
   <!-- START BLOCK : person_section_row -->
   <tr> 
     <form name="person_section_delete_{id}" method="post" action="form.php">
-      <td class="TableData" width="5%"> 
+      <td class="TableData"> 
         <input type="checkbox" name="ticket_print" value="ticketprint" onClick="updateTicketList({id},form.ticket_print.checked)">
       </td>
-      <td width="5%"> 
+      <td> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="deleteIncluded">
@@ -290,7 +290,7 @@ function setRegTypeList() {
       </td>
     </form>
     <form name="person_section_save_{id}" method="post" action="form.php">
-      <td width="5%"> 
+      <td> 
         <input type="hidden" name="table" value="person">
         <input type="hidden" name="included_id" value="{id}">
         <input type="hidden" name="action" value="saveIncluded">
